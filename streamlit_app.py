@@ -6,7 +6,14 @@ import textwrap
 import streamlit as st
 
 
+from model import mod_read_input, mod_nearterm_CO2eq, mod_longterm_CO2eq
+
+
 st.title("NDC pledges for selected countries")
+
+
+NDC = mod_read_input.read_ndc()
+co2eq = mod_nearterm_CO2eq.grp_emiss(NDC,'CO2eq')
 
 col1,col2=st.columns([2,1])
 
@@ -14,16 +21,8 @@ with col1:
     label = "Choose Country:"
     st.header(label)
 with col2:
-    country_options=("India","EU27","China")
-    selected_country= st.selectbox("",options=country_options)
+    selected_country= st.selectbox("",NDC.index)
 
-if selected_country=="India":
-    st.markdown(textwrap.dedent("""\
-                                India
-                                """))
-else:
-    st.markdown(textwrap.dedent("""\
-                                No-way!
-                                """))
 
+st.write(NDC.loc[selected_country])
 
