@@ -41,7 +41,7 @@ with col1:
     
 
 with col2:
-    selected_inventory= st.selectbox("Choose Historical Inventory:",['PRIMAPv5'])
+    selected_inventory= st.selectbox("Choose Historical Inventory:",['PRIMAPv5','EDGARv6'])
     hist_co2eq_excl = mod_read_input.read_hist(selected_inventory,'CO2eq','excl') #read historical emissions data
 
 with col3:
