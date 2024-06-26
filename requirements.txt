@@ -2,4 +2,5 @@ matplotlib
 altair
 pandas
 scikit-learn
+openpyxl
 streamlit
