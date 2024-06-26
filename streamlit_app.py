@@ -82,7 +82,7 @@ ax.set_xlim(start,end)
 #ax.set_yticks([0,10,20,30,40,50])
 ax.tick_params(axis='y', length=0)
 ax.tick_params(labelsize=9)
-ax.set_ylabel("GHG emissions (Mt CO2eq / yr) ",fontfamily="Arial",fontsize=9,y=0.5)
+ax.set_ylabel("GHG emissions excl. LULUCF (Mt CO2eq / yr) ",fontfamily="Arial",fontsize=9,y=0.5)
 
 for tick in ax.get_xticklabels():
     tick.set_fontname("Arial")
@@ -95,6 +95,8 @@ ax.grid(which='major', axis='y', lw=0.4)
 
 st.pyplot(fig)
 
+st.write("Line represents the historical emissions")
+st.write("Dots represent emissions as per the NDC target: Unconditional (dark-blue) and Conditional (light-blue)")") 
 
 
 
