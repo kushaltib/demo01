@@ -8,18 +8,22 @@ import streamlit as st
 
 st.title("NDC pledges for selected countries")
 
-#col1,col2=st.columns([2,1])
+col1,col2=st.columns([2,1])
 
-label = "<label style='display: inline;'>Choose Country:</label>"
-st.markdown(label, unsafe_allow_html=True)
-country_options=("India","EU27","China")
-selected_country= st.selectbox("",options=country_options)
+with col1:
+    label = "<label style='display: inline;'>Choose Country:</label>"
+    st.markdown(label, unsafe_allow_html=True)
+with col2:
+    country_options=("India","EU27","China")
+    selected_country= st.selectbox("",options=country_options)
 
 if selected_country=="India":
     st.markdown(textwrap.dedent("""\
                                 India
                                 """))
 else:
-    print("No")
+    st.markdown(textwrap.dedent("""\
+                                No-way!
+                                """))
 
 
