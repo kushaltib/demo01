@@ -1,5 +1,5 @@
 matplotlib
 altair
 pandas
-sklearn
+scikit-learn
 streamlit
