@@ -96,7 +96,7 @@ ax.grid(which='major', axis='y', lw=0.4)
 st.pyplot(fig)
 
 st.write("Line represents the historical emissions")
-st.write("Dots represent emissions as per the NDC target: Unconditional (dark-blue) and Conditional (light-blue)")") 
+st.write("Dots represent emissions as per the NDC target: Unconditional (dark-blue) and Conditional (light-blue)") 
 
 
 
