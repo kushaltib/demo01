@@ -151,6 +151,10 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02):
      Eneg0 = Eneg_max/2.
 
      x0=[g0,Eneg0,dg]
+     x0 = np.array(x0, dtype=object)
+
+
+
      #
      
      #--define bounds for minimation of control vector x
