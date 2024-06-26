@@ -34,7 +34,9 @@ col1,col2,col3=st.columns(3)
 
 
 with col1:
-    selected_country= st.selectbox("Choose Country:",NDC.index)
+    #selected_country= st.selectbox("Choose Country:",NDC.index)
+    selected_country= st.selectbox("Choose Country:",co2eq_excl.index[co2eq_excl['Processed']=='Yes'])
+    
 
 with col2:
     selected_inventory= st.selectbox("Choose Historical Inventory:",['PRIMAPv5'])
