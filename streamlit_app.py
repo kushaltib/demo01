@@ -6,7 +6,7 @@ import textwrap
 import streamlit as st
 
 
-from model import mod_read_input, mod_nearterm_CO2eq, mod_longterm_CO2eq
+from model import mod_read_input, mod_nearterm_CO2eq, mod_longterm_CO2eq, mod_emissions_projection
 
 
 st.title("NDC pledges for selected countries")
@@ -20,6 +20,8 @@ NDC = mod_read_input.read_ndc()
 co2eq = mod_nearterm_CO2eq.grp_emiss(NDC,'CO2eq')
 co2eq = mod_nearterm_CO2eq.grp_percent_abs(NDC,'CO2eq',data=co2eq)
 co2eq_excl = mod_nearterm_CO2eq.to_total_excl(NDC,'CO2eq',data=co2eq)
+co2eq_nz = mod_longterm_CO2eq.grp_nz(NDC,process='co2eq')
+
 
 #Ask for choices:
 
@@ -53,6 +55,14 @@ with col3:
     #match = pd.DataFrame(np.arange(273),index=np.arange(1750,2023),columns=['values'])
 
 
+#compute the trajectory for selected country:
+ehist = hist_co2eq_excl.loc[c]
+endc = co2eq_excl.loc[c]
+enz = co2eq_nz.loc[c]
+
+emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz)
+
+
 #display the plot
 fig, ax = plt.subplots()
 
@@ -61,6 +71,17 @@ ax.set_title(selected_country,fontfamily="Arial",fontsize=10)
 ax.plot(hist_co2eq_excl.loc[selected_country].index,
         hist_co2eq_excl.loc[selected_country].values/1000,
         '-', color='black',alpha=1, lw=2, label='CO2eq historical',mec='k',mew=0.5,ms=6
+        )
+
+
+ax.plot(emiss_coun.iloc[0].index,
+        emiss_coun.iloc[0].values/1000,
+        ':', color='grey',alpha=1, lw=2, label='CO2eq historical',mec='k',mew=0.5,ms=6
+        )
+
+ax.plot(emiss_coun.iloc[1].index,
+        emiss_coun.iloc[1].values/1000,
+        ':', color='grey',alpha=1, lw=2, label='CO2eq historical',mec='k',mew=0.5,ms=6
         )
 
 
