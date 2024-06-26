@@ -11,11 +11,11 @@ st.title("NDC pledges for selected countries")
 col1,col2=st.columns([2,1])
 
 with col1:
-    label = "<label style='display: inline;'>Choose Country:</label>"
-    st.markdown(label, unsafe_allow_html=True)
+    label = "Choose Country:"
+    st.header(label)
 with col2:
     country_options=("India","EU27","China")
-    selected_country= st.selectbox(None,options=country_options)
+    selected_country= st.selectbox("",options=country_options)
 
 if selected_country=="India":
     st.markdown(textwrap.dedent("""\
