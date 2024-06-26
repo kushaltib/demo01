@@ -15,7 +15,7 @@ with col1:
     st.markdown(label, unsafe_allow_html=True)
 with col2:
     country_options=("India","EU27","China")
-    selected_country= st.selectbox("",options=country_options)
+    selected_country= st.selectbox(None,options=country_options)
 
 if selected_country=="India":
     st.markdown(textwrap.dedent("""\
