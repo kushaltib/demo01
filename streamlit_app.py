@@ -56,6 +56,8 @@ with col3:
 #display the plot
 fig, ax = plt.subplots()
 
+ax.set_title(selected_country,fontfamily="Arial",fontsize=10)
+
 ax.plot(hist_co2eq_excl.loc[selected_country].index,
         hist_co2eq_excl.loc[selected_country].values/1000,
         '-', color='black',alpha=1, lw=2, label='CO2eq historical',mec='k',mew=0.5,ms=6
