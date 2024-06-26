@@ -198,7 +198,7 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02):
                     x=res['x']
                     #--recompute CO2 emission trajectory for vector x
                     
-                    emi_list=np.array(emi_calc(E0,x[0],x[1]+Elong,x[2]))
+                    emi_list=np.array(emi_calc(E0,x[0],x[1]+Elong,x[2],year_start=yr_last+1))
                     #--make a quadratic fit to correct for the error term
                     #--the quadratic function is 0 for the 3 points defined by years "year last",2030,yr_neutrality
                     abc,cov=curve_fit(ax2bxc, [yr_last,yr_near,yr_nz], [0.0,Enear-emi_list[yr_near-yr_last],Elong-emi_list[yr_nz-yr_last]])
