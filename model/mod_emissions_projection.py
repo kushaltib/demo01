@@ -123,7 +123,7 @@ def cost(x,E0,gi0,Enear,Elong,yr_last,yr_near,yr_long):
 
 
 
-def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02):
+def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02,duncond=1,dcond=1,dndcyr=0,dnzyr=0):
      
      E0=emiss_hist.values[-1]  #-- emissions at t=0
      yr_last = emiss_hist.index[-1] 
@@ -166,9 +166,10 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02):
      #
 
      #--getting the near-term and long-term parameters:
-     yr_near = emiss_ndc['Year']
+     yr_near = emiss_ndc['Year']+dndcyr
      emiss_near = emiss_ndc[['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB']].values.tolist()
-     yr_nz = emiss_nz['Year']
+     dnear=[duncond,duncond,dcond,dcond]
+     yr_nz = emiss_nz['Year']+dndcyr
      Elong = emiss_nz['co2eq_excl']
 
 
@@ -181,6 +182,9 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02):
                
                #convert the emissions into kT/year
                Enear=emiss_near[i]*1000
+
+               #adjust for user specificed changes to NDC targets
+               Enear=Enear*dnear[i]
 
                #--adjust Elong if 2030 value is lower
                if Enear<Elong: Elong=Enear
