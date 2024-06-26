@@ -24,5 +24,9 @@ with col2:
     selected_country= st.selectbox("",NDC.index)
 
 
-st.write(NDC.loc[selected_country])
+#display the summary
+
+
+
+st.write(co2eq.loc[selected_country])
 
