@@ -56,9 +56,9 @@ with col3:
 
 
 #compute the trajectory for selected country:
-ehist = hist_co2eq_excl.loc[c]
-endc = co2eq_excl.loc[c]
-enz = co2eq_nz.loc[c]
+ehist = hist_co2eq_excl.loc[selected_country]
+endc = co2eq_excl.loc[selected_country]
+enz = co2eq_nz.loc[selected_country]
 
 emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz)
 
