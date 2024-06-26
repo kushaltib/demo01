@@ -54,13 +54,58 @@ with col3:
     
     #match = pd.DataFrame(np.arange(273),index=np.arange(1750,2023),columns=['values'])
 
+col1,col2,col3,col4=st.columns(4)
+
+
+
+with col1:
+    duncond= st.slider("Change the unconditional target emissions",
+                       min_value=0.7,
+                       max_value=1.3,
+                       value=1,
+                       step=0.05,
+                       )
+
+with col2:
+    dcond= st.slider("Change the conditional target emissions",
+                       min_value=0.7,
+                       max_value=1.3,
+                       value=1,
+                       step=0.05,
+                       )
+
+with col3:
+    dndcyr= st.slider("Change the NDC target year by ",
+                       min_value=0,
+                       max_value=7,
+                       value=0,
+                       step=1,
+                       )
+
+with col4:
+    dnzyr= st.slider("Change the net-zero target year by ",
+                       min_value=-5,
+                       max_value=7,
+                       value=0,
+                       step=1,
+                       )    
+
+
 
 #compute the trajectory for selected country:
 ehist = hist_co2eq_excl.loc[selected_country]
 endc = co2eq_excl.loc[selected_country]
 enz = co2eq_nz.loc[selected_country]
 
+#ndc based trajectory
 emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz)
+
+#adjusted enhanced/delayed trajectories
+emiss_uncond = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,duncond=duncond)
+emiss_cond = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,dcond=dcond)
+emiss_ndcyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,dndcyr=dndcyr)
+emiss_nzyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,dnzyr=dnzyr)
+
 
 
 #display the plot
