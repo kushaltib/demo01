@@ -62,7 +62,7 @@ with col1:
     duncond= st.slider(label="Change the unconditional target emissions",
                        min_value=0.7,
                        max_value=1.3,
-                       value=1,
+                       value=1.0,
                        step=0.05
                        )
 
@@ -70,7 +70,7 @@ with col2:
     dcond= st.slider(label="Change the conditional target emissions",
                      min_value=0.7,
                      max_value=1.3,
-                     value=1,
+                     value=1.0,
                      step=0.05
                     )
 
