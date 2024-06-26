@@ -59,36 +59,36 @@ col1,col2,col3,col4=st.columns(4)
 
 
 with col1:
-    duncond= st.slider("Change the unconditional target emissions",
+    duncond= st.slider(label="Change the unconditional target emissions",
                        min_value=0.7,
                        max_value=1.3,
                        value=1,
-                       step=0.05,
+                       step=0.05
                        )
 
 with col2:
-    dcond= st.slider("Change the conditional target emissions",
-                       min_value=0.7,
-                       max_value=1.3,
-                       value=1,
-                       step=0.05,
-                       )
+    dcond= st.slider(label="Change the conditional target emissions",
+                     min_value=0.7,
+                     max_value=1.3,
+                     value=1,
+                     step=0.05
+                    )
 
 with col3:
-    dndcyr= st.slider("Change the NDC target year by ",
-                       min_value=0,
-                       max_value=7,
-                       value=0,
-                       step=1,
-                       )
+    dndcyr= st.slider(label="Change the NDC target year by ",
+                      min_value=0,
+                      max_value=7,
+                      value=0,
+                      step=1
+                      )
 
 with col4:
-    dnzyr= st.slider("Change the net-zero target year by ",
-                       min_value=-5,
-                       max_value=7,
-                       value=0,
-                       step=1,
-                       )    
+    dnzyr= st.slider(label="Change the net-zero target year by ",
+                     min_value=-5,
+                     max_value=7,
+                     value=0,
+                     step=1
+                     )    
 
 
 
