@@ -61,7 +61,7 @@ def ax2bxc(x,a,b,c):
 #---- Eneg: asymptotic emissions (can be negative but does not have to be)
 #---- dg: yearly increment in growth rate
 
-def emi_calc(E0,g0,Eneg,dg,year_start=2022,gmax=0.1):
+def emi_calc(E0,g0,Eneg,dg,year_start=2023,gmax=0.1):
     #--initialising to latest-year values
     emi_list=[E0]  #--list of yearly emission values
     g=g0           #--growth rate
@@ -125,7 +125,7 @@ def cost(x,E0,gi0,Enear,Elong,yr_last,yr_near,yr_long):
 
 def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02):
      
-     E0=emiss_hist[-1]  #-- emissions at t=0
+     E0=emiss_hist.values[-1]  #-- emissions at t=0
      yr_last = emiss_hist.index[-1] 
      
      #--developing initial control vector for the minimation
@@ -179,7 +179,7 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02):
                Enear=emiss_near[i]*1000
 
                #--adjust Elong if 2030 value is lower
-               if Enear[0]<Elong: Elong=Enear
+               if Enear<Elong: Elong=Enear
 
                #--low ambition: emission trajectory minimization with x0 as initial conditions and bnds bounds
                #cost(x,E0,gi0,Enear,Elong,yr_last,yr_near,yr_long)
@@ -193,6 +193,7 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02):
                     #--x control vector after optimisation
                     x=res['x']
                     #--recompute CO2 emission trajectory for vector x
+                    
                     emi_list=np.array(emi_calc(E0,x[0],x[1]+Elong,x[2]))
                     #--make a quadratic fit to correct for the error term
                     #--the quadratic function is 0 for the 3 points defined by years "year last",2030,yr_neutrality
@@ -201,7 +202,7 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02):
                     #--initialise with recomputed emi_list
                     emiss_proj.iloc[i]=emi_list  #np.append([E0*(1-g0)],emi_list)
                     #--add correction term for the period "year last" to long-term target year
-                    emiss_proj.iloc[i] += ax2bxc(np.arange(yr_last,yr_nz+1),*abc)
+                    emiss_proj.iloc[i][np.arange(yr_last,yr_nz+1)] += ax2bxc(np.arange(yr_last,yr_nz+1),*abc)
                     #--overwrite Elong value beyond long-term target year
                     emiss_proj.iloc[i][np.arange(yr_nz+1,2101)]=Elong
                                    
