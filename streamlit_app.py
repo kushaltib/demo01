@@ -29,7 +29,7 @@ NDC = mod_read_input.read_ndc()
 #process NDC
 co2eq = mod_nearterm_CO2eq.grp_emiss(NDC,'CO2eq')
 co2eq = mod_nearterm_CO2eq.grp_percent_abs(NDC,'CO2eq',data=co2eq)
-co2eq_excl = mod_nearterm_CO2eq.to_total_excl(NDC,'CO2eq',data=co2eq)
+co2eq_excl,co2eq_luc = mod_nearterm_CO2eq.to_total_excl(NDC,'CO2eq',data=co2eq)
 co2eq_nz = mod_longterm_CO2eq.grp_nz(NDC,process='co2eq')
 
 
@@ -37,7 +37,7 @@ co2eq_nz = mod_longterm_CO2eq.grp_nz(NDC,process='co2eq')
 
 #country
 #col1,col2=st.columns([2,1])
-col1,col2,col3=st.columns(3)
+col1,col2,col3,col4=st.columns(4)
 
 #with col1:
 #    st.write("Choose Country:")
@@ -55,6 +55,18 @@ with col2:
     hist_co2eq_excl = mod_read_input.read_hist(selected_inventory,'CO2eq','excl') #read historical emissions data
 
 with col3:
+    selected_luc = st.selectbox("Choose land-use data:",['OSCAR+DGVM','NGHGI'])
+    if selected_luc=='OSCAR+DGVM':
+        hist_luc_emiss = mod_read_input.read_luc('emiss','OSCAR')
+        hist_luc_sink = mod_read_input.read_luc('sink','Grassi')
+        hist_luc_net = hist_luc_sink+hist_luc_emiss
+    
+    if selected_luc=='NGHGI':
+        hist_luc_net = mod_read_input.read_luc('net','NGHGI')
+
+
+
+with col4:
     start, end = st.slider("Select range of years", 
                            min_value=1850,
                            max_value=2100,
@@ -229,6 +241,14 @@ x = emiss_coun.iloc[i].index
 y1 = emiss_coun.iloc[i].values/1000
 y2 = emiss_ndcyr.iloc[i].values/1000
 ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='khaki',interpolate=True,alpha=0.5)
+
+
+#plot luc emissions:
+ax.plot(hist_luc_net.loc[selected_country].index,
+        hist_luc_net.loc[selected_country].values/1000,
+        '-', color='yellowgreen',alpha=1, lw=2, label='CO2eq historical luc net',mec='k',mew=0.5,ms=6
+        )
+
 
 
 

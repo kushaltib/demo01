@@ -235,6 +235,9 @@ def to_total_excl(ndc_table,applies_to,data=None):
                if is_nan(adj_cond_lb): adj_cond_lb = adj_uncond_lb
                if is_nan(adj_cond_ub): adj_cond_ub = adj_uncond_ub
 
+               data_luc = [adj_uncond_lb,adj_uncond_ub,adj_cond_lb,adj_cond_ub]
+
+
                
                data_adj.loc[country,'Unconditional_LB'] = min(data.loc[country,'Unconditional_LB']-adj_uncond_lb,data.loc[country,'Unconditional_LB']-adj_uncond_ub)
                data_adj.loc[country,'Unconditional_UB'] = max(data.loc[country,'Unconditional_UB']-adj_uncond_lb,data.loc[country,'Unconditional_UB']-adj_uncond_lb)
@@ -249,7 +252,7 @@ def to_total_excl(ndc_table,applies_to,data=None):
 
 
 
-     return data_adj          
+     return data_adj,data_luc          
                
 
 
