@@ -143,9 +143,13 @@ plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
             label='NDC Uncondititonal',color='royalblue',marker='o',s=30,zorder=20)
 
 #plotting for adjusted targets
-x = emiss_coun.iloc[1].index
-y1 = emiss_coun.iloc[1].values/1000
-y2 = emiss_nzyr.iloc[1].values/1000
+
+#for net-zero year
+i= 1 if dnzyr>0 else 2
+
+x = emiss_coun.iloc[i].index
+y1 = emiss_coun.iloc[i].values/1000
+y2 = emiss_nzyr.iloc[i].values/1000
 ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='dodgerblue',interpolate=True,alpha=0.6)
 
 
