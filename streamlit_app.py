@@ -152,6 +152,14 @@ y1 = emiss_coun.iloc[i].values/1000
 y2 = emiss_nzyr.iloc[i].values/1000
 ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='dodgerblue',interpolate=True,alpha=0.6)
 
+#for ndc unconditional
+i=1 if duncond>1 else 0
+x = emiss_coun.iloc[i].index
+y1 = emiss_coun.iloc[i].values/1000
+y2 = emiss_uncond.iloc[i].values/1000
+ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='orange',interpolate=True,alpha=0.6)
+
+
 
 
 ax.spines.left.set_position(('data', start))
