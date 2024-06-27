@@ -145,7 +145,7 @@ plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
 #plotting for adjusted targets
 
 #for net-zero year
-i= 1 if dnzyr>0 else 2
+i= 1 if dnzyr>0 else 0
 
 x = emiss_coun.iloc[i].index
 y1 = emiss_coun.iloc[i].values/1000
