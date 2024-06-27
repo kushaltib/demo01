@@ -54,15 +54,15 @@ with col3:
     
     #match = pd.DataFrame(np.arange(273),index=np.arange(1750,2023),columns=['values'])
 
-col1,col2,col3,col4=st.columns(4)
+col1,col2,col3,col4,col5=st.columns(5)
 
-
+default=[1.0,1.0,0,0]
 
 with col1:
     duncond= st.slider(label="Change the unconditional target emissions",
                        min_value=0.7,
                        max_value=1.3,
-                       value=1.0,
+                       value=default[0],
                        step=0.05
                        )
 
@@ -70,7 +70,7 @@ with col2:
     dcond= st.slider(label="Change the conditional target emissions",
                      min_value=0.7,
                      max_value=1.3,
-                     value=1.0,
+                     value=default[1],
                      step=0.05
                     )
 
@@ -78,7 +78,7 @@ with col3:
     dndcyr= st.slider(label="Change the NDC target year by ",
                       min_value=0,
                       max_value=7,
-                      value=0,
+                      value=default[2],
                       step=1
                       )
 
@@ -86,9 +86,14 @@ with col4:
     dnzyr= st.slider(label="Change the net-zero target year by ",
                      min_value=-5,
                      max_value=7,
-                     value=0,
+                     value=default[3],
                      step=1
-                     )    
+                     )
+
+with col5:
+    if st.button('Reset Slider'):
+        st.session_state.slider = default
+        #st.experimental_rerun()    
 
 
 
