@@ -22,16 +22,20 @@ def format_text(value):
 st.title("NDC pledges for selected countries")
 
 
-#read data:
-NDC = mod_read_input.read_ndc()
+#read and process NDC data:
+@st.cache_data
+def get_ndc():
+    NDC = mod_read_input.read_ndc()
+    
+    #process NDC
+    co2eq = mod_nearterm_CO2eq.grp_emiss(NDC,'CO2eq')
+    co2eq = mod_nearterm_CO2eq.grp_percent_abs(NDC,'CO2eq',data=co2eq)
+    co2eq_excl,co2eq_luc = mod_nearterm_CO2eq.to_total_excl(NDC,'CO2eq',data=co2eq)
+    co2eq_nz = mod_longterm_CO2eq.grp_nz(NDC,process='co2eq')
 
+    return NDC,co2eq,co2eq_excl,co2eq_luc,co2eq_nz
 
-#process NDC
-co2eq = mod_nearterm_CO2eq.grp_emiss(NDC,'CO2eq')
-co2eq = mod_nearterm_CO2eq.grp_percent_abs(NDC,'CO2eq',data=co2eq)
-co2eq_excl,co2eq_luc = mod_nearterm_CO2eq.to_total_excl(NDC,'CO2eq',data=co2eq)
-co2eq_nz = mod_longterm_CO2eq.grp_nz(NDC,process='co2eq')
-
+NDC,co2eq,co2eq_excl,co2eq_luc,co2eq_nz = get_ndc()
 
 #Ask for choices:
 
@@ -122,8 +126,13 @@ ehist = hist_co2eq_excl.loc[selected_country]
 endc = co2eq_excl.loc[selected_country]
 enz = co2eq_nz.loc[selected_country]
 
-#ndc based trajectory
-emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz)
+#ndc base trajectory
+@st.cache_data
+def base_ndc():
+    emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz)
+    return emiss_coun
+
+emiss_coun = base_ndc()
 
 #adjusted enhanced/delayed trajectories
 emiss_uncond= mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,duncond=duncond)
