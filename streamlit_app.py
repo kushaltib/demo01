@@ -54,7 +54,7 @@ with col3:
     
     #match = pd.DataFrame(np.arange(273),index=np.arange(1750,2023),columns=['values'])
 
-col1,col2,col3,col4,col5=st.columns(5)
+col1,col2,col3,col4=st.columns(4)
 
 default=[1.0,1.0,0,0]
 
@@ -64,7 +64,7 @@ with col1:
                        max_value=1.3,
                        value=default[0],
                        step=0.05,
-                       key='slider1'
+                       #key='slider1'
                        )
 
 with col2:
@@ -73,7 +73,7 @@ with col2:
                      max_value=1.3,
                      value=default[1],
                      step=0.05,
-                     key='slider2'
+                     #key='slider2'
                     )
 
 with col3:
@@ -82,7 +82,7 @@ with col3:
                       max_value=7,
                       value=default[2],
                       step=1,
-                      key='slider3'
+                      #key='slider3'
                       )
 
 with col4:
@@ -91,14 +91,8 @@ with col4:
                      max_value=7,
                      value=default[3],
                      step=1,
-                     key='slider4'
+                     #key='slider4'
                      )
-
-with col5:
-    if st.button('Reset Slider'):
-        st.session_state.slider4 = default[3]
-        #st.experimental_rerun()    
-
 
 
 #compute the trajectory for selected country:
