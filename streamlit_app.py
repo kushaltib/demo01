@@ -133,7 +133,7 @@ i=1 if duncond>1 else 0
 cumm_uncond = emiss_uncond.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
 
 #for ndc conditional
-i=1 if dcond>1 else 0
+i=3 if dcond>1 else 2
 cumm_cond = emiss_cond.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
 
 #for ndc year
@@ -216,7 +216,7 @@ ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='orange',interpolate=True,alpha
 
 
 #for ndc conditional
-i=1 if dcond>1 else 0
+i=3 if dcond>1 else 2
 x = emiss_coun.iloc[i].index
 y1 = emiss_coun.iloc[i].values/1000
 y2 = emiss_cond.iloc[i].values/1000
