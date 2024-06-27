@@ -47,7 +47,7 @@ col1,col2,col3=st.columns(3)
 
 with col1:
     #selected_country= st.selectbox("Choose Country:",NDC.index)
-    selected_country= st.selectbox("Choose Country:",co2eq_excl.index[co2eq_excl['Processed']=='Yes'])
+    selected_country= st.selectbox("Choose Country:",sorted(co2eq_excl.index[co2eq_excl['Processed']=='Yes']))
     
 
 with col2:
