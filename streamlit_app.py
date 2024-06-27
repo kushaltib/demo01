@@ -48,7 +48,7 @@ with col3:
     start, end = st.slider("Select range of years", 
                            min_value=1850,
                            max_value=2100,
-                           value=(2000, 2050),        
+                           value=(2000, 2100),        
                            step=1
                           )
     
