@@ -139,6 +139,13 @@ plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
             co2eq_excl.loc[selected_country,co2eq.columns[2:4]].values,
             label='NDC Uncondititonal',color='royalblue',marker='o',s=30,zorder=20)
 
+#plotting for adjusted targets
+
+x = emiss_coun.iloc[1].index
+y1 = emiss_coun.iloc[1].values/1000000
+y2 = emiss_nzyr.iloc[1].values/1000000
+ax.fill_between(x,y1,y2, where=y2>=y1, facecolor='dodgerblue',interpolate=True,alpha=0.6)
+
 
 
 ax.spines.left.set_position(('data', start))
