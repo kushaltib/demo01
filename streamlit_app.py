@@ -9,11 +9,13 @@ import streamlit as st
 from model import mod_read_input, mod_nearterm_CO2eq, mod_longterm_CO2eq, mod_emissions_projection
 
 def format_text(value):
+    value = int(value)
+
     if value > 0:
         color = 'red'
     else:
         color = 'green'
-    return f"<b style='color:{color};'>{value}</b>"
+    return f"<b style='color:{color}; font-size:20px;'>{value} GtCO2eq </b>"
 
 
 
