@@ -249,13 +249,24 @@ ax.plot(hist_luc_net.loc[selected_country].index,
         '-', color='yellowgreen',alpha=1, lw=2, label='CO2eq historical luc net',mec='k',mew=0.5,ms=6
         )
 
-#plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
-#            co2eq_luc.loc[selected_country,co2eq_luc.columns[4:6]].values,
-#            label='NDC Condititonal',color='limegreen',marker='o',s=30,zorder=20)
+if np.isnan(np.asarray(NDC.loc[selected_country,['Target_CO2eq_emissions_LB_conditional_LULUCF','Target_CO2eq_emissions_UB_conditional_LULUCF']].values,dtype=float)).any():
+    plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
+                NDC.loc[selected_country,['Supp_Target_CO2eq_emissions_LB_conditional_LULUCF','Supp_Target_CO2eq_emissions_UB_conditional_LULUCF']].values,
+                label='NDC Condititonal',color='limegreen',marker='o',s=30,zorder=20)
+else:
+    plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
+                NDC.loc[selected_country,['Target_CO2eq_emissions_LB_conditional_LULUCF','Target_CO2eq_emissions_UB_conditional_LULUCF']].values,
+                label='NDC Condititonal',color='limegreen',marker='o',s=30,zorder=20)
 
-#plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
-#            co2eq_luc.loc[selected_country,co2eq_luc.columns[2:4]].values,
-#            label='NDC Uncondititonal',color='darkgreen',marker='o',s=30,zorder=20)
+
+if np.isnan(np.asarray(NDC.loc[selected_country,['Target_CO2eq_emissions_LB_unconditional_LULUCF','Target_CO2eq_emissions_UB_unconditional_LULUCF']].values,dtype=float)).any():
+    plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
+                NDC.loc[selected_country,['Supp_Target_CO2eq_emissions_LB_unconditional_LULUCF','Supp_Target_CO2eq_emissions_UB_unconditional_LULUCF']].values,
+                label='NDC Condititonal',color='darkgreen',marker='o',s=30,zorder=20)
+else:
+    plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
+                NDC.loc[selected_country,['Target_CO2eq_emissions_LB_unconditional_LULUCF','Target_CO2eq_emissions_UB_unconditional_LULUCF']].values,
+                label='NDC Condititonal',color='darkgreen',marker='o',s=30,zorder=20)    
 
 
 ax.spines.left.set_position(('data', start))
