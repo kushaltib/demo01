@@ -231,11 +231,17 @@ def to_total_excl(ndc_table,applies_to,data=None):
                     
                     
                data_adj.loc[country,'Scope'] = 'Total-excl'
-               data_adj.loc[country,'Unconditional_LB'] = data.loc[country,'Unconditional_LB']-adj_uncond_lb
-               data_adj.loc[country,'Unconditional_UB'] = data.loc[country,'Unconditional_UB']-adj_uncond_ub
-               data_adj.loc[country,'Conditional_LB'] = data.loc[country,'Conditional_LB']-adj_cond_lb
-               data_adj.loc[country,'Conditional_UB'] = data.loc[country,'Conditional_UB']-adj_cond_ub
 
+               if is_nan(adj_cond_lb): adj_cond_lb = adj_uncond_lb
+               if is_nan(adj_cond_ub): adj_cond_ub = adj_uncond_ub
+
+               
+               data_adj.loc[country,'Unconditional_LB'] = min(data.loc[country,'Unconditional_LB']-adj_uncond_lb,data.loc[country,'Unconditional_LB']-adj_uncond_ub)
+               data_adj.loc[country,'Unconditional_UB'] = max(data.loc[country,'Unconditional_UB']-adj_uncond_lb,data.loc[country,'Unconditional_UB']-adj_uncond_lb)
+               data_adj.loc[country,'Conditional_LB'] = min(data.loc[country,'Conditional_LB']-adj_cond_lb,data.loc[country,'Conditional_LB']-adj_cond_ub)
+               data_adj.loc[country,'Conditional_UB'] = max(data.loc[country,'Conditional_UB']-adj_cond_lb,data.loc[country,'Conditional_UB']-adj_cond_ub)
+                
+               
                if is_nan(data_adj.loc[country,'Conditional_LB']):
                   
                   data_adj.loc[country,'Conditional_LB'] = data_adj.loc[country,'Unconditional_LB']
