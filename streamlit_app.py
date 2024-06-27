@@ -201,12 +201,12 @@ ax.plot(emiss_coun.iloc[1].index,
 
 
 plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
-            co2eq_excl.loc[selected_country,co2eq.columns[4:6]].values,
+            co2eq_excl.loc[selected_country,co2eq_excl.columns[4:6]].values,
             label='NDC Condititonal',color='lightblue',marker='o',s=30,zorder=20)
 
 
 plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
-            co2eq_excl.loc[selected_country,co2eq.columns[2:4]].values,
+            co2eq_excl.loc[selected_country,co2eq_excl.columns[2:4]].values,
             label='NDC Uncondititonal',color='royalblue',marker='o',s=30,zorder=20)
 
 #plotting for adjusted targets
@@ -250,11 +250,11 @@ ax.plot(hist_luc_net.loc[selected_country].index,
         )
 
 plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
-            co2eq_luc.loc[selected_country,co2eq.columns[4:6]].values,
+            co2eq_luc.loc[selected_country,co2eq_luc.columns[4:6]].values,
             label='NDC Condititonal',color='limegreen',marker='o',s=30,zorder=20)
 
 plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
-            co2eq_luc.loc[selected_country,co2eq.columns[2:4]].values,
+            co2eq_luc.loc[selected_country,co2eq_luc.columns[2:4]].values,
             label='NDC Uncondititonal',color='darkgreen',marker='o',s=30,zorder=20)
 
 
