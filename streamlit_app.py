@@ -15,7 +15,7 @@ def format_text(value):
         color = 'red'
     else:
         color = 'green'
-    return f"<b style='color:{color}; font-size:20px; text-align: center;'>{value} GtCO2eq </b>"
+    return f"<div style='color:{color}; font-size:20px; text-align: center;'><b>{value} GtCO2eq</b></div>"
 
 
 
