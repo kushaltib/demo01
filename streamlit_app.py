@@ -142,8 +142,8 @@ plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
 #plotting for adjusted targets
 
 x = emiss_coun.iloc[1].index
-y1 = emiss_coun.iloc[1].values/1000000
-y2 = emiss_nzyr.iloc[1].values/1000000
+y1 = emiss_coun.iloc[1].values/1000
+y2 = emiss_nzyr.iloc[1].values/1000
 ax.fill_between(x,y1,y2, where=y2>=y1, facecolor='dodgerblue',interpolate=True,alpha=0.6)
 
 
