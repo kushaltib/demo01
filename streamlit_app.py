@@ -307,7 +307,7 @@ sentence = (
     "<b style='color: darkgreen;'>NDC uncond. land-use </b> | "
     "<b style='color: limegreen;'>NDC cond. land-use </b>"
 )
-
+st.markdown(sentence, unsafe_allow_html=True)
 
 
 #st.write("Solid line represents the historical emissions")
