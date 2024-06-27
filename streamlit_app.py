@@ -295,13 +295,18 @@ sentence = (
     "<b style='color: black;'>Historical emissions excl. land-use</b> | "
     "<b style='color: royalblue;'>Unconditional NDC</b> | "
     "<b style='color: lightblue;'>Conditional NDC</b> | "
-    "<b style='color: yellowgreen;'>Net land-use managed lands</b> | "
-    "<b style='color: darkgreen;'>NDC uncond. land-use </b> | "
-    "<b style='color: limegreen;'>NDC cond. land-use </b>"
+    
 )
 
 # Display the sentence
 st.markdown(sentence, unsafe_allow_html=True)
+
+sentence = (
+    
+    "<b style='color: yellowgreen;'>Net land-use managed lands</b> | "
+    "<b style='color: darkgreen;'>NDC uncond. land-use </b> | "
+    "<b style='color: limegreen;'>NDC cond. land-use </b>"
+)
 
 
 
