@@ -98,7 +98,7 @@ endc = co2eq_excl.loc[selected_country]
 enz = co2eq_nz.loc[selected_country]
 
 #ndc based trajectory
-emiss_coun2 = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz)
+emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz)
 
 #adjusted enhanced/delayed trajectories
 emiss_uncond = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,duncond=duncond)
@@ -106,7 +106,7 @@ emiss_cond = mod_emissions_projection.create_timeseries(selected_country,ehist,e
 emiss_ndcyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,dndcyr=dndcyr)
 emiss_nzyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,dnzyr=int(dnzyr))
 
-emiss_coun = emiss_nzyr.copy()
+#emiss_coun = emiss_nzyr.copy()
 
 #display the plot
 fig, ax = plt.subplots()
@@ -141,10 +141,10 @@ plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
 
 #plotting for adjusted targets
 
-#x = emiss_coun.iloc[1].index
-#y1 = emiss_coun.iloc[1].values/1000000
-#y2 = emiss_nzyr.iloc[1].values/1000000
-#ax.fill_between(x,y1,y2, where=y2>=y1, facecolor='dodgerblue',interpolate=True,alpha=0.6)
+x = emiss_coun.iloc[1].index
+y1 = emiss_coun.iloc[1].values/1000000
+y2 = emiss_nzyr.iloc[1].values/1000000
+ax.fill_between(x,y1,y2, where=y2>=y1, facecolor='dodgerblue',interpolate=True,alpha=0.6)
 
 
 
