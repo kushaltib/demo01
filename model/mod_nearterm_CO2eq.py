@@ -211,6 +211,8 @@ def to_total_excl(ndc_table,applies_to,data=None):
           data_adj = data.copy()
           country_list = data.index
 
+          data_luc = data.copy()
+
           country_for_adjust = create_lists(country_list,data,'Scope',data['Scope'].unique().tolist())
           luc_separate = create_lists(country_list,NDC,'LULUCF_separate_info',NDC['LULUCF_separate_info'].unique().tolist())
 
@@ -235,7 +237,10 @@ def to_total_excl(ndc_table,applies_to,data=None):
                if is_nan(adj_cond_lb): adj_cond_lb = adj_uncond_lb
                if is_nan(adj_cond_ub): adj_cond_ub = adj_uncond_ub
 
-               data_luc = [adj_uncond_lb,adj_uncond_ub,adj_cond_lb,adj_cond_ub]
+               data_luc.loc[country,'Unconditional_LB'] = adj_uncond_lb
+               data_luc.loc[country,'Unconditional_UB'] = adj_uncond_ub
+               data_luc.loc[country,'Conditional_LB'] = adj_cond_lb
+               data_luc.loc[country,'conditional_UB'] = adj_cond_ub
 
 
                

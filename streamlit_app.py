@@ -249,7 +249,13 @@ ax.plot(hist_luc_net.loc[selected_country].index,
         '-', color='yellowgreen',alpha=1, lw=2, label='CO2eq historical luc net',mec='k',mew=0.5,ms=6
         )
 
+plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
+            co2eq_luc.loc[selected_country,co2eq.columns[4:6]].values,
+            label='NDC Condititonal',color='limegreen',marker='o',s=30,zorder=20)
 
+plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
+            co2eq_luc.loc[selected_country,co2eq.columns[2:4]].values,
+            label='NDC Uncondititonal',color='darkgreen',marker='o',s=30,zorder=20)
 
 
 ax.spines.left.set_position(('data', start))
