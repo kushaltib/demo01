@@ -8,6 +8,14 @@ import streamlit as st
 
 from model import mod_read_input, mod_nearterm_CO2eq, mod_longterm_CO2eq, mod_emissions_projection
 
+def format_text(value):
+    if value > 0:
+        color = 'red'
+    else:
+        color = 'green'
+    return f"<b style='color:{color};'>{value}</b>"
+
+
 
 st.title("NDC pledges for selected countries")
 
@@ -110,6 +118,42 @@ emiss_ndcyr = mod_emissions_projection.create_timeseries(selected_country,ehist,
 emiss_nzyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,dnzyr=dnzyr)
 
 #emiss_coun = emiss_nzyr.copy()
+
+
+
+#show the change in cumm. CO2eq with each type of change
+#for net-zero year
+i= 1 if dnzyr>0 else 0
+cumm_nzyr = emiss_nzyr.iloc[i].sum()/1000000 -emiss_coun.iloc[i].sum()/1000000
+
+#for ndc unconditional
+i=1 if duncond>1 else 0
+cumm_uncond = emiss_uncond.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
+
+#for ndc conditional
+i=1 if dcond>1 else 0
+cumm_cond = emiss_cond.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
+
+#for ndc year
+i= 1 if dndcyr>0 else 0
+cumm_ndcyr = emiss_ndcyr.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
+
+
+col1,col2,col3,col4=st.columns(4)
+
+with col1:
+    st.markdown(format_text(cumm_uncond), unsafe_allow_html=True)
+
+with col2:
+    st.markdown(format_text(cumm_cond), unsafe_allow_html=True)
+
+with col3:
+    st.markdown(format_text(cumm_ndcyr), unsafe_allow_html=True)
+
+with col4:
+    st.markdown(format_text(cumm_nzyr), unsafe_allow_html=True)
+
+
 
 #display the plot
 fig, ax = plt.subplots()
