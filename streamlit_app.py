@@ -291,8 +291,22 @@ ax.grid(which='major', axis='y', lw=0.4)
 
 st.pyplot(fig)
 
-st.write("Solid line represents the historical emissions")
-st.write("Dots represent emissions as per the NDC target: Unconditional (dark-blue) and Conditional (light-blue)") 
+sentence = (
+    "<b style='color: black;'>Historical emissions excl. land-use</b> | "
+    "<b style='color: royalblue;'>Unconditional NDC</b> | "
+    "<b style='color: lightblue;'>Conditional NDC</b> | "
+    "<b style='color: yellowgreen;'>Net land-use managed lands</b> | "
+    "<b style='color: darkgreen;'>NDC uncond. land-use </b> | "
+    "<b style='color: limegreen;'>NDC cond. land-use </b>"
+)
+
+# Display the sentence
+st.markdown(sentence, unsafe_allow_html=True)
+
+
+
+#st.write("Solid line represents the historical emissions")
+#st.write("Dots represent emissions as per the NDC target: Unconditional (dark-blue) and Conditional (light-blue)") 
 
 
 
