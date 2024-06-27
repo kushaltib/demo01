@@ -15,7 +15,7 @@ def format_text(value):
         color = 'red'
     else:
         color = 'green'
-    return f"<b style='color:{color}; font-size:20px;'>{value} GtCO2eq </b>"
+    return f"<b style='color:{color}; font-size:20px; text-align: center;'>{value} GtCO2eq </b>"
 
 
 
@@ -139,6 +139,15 @@ cumm_cond = emiss_cond.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
 #for ndc year
 i= 1 if dndcyr>0 else 0
 cumm_ndcyr = emiss_ndcyr.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
+
+sentence = (
+    "Cumulative emissions "
+    "<b style='color: green;'>avoided</b> or "
+    "<b style='color: red;'>added</b>."
+)
+
+# Display the sentence
+st.markdown(sentence, unsafe_allow_html=True)
 
 
 col1,col2,col3,col4=st.columns(4)
