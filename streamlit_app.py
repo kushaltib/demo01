@@ -47,15 +47,15 @@ col1,col2,col3,col4=st.columns(4)
 
 with col1:
     #selected_country= st.selectbox("Choose Country:",NDC.index)
-    selected_country= st.selectbox("Choose Country:",sorted(co2eq_excl.index[co2eq_excl['Processed']=='Yes']))
+    selected_country= st.selectbox("Country:",sorted(co2eq_excl.index[co2eq_excl['Processed']=='Yes']))
     
 
 with col2:
-    selected_inventory= st.selectbox("Choose Historical Inventory:",['PRIMAPv5','EDGARv6'])
+    selected_inventory= st.selectbox("Historical Inventory:",['PRIMAPv5','EDGARv6'])
     hist_co2eq_excl = mod_read_input.read_hist(selected_inventory,'CO2eq','excl') #read historical emissions data
 
 with col3:
-    selected_luc = st.selectbox("Choose land-use data:",['OSCAR+DGVM','NGHGI'])
+    selected_luc = st.selectbox("Land-use data:",['OSCAR+DGVM','NGHGI'])
     if selected_luc=='OSCAR+DGVM':
         hist_luc_emiss = mod_read_input.read_luc('emiss','OSCAR')
         hist_luc_sink = mod_read_input.read_luc('sink','Grassi')
@@ -67,7 +67,7 @@ with col3:
 
 
 with col4:
-    start, end = st.slider("Select range of years", 
+    start, end = st.slider("Range of years", 
                            min_value=1850,
                            max_value=2100,
                            value=(2000, 2100),        
