@@ -127,12 +127,7 @@ endc = co2eq_excl.loc[selected_country]
 enz = co2eq_nz.loc[selected_country]
 
 #ndc base trajectory
-@st.cache_data
-def base_ndc():
-    emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz)
-    return emiss_coun
-
-emiss_coun = base_ndc()
+emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz)
 
 #adjusted enhanced/delayed trajectories
 emiss_uncond= mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,duncond=duncond)
