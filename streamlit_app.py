@@ -63,7 +63,8 @@ with col1:
                        min_value=0.7,
                        max_value=1.3,
                        value=default[0],
-                       step=0.05
+                       step=0.05,
+                       key='slider'
                        )
 
 with col2:
@@ -71,7 +72,8 @@ with col2:
                      min_value=0.7,
                      max_value=1.3,
                      value=default[1],
-                     step=0.05
+                     step=0.05,
+                     key='slider'
                     )
 
 with col3:
@@ -79,7 +81,8 @@ with col3:
                       min_value=0,
                       max_value=7,
                       value=default[2],
-                      step=1
+                      step=1,
+                      key='slider'
                       )
 
 with col4:
@@ -87,7 +90,8 @@ with col4:
                      min_value=-5,
                      max_value=7,
                      value=default[3],
-                     step=1
+                     step=1,
+                     key='slider'
                      )
 
 with col5:
