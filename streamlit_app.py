@@ -64,7 +64,7 @@ with col1:
                        max_value=1.3,
                        value=default[0],
                        step=0.05,
-                       key='slider'
+                       key='slider1'
                        )
 
 with col2:
@@ -73,7 +73,7 @@ with col2:
                      max_value=1.3,
                      value=default[1],
                      step=0.05,
-                     key='slider'
+                     key='slider2'
                     )
 
 with col3:
@@ -82,7 +82,7 @@ with col3:
                       max_value=7,
                       value=default[2],
                       step=1,
-                      key='slider'
+                      key='slider3'
                       )
 
 with col4:
@@ -91,12 +91,12 @@ with col4:
                      max_value=7,
                      value=default[3],
                      step=1,
-                     key='slider'
+                     key='slider4'
                      )
 
 with col5:
     if st.button('Reset Slider'):
-        st.session_state.slider = default
+        st.session_state.slider4 = default[3]
         #st.experimental_rerun()    
 
 
