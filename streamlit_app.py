@@ -126,7 +126,7 @@ enz = co2eq_nz.loc[selected_country]
 emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz)
 
 #adjusted enhanced/delayed trajectories
-emiss_uncond = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,duncond=duncond)
+emiss_uncond= mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,duncond=duncond)
 emiss_cond = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,dcond=dcond)
 emiss_ndcyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,dndcyr=dndcyr)
 emiss_nzyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,dnzyr=dnzyr)
