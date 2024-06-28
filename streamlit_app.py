@@ -41,24 +41,20 @@ NDC,co2eq,co2eq_excl,co2eq_luc,co2eq_nz = get_ndc()
 
 #country
 #col1,col2=st.columns([2,1])
-col1,col2,col3,col4=st.columns(4)
+#col1,col2,col3,col4=st.columns(4)
 
+with st.sidebar:
+    
 #with col1:
-#    st.write("Choose Country:")
-#with col2:
-#    selected_country= st.selectbox("",NDC.index)
-
-
-with col1:
     #selected_country= st.selectbox("Choose Country:",NDC.index)
     selected_country= st.selectbox("Country:",sorted(co2eq_excl.index[co2eq_excl['Processed']=='Yes']))
     
 
-with col2:
+#with col2:
     selected_inventory= st.selectbox("Historical Inventory:",['PRIMAPv5','EDGARv6'])
     hist_co2eq_excl = mod_read_input.read_hist(selected_inventory,'CO2eq','excl') #read historical emissions data
 
-with col3:
+#with col3:
     selected_luc = st.selectbox("Land-use data:",['OSCAR+DGVM','NGHGI'])
     if selected_luc=='OSCAR+DGVM':
         hist_luc_emiss = mod_read_input.read_luc('emiss','OSCAR')
@@ -68,9 +64,7 @@ with col3:
     if selected_luc=='NGHGI':
         hist_luc_net = mod_read_input.read_luc('net','NGHGI')
 
-
-
-with col4:
+#with col4:
     start, end = st.slider("Range of years", 
                            min_value=1850,
                            max_value=2100,
@@ -81,7 +75,7 @@ with col4:
     #match = pd.DataFrame(np.arange(273),index=np.arange(1750,2023),columns=['values'])
 
 
-st.markdown("<hr>", unsafe_allow_html=True)
+#st.markdown("<hr>", unsafe_allow_html=True)
 
 col1,col2=st.columns(2)
 
