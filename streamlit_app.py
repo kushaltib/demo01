@@ -84,13 +84,11 @@ with col4:
 col1,col2=st.columns(2)
 
 with col1: 
-    st.markdown(f"<div text-align: center;'>Adjust emissions level rel. to declared in pledge.<br>
-                (<b>>1</b> = more emissions) </div>",
+    st.markdown(f"<div style='text-align: center;'>Adjust emissions level rel. to declared in pledge.<br>(<b>>1</b> = more emissions) </div>",
                 unsafe_allow_html=True)
     
 with col2:
-    st.markdown(f"<div text-align: center;'>Adjust year rel. to declared in pledge.<br>
-                (<b>>0</b> = delay it further) </div>",
+    st.markdown(f"<div style='text-align: center;'>Adjust year rel. to declared in pledge.<br> (<b>>0</b> = delay it further) </div>",
                 unsafe_allow_html=True)
 
 col1,col2,col3,col4=st.columns(4)
