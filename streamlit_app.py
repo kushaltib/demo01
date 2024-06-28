@@ -80,12 +80,25 @@ with col4:
     
     #match = pd.DataFrame(np.arange(273),index=np.arange(1750,2023),columns=['values'])
 
+
+col1,col2=st.columns(2)
+
+with col1: 
+    st.markdown(f"<div text-align: center;'>Adjust emissions level rel. to declared in pledge.<br>
+                (<b>>1</b> = more emissions) </div>",
+                unsafe_allow_html=True)
+    
+with col2:
+    st.markdown(f"<div text-align: center;'>Adjust year rel. to declared in pledge.<br>
+                (<b>>0</b> = delay it further) </div>",
+                unsafe_allow_html=True)
+
 col1,col2,col3,col4=st.columns(4)
 
 default=[1.0,1.0,0,0]
 
 with col1:
-    duncond= st.slider(label="Change the unconditional target emissions",
+    duncond= st.slider(label="Unconditional emissions",
                        min_value=0.7,
                        max_value=1.3,
                        value=default[0],
@@ -94,7 +107,7 @@ with col1:
                        )
 
 with col2:
-    dcond= st.slider(label="Change the conditional target emissions",
+    dcond= st.slider(label="Conditional emissions",
                      min_value=0.7,
                      max_value=1.3,
                      value=default[1],
@@ -103,7 +116,7 @@ with col2:
                     )
 
 with col3:
-    dndcyr= st.slider(label="Change the NDC target year by ",
+    dndcyr= st.slider(label="NDC target year",
                       min_value=0,
                       max_value=7,
                       value=default[2],
@@ -112,7 +125,7 @@ with col3:
                       )
 
 with col4:
-    dnzyr= st.slider(label="Change the net-zero target year by ",
+    dnzyr= st.slider(label="Net-zero target year",
                      min_value=-5,
                      max_value=7,
                      value=default[3],
@@ -156,15 +169,7 @@ cumm_cond = emiss_cond.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
 i= 1 if dndcyr>0 else 0
 cumm_ndcyr = emiss_ndcyr.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
 
-col1,col2=st.columns(2)
 
-with col1: 
-    st.markdown(f"<div text-align: center;'>Adjust emissions level rel. to declared in pledge. (<b>>1</b> = more emissions) </div>",
-                unsafe_allow_html=True)
-    
-with col2:
-    st.markdown(f"<div text-align: center;'>Adjust year rel. to declared in pledge. (<b>>0</b> = delay it further) </div>",
-                unsafe_allow_html=True)
 
 sentence = (
     "Cumulative emissions "
@@ -309,19 +314,19 @@ st.pyplot(fig)
 sentence = (
     "<b style='color: black;'>Historical emissions excl. land-use</b> | "
     "<b style='color: royalblue;'>Unconditional NDC</b> | "
-    "<b style='color: lightblue;'>Conditional NDC</b> | "
+    "<b style='color: lightblue;'>Conditional NDC</b> | <br>"
+    "<b style='color: yellowgreen;'>Net land-use managed lands</b> | "
+    "<b style='color: darkgreen;'>NDC uncond. land-use </b> | "
+    "<b style='color: limegreen;'>NDC cond. land-use </b>"
+
     
 )
 
 # Display the sentence
 st.markdown(sentence, unsafe_allow_html=True)
 
-sentence = (
-    
-    "<b style='color: yellowgreen;'>Net land-use managed lands</b> | "
-    "<b style='color: darkgreen;'>NDC uncond. land-use </b> | "
-    "<b style='color: limegreen;'>NDC cond. land-use </b>"
-)
+sentence = ("*Double dots with same colour denote the upper and lower bounds. <br>"
+            "**Shaded area represents the additional emissions added or removed because of the adjustment")
 st.markdown(sentence, unsafe_allow_html=True)
 
 
