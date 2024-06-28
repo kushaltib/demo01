@@ -38,8 +38,7 @@ def get_ndc():
 NDC,co2eq,co2eq_excl,co2eq_luc,co2eq_nz = get_ndc()
 
 
-#for dividing the page into 3 sections:
-col1,col2,col3=st.columns([0.8,2,0.8])
+
 
 #Ask for choices:
 
@@ -47,9 +46,9 @@ col1,col2,col3=st.columns([0.8,2,0.8])
 #col1,col2=st.columns([2,1])
 #col1,col2,col3,col4=st.columns(4)
 
-#with st.sidebar:
+with st.sidebar:
     
-with col1:
+#with col1:
     #selected_country= st.selectbox("Choose Country:",NDC.index)
     selected_country= st.selectbox("Country:",sorted(co2eq_excl.index[co2eq_excl['Processed']=='Yes']))
     
@@ -79,23 +78,26 @@ with col1:
     #match = pd.DataFrame(np.arange(273),index=np.arange(1750,2023),columns=['values'])
 
 
-with col3:
-
-    default=[1.0,1.0,0,0]
-    
-
 #st.markdown("<hr>", unsafe_allow_html=True)
 
-#col1,col2=st.columns(2)
-# 
+col1,col2=st.columns(2)
 
-
-#with col1: 
+with col1: 
     st.markdown(f"<div style='text-align: center;'>Adjust emissions level rel. to declared in pledge.<br>(<b>>1</b> = more emissions) </div>",
                 unsafe_allow_html=True)
+    
+with col2:
+    st.markdown(f"<div style='text-align: center;'>Adjust year rel. to declared in pledge.<br> (<b>>0</b> = delay it further) </div>",
+                unsafe_allow_html=True)
+    
 
 
-#with col1:
+
+col1,col2,col3,col4=st.columns(4)
+
+default=[1.0,1.0,0,0]
+
+with col1:
     duncond= st.slider(label="Unconditional emissions",
                        min_value=0.7,
                        max_value=1.3,
@@ -104,7 +106,7 @@ with col3:
                        #key='slider1'
                        )
 
-#with col2:
+with col2:
     dcond= st.slider(label="Conditional emissions",
                      min_value=0.7,
                      max_value=1.3,
@@ -113,21 +115,7 @@ with col3:
                      #key='slider2'
                     )
 
-#with col2:
-
-    st.markdown(f"<div style='text-align: center;'>Adjust year rel. to declared in pledge.<br> (<b>>0</b> = delay it further) </div>",
-                unsafe_allow_html=True)
-    
-
-
-
-#col1,col2,col3,col4=st.columns(4)
-
-
-
-
-
-#with col3:
+with col3:
     dndcyr= st.slider(label="NDC target year",
                       min_value=0,
                       max_value=7,
@@ -136,7 +124,7 @@ with col3:
                       #key='slider3'
                       )
 
-#with col4:
+with col4:
     dnzyr= st.slider(label="Net-zero target year",
                      min_value=-5,
                      max_value=7,
@@ -182,32 +170,32 @@ i= 1 if dndcyr>0 else 0
 cumm_ndcyr = emiss_ndcyr.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
 
 
-#st.markdown("<hr>", unsafe_allow_html=True)
+st.markdown("<hr>", unsafe_allow_html=True)
+
+sentence = (
+    "Cumulative emissions "
+    "<b style='color: green;'>avoided</b> or "
+    "<b style='color: red;'>added</b>"
+    " for each type of change."
+)
+
+# Display the sentence
+st.markdown(sentence, unsafe_allow_html=True)
+
+
+col1,col2,col3,col4=st.columns(4)
+
+with col1:
+    st.markdown(format_text(cumm_uncond), unsafe_allow_html=True)
 
 with col2:
-    sentence = ( "Cumulative emissions "
-                 "<b style='color: green;'>avoided</b> or "
-                 "<b style='color: red;'>added</b>"
-                 " for each type of change."
-               )
+    st.markdown(format_text(cumm_cond), unsafe_allow_html=True)
 
-    # Display the sentence
-    st.markdown(sentence, unsafe_allow_html=True)
+with col3:
+    st.markdown(format_text(cumm_ndcyr), unsafe_allow_html=True)
 
-
-    col1,col2,col3,col4=st.columns(4)
-
-    with col1:
-        st.markdown(format_text(cumm_uncond), unsafe_allow_html=True)
-
-    with col2:
-        st.markdown(format_text(cumm_cond), unsafe_allow_html=True)
-
-    with col3:
-        st.markdown(format_text(cumm_ndcyr), unsafe_allow_html=True)
-
-    with col4:
-        st.markdown(format_text(cumm_nzyr), unsafe_allow_html=True)
+with col4:
+    st.markdown(format_text(cumm_nzyr), unsafe_allow_html=True)
 
 
 
@@ -322,25 +310,25 @@ for tick in ax.get_yticklabels():
 
 ax.grid(which='major', axis='y', lw=0.4)
 
-with col2:
-    st.pyplot(fig)
+st.pyplot(fig)
 
-    sentence = (
-        "<b style='color: black;'>Historical emissions excl. land-use</b> | "
-        "<b style='color: royalblue;'>Unconditional NDC</b> | "
-        "<b style='color: lightblue;'>Conditional NDC</b> | <br>"
-        "<b style='color: yellowgreen;'>Net land-use managed lands</b> | "
-        "<b style='color: darkgreen;'>NDC uncond. land-use </b> | "
-        "<b style='color: limegreen;'>NDC cond. land-use </b>"
-    )
+sentence = (
+    "<b style='color: black;'>Historical emissions excl. land-use</b> | "
+    "<b style='color: royalblue;'>Unconditional NDC</b> | "
+    "<b style='color: lightblue;'>Conditional NDC</b> | <br>"
+    "<b style='color: yellowgreen;'>Net land-use managed lands</b> | "
+    "<b style='color: darkgreen;'>NDC uncond. land-use </b> | "
+    "<b style='color: limegreen;'>NDC cond. land-use </b>"
 
+    
+)
 
-    # Display the sentence
-    st.markdown(sentence, unsafe_allow_html=True)
+# Display the sentence
+st.markdown(sentence, unsafe_allow_html=True)
 
-    sentence = ("*Double dots with same colour denote the upper and lower bounds. <br>"
-                "**Shaded area represents the additional emissions added or removed because of the adjustment")
-    st.markdown(sentence, unsafe_allow_html=True)
+sentence = ("*Double dots with same colour denote the upper and lower bounds. <br>"
+            "**Shaded area represents the additional emissions added or removed because of the adjustment")
+st.markdown(sentence, unsafe_allow_html=True)
 
 
 #st.write("Solid line represents the historical emissions")
