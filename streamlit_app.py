@@ -81,6 +81,8 @@ with col4:
     #match = pd.DataFrame(np.arange(273),index=np.arange(1750,2023),columns=['values'])
 
 
+st.markdown("<hr>", unsafe_allow_html=True)
+
 col1,col2=st.columns(2)
 
 with col1: 
@@ -90,6 +92,9 @@ with col1:
 with col2:
     st.markdown(f"<div style='text-align: center;'>Adjust year rel. to declared in pledge.<br> (<b>>0</b> = delay it further) </div>",
                 unsafe_allow_html=True)
+    
+
+
 
 col1,col2,col3,col4=st.columns(4)
 
@@ -168,6 +173,7 @@ i= 1 if dndcyr>0 else 0
 cumm_ndcyr = emiss_ndcyr.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
 
 
+st.markdown("<hr>", unsafe_allow_html=True)
 
 sentence = (
     "Cumulative emissions "
