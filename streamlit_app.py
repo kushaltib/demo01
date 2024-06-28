@@ -156,11 +156,21 @@ cumm_cond = emiss_cond.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
 i= 1 if dndcyr>0 else 0
 cumm_ndcyr = emiss_ndcyr.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
 
+col1,col2=st.columns(2)
+
+with col1: 
+    st.markdown(f"<div text-align: center;'>Adjust emissions level rel. to declared in pledge. (<b>>1</b> = more emissions) </div>",
+                unsafe_allow_html=True)
+    
+with col2:
+    st.markdown(f"<div text-align: center;'>Adjust year rel. to declared in pledge. (<b>>0</b> = delay it further) </div>",
+                unsafe_allow_html=True)
+
 sentence = (
     "Cumulative emissions "
     "<b style='color: green;'>avoided</b> or "
     "<b style='color: red;'>added</b>"
-    "for each type of change."
+    " for each type of change."
 )
 
 # Display the sentence
