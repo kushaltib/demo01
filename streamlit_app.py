@@ -80,11 +80,15 @@ with col1:
 
 
 with col3:
+
+    default=[1.0,1.0,0,0]
     
 
 #st.markdown("<hr>", unsafe_allow_html=True)
 
 #col1,col2=st.columns(2)
+# 
+
 
 #with col1: 
     st.markdown(f"<div style='text-align: center;'>Adjust emissions level rel. to declared in pledge.<br>(<b>>1</b> = more emissions) </div>",
@@ -119,7 +123,7 @@ with col3:
 
 #col1,col2,col3,col4=st.columns(4)
 
-#default=[1.0,1.0,0,0]
+
 
 
 
