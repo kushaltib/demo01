@@ -159,7 +159,8 @@ cumm_ndcyr = emiss_ndcyr.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/100000
 sentence = (
     "Cumulative emissions "
     "<b style='color: green;'>avoided</b> or "
-    "<b style='color: red;'>added</b>."
+    "<b style='color: red;'>added</b>"
+    "for each type of change "
 )
 
 # Display the sentence
