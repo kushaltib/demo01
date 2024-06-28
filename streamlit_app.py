@@ -170,7 +170,7 @@ i= 1 if dndcyr>0 else 0
 cumm_ndcyr = emiss_ndcyr.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
 
 
-st.markdown("<hr>", unsafe_allow_html=True)
+
 
 sentence = (
     "Cumulative emissions "
@@ -197,7 +197,7 @@ with col3:
 with col4:
     st.markdown(format_text(cumm_nzyr), unsafe_allow_html=True)
 
-
+st.markdown("<hr>", unsafe_allow_html=True)
 
 #display the plot
 fig, ax = plt.subplots()
