@@ -160,7 +160,7 @@ sentence = (
     "Cumulative emissions "
     "<b style='color: green;'>avoided</b> or "
     "<b style='color: red;'>added</b>"
-    "for each type of change "
+    "for each type of change."
 )
 
 # Display the sentence
