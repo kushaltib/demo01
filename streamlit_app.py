@@ -276,7 +276,7 @@ plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
 #plot base year values from NDC
 plt.scatter(NDC.loc[selected_country,'Base_year'],
             NDC.loc[selected_country,'Base_CO2eq_emissions_Total-net'],
-            label='NDC Condititonal',color='orange',marker='o',mfc='red',mew=2,s=30,zorder=20)
+            label='NDC Condititonal',color='red',marker='o',edgecolors='orange',linewidths=1.5,s=30,zorder=20)
 
 
 
