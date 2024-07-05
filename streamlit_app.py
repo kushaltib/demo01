@@ -71,7 +71,7 @@ with st.sidebar:
     start, end = st.slider("Range of years", 
                            min_value=1850,
                            max_value=2100,
-                           value=(2000, 2100),        
+                           value=(1985, 2100),        
                            step=1
                           )
     
