@@ -130,7 +130,7 @@ with col2:
 with col3:
     dndcyr= st.slider(label="NDC target year",
                       min_value=0,
-                      max_value=7,
+                      max_value=10,
                       value=default[2],
                       step=1,
                       #key='slider3'
@@ -138,8 +138,8 @@ with col3:
 
 with col4:
     dnzyr= st.slider(label="Net-zero target year",
-                     min_value=-5,
-                     max_value=7,
+                     min_value=-10,
+                     max_value=10,
                      value=default[3],
                      step=1,
                      #key='slider4'
