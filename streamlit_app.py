@@ -333,7 +333,7 @@ else:
 
 
 #add line at 2050:
-ax.axvline(x=2050, color='r', linestyle='--', linewidth=2, label='2050')
+ax.axvline(x=2050, color='r', linestyle='--', linewidth=0.5, label='2050')
 
 
 
