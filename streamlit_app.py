@@ -334,8 +334,10 @@ else:
 
 
 #plot net emissions:
-ax.plot(hist_luc_net.loc[selected_country].index,
-        hist_co2eq_excl.loc[selected_country].values/1000+hist_luc_net.loc[selected_country].values/1000,
+data_len = min(len(hist_co2eq_excl.loc[selected_country].values),len(hist_luc_net.loc[selected_country].values))
+
+ax.plot(hist_luc_net.loc[selected_country].index[-data_len:],
+        hist_co2eq_excl.loc[selected_country].values[-data_len:]/1000+hist_luc_net.loc[selected_country].values[-data_len:]/1000,
         '--', color='orange',alpha=1, lw=2, label='CO2eq historical net',mec='k',mew=0.5,ms=6
         ) 
 
