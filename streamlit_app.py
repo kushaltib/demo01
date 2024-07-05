@@ -376,7 +376,7 @@ sentence = (
     "<b style='color: lightblue;'>Conditional NDC</b> | <br>"
     "<b style='color: yellowgreen;'>Net land-use managed lands</b> | "
     "<b style='color: darkgreen;'>NDC uncond. land-use </b> | "
-    "<b style='color: limegreen;'>NDC cond. land-use </b>"
+    "<b style='color: limegreen;'>NDC cond. land-use </b> <br>"
     "<b style='color: orange;'>Historical emissions net</b> | "
 
     
