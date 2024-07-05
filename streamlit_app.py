@@ -77,6 +77,11 @@ with st.sidebar:
     
     #match = pd.DataFrame(np.arange(273),index=np.arange(1750,2023),columns=['values'])
 
+    if st.checkbox('Remove quardractic correction'):
+        corr=0
+    else:
+        corr=1
+
 
 #st.markdown("<hr>", unsafe_allow_html=True)
 
@@ -140,7 +145,7 @@ endc = co2eq_excl.loc[selected_country]
 enz = co2eq_nz.loc[selected_country]
 
 #ndc base trajectory
-emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz)
+emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,corr=corr)
 
 #adjusted enhanced/delayed trajectories
 emiss_uncond= mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,duncond=duncond)
