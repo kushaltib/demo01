@@ -332,6 +332,15 @@ else:
                 label='NDC Condititonal',color='darkgreen',marker='o',s=30,zorder=20)    
 
 
+
+#plot net emissions:
+ax.plot(hist_luc_net.loc[selected_country].index,
+        hist_co2eq_excl.loc[selected_country].values/1000+hist_luc_net.loc[selected_country].values/1000,
+        '--', color='orange',alpha=1, lw=2, label='CO2eq historical net',mec='k',mew=0.5,ms=6
+        ) 
+
+
+
 #add line at 2050:
 ax.axvline(x=2050, color='r', linestyle='--', linewidth=0.5, label='2050')
 
@@ -366,6 +375,7 @@ sentence = (
     "<b style='color: yellowgreen;'>Net land-use managed lands</b> | "
     "<b style='color: darkgreen;'>NDC uncond. land-use </b> | "
     "<b style='color: limegreen;'>NDC cond. land-use </b>"
+    "<b style='color: orange;'>Historical emissions net</b> | "
 
     
 )
