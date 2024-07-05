@@ -140,7 +140,7 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02,co
      g0=Ep0/E0                #--rate of emissions change (as a fraction)
      
      #----dg: annual change in growth rate
-     dg=0.02
+     dg=dg0
 
      #----Eneg0:
 
