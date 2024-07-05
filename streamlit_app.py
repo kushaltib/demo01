@@ -82,6 +82,13 @@ with st.sidebar:
     else:
         corr=1
 
+    if st.checkbox('Do not overwrite asymptotic emissions with net-zero pledge'):
+        asm=0
+    else:
+        asm=1
+
+    
+
 
 #st.markdown("<hr>", unsafe_allow_html=True)
 

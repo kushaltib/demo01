@@ -123,7 +123,7 @@ def cost(x,E0,gi0,Enear,Elong,yr_last,yr_near,yr_long):
 
 
 
-def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02,corr=1,duncond=1,dcond=1,dndcyr=0,dnzyr=0):
+def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02,corr=1,asm=1,duncond=1,dcond=1,dndcyr=0,dnzyr=0):
      
      E0=emiss_hist.values[-1]  #-- emissions at t=0
      yr_last = emiss_hist.index[-1] 
@@ -212,7 +212,7 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02,co
                     #--add correction term for the period: "year last" to "long-term target year"
                     if corr==1: emiss_proj.iloc[i][np.arange(yr_last,yr_nz+1)] += ax2bxc(np.arange(yr_last,yr_nz+1),*abc)
                     #--overwrite Elong value beyond long-term target year
-                    emiss_proj.iloc[i][np.arange(yr_nz+1,2101)]=Elong
+                    if asm==1: emiss_proj.iloc[i][np.arange(yr_nz+1,2101)]=Elong
                                    
                else:
                     print(country,': neutrality low optimisation did not converge')
