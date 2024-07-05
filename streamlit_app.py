@@ -86,7 +86,7 @@ with st.sidebar:
                      )
     
     
-    gmax = st.slider(label="Max annual growth (%)",
+    gmax = st.slider(label="Annual growth rate (%)",
                      min_value=10,
                      max_value=40,
                      value=10,
@@ -95,7 +95,7 @@ with st.sidebar:
                      )
     
 
-    dg = st.slider(label="Annual decarbonization rate (%)",
+    dg = st.slider(label="Annual change in growth rate (%)",
                      min_value=2,
                      max_value=6,
                      value=2,
