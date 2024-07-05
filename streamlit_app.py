@@ -332,6 +332,11 @@ else:
                 label='NDC Condititonal',color='darkgreen',marker='o',s=30,zorder=20)    
 
 
+#add line at 2050:
+ax.axvline(x=2050, color='r', linestyle='--', linewidth=2, label='2050')
+
+
+
 ax.spines.left.set_position(('data', start))
 ax.spines.bottom.set_position(('data', 0))
 ax.spines[['top', 'right','left']].set_visible(False)
