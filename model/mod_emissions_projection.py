@@ -146,7 +146,7 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02,en
 
      #--Maximum asymptotic negative emissions in 2100 (ktCO2/yr)
      if E0<0: Eneg_max=E0*1.1
-     else: Eneg_max=-E0/eneg.
+     else: Eneg_max=-E0/eneg
      
      Eneg0 = Eneg_max/2.
 
