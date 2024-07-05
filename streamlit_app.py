@@ -77,6 +77,15 @@ with st.sidebar:
     
     #match = pd.DataFrame(np.arange(273),index=np.arange(1750,2023),columns=['values'])
 
+    eneg = st.slider(label="Allow neg emission (rel. to present emissions)",
+                     min_value=10,
+                     max_value=100,
+                     value=10,
+                     step=10,
+                     #key='slider3'
+                     )
+    
+    
     gmax = st.slider(label="Max annual growth (%)",
                      min_value=10,
                      max_value=40,
@@ -173,13 +182,13 @@ endc = co2eq_excl.loc[selected_country]
 enz = co2eq_nz.loc[selected_country]
 
 #ndc base trajectory
-emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm)
+emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm)
 
 #adjusted enhanced/delayed trajectories
-emiss_uncond= mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,duncond=duncond)
-emiss_cond = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dcond=dcond)
-emiss_ndcyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dndcyr=dndcyr)
-emiss_nzyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dnzyr=dnzyr)
+emiss_uncond= mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,duncond=duncond)
+emiss_cond = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dcond=dcond)
+emiss_ndcyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dndcyr=dndcyr)
+emiss_nzyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dnzyr=dnzyr)
 
 #emiss_coun = emiss_nzyr.copy()
 

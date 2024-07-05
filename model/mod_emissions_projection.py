@@ -123,7 +123,7 @@ def cost(x,E0,gi0,Enear,Elong,yr_last,yr_near,yr_long):
 
 
 
-def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02,corr=1,asm=1,duncond=1,dcond=1,dndcyr=0,dnzyr=0):
+def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02,eneg=10,corr=1,asm=1,duncond=1,dcond=1,dndcyr=0,dnzyr=0):
      
      E0=emiss_hist.values[-1]  #-- emissions at t=0
      yr_last = emiss_hist.index[-1] 
@@ -146,7 +146,7 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02,co
 
      #--Maximum asymptotic negative emissions in 2100 (ktCO2/yr)
      if E0<0: Eneg_max=E0*1.1
-     else: Eneg_max=-E0/10.
+     else: Eneg_max=-E0/eneg.
      
      Eneg0 = Eneg_max/2.
 
