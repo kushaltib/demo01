@@ -70,12 +70,13 @@ def emi_calc(E0,g0,Eneg,dg,year_start=2023,gmax=0.1):
     for yr in range(year_start,2101):
         #--emissions in year yr as per Edwards et al
         emi=Eneg+(E0-Eneg)*np.exp(np.sum(np.array(g_list,dtype=object))) 
+             
         #--emission is appended to list
         emi_list.append(emi)
         #--growth rate is reduced linearly
         g=g-dg
         #--growth rate cannot be less than -gmax (-10%)
-        g=max(g,-gmax)
+        #g=max(g,-gmax)
         #--growth rate is appended to list
         g_list.append(g)
     #--return list of emissions
@@ -116,7 +117,7 @@ def cost(x,E0,gi0,Enear,Elong,yr_last,yr_near,yr_long):
     #--each term of the cost function is weighted by a reasonable value
     err= 10.*((emi_list[yr_near-yr_last]-Enear)/E0)**2 + \
          5.*((emi_list[yr_long-yr_last]-Elong)/E0)**2. + \
-         ((yr_long_simulated-yr_long)/10.)**2. + \
+         10.*((yr_long_simulated-yr_long)/10.)**2. + \
          ((g0-gi0)/gi0)**2.
     
     return err
