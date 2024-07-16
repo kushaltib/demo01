@@ -156,15 +156,7 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02,en
 
 
 
-     #
      
-     #--define bounds for minimation of control vector x
-     #---- g0 +/- dg0: on initial growth rate
-     #---- Eneg_max to 0 for asymptotic negative emissions
-     #---- 0 to gmax for initial increment in growth rate
-
-     bnds = ([g0-dg0,g0+dg0],[Eneg_max,0.0],[0,gmax])
-     #
 
      #--getting the near-term and long-term parameters:
      yr_near = emiss_ndc['Year']+dndcyr
@@ -172,6 +164,19 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02,en
      dnear=[duncond,duncond,dcond,dcond]
      yr_nz = emiss_nz['Year']+dnzyr
      Elong = emiss_nz['co2eq_excl']
+
+
+     #
+     
+     #--define bounds for minimation of control vector x
+     #---- g0 +/- dg0: on initial growth rate
+     #---- Eneg_max to 0 for asymptotic negative emissions
+     #---- 0 to gmax for initial increment in growth rate
+
+     #bnds = ([g0-dg0,g0+dg0],[Eneg_max,0.0],[0,gmax])
+     bnds = ([g0-dg0,g0+dg0],[Elong,0.0],[0,gmax])
+     #
+
 
 
      #--initialize empty dataframe to store projected timeseries:
