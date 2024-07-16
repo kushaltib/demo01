@@ -173,8 +173,8 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02,en
      #---- Eneg_max to 0 for asymptotic negative emissions
      #---- 0 to gmax for initial increment in growth rate
 
-     #bnds = ([g0-dg0,g0+dg0],[Eneg_max,0.0],[0,gmax])
-     bnds = ([g0-dg0,g0+dg0],[Elong,0.0],[0,gmax])
+     bnds = ([g0-dg0,g0+dg0],[Eneg_max,0.0],[0,gmax])
+     #bnds = ([g0-dg0,g0+dg0],[Elong,0.0],[0,gmax])
      #
 
 
