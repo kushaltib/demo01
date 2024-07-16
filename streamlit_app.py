@@ -23,7 +23,7 @@ st.title("NDC pledges for selected countries")
 
 
 #read and process NDC data:
-@st.cache_data
+#@st.cache_data
 def get_ndc():
     NDC = mod_read_input.read_ndc()
     

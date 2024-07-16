@@ -116,7 +116,7 @@ def cost(x,E0,gi0,Enear,Elong,yr_last,yr_near,yr_long):
     #--compute cost function as departure from g0, near-term target, long-term target and long-term target year
     #--each term of the cost function is weighted by a reasonable value
     err= 100.*((emi_list[yr_near-yr_last]-Enear)/E0)**2 + \
-         10.*((emi_list[yr_long-yr_last]-Elong)/E0)**2. + \
+         1000.*((emi_list[yr_long-yr_last]-Elong)/E0)**2. + \
          100.*((yr_long_simulated-yr_long)/10.)**2. + \
          ((g0-gi0)/gi0)**2.
     
