@@ -272,6 +272,12 @@ plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
             co2eq_excl.loc[selected_country,co2eq_excl.columns[2:4]].values,
             label='NDC Uncondititonal',color='royalblue',marker='x',s=30,zorder=20)
 
+plt.scatter(co2eq_nz .loc[selected_country,'Year'],
+            0,
+            label='Net-zero',color='red',marker='x',s=50,zorder=20)
+
+
+
 
 #plot base year values from NDC
 plt.scatter(NDC.loc[selected_country,'Base_year'],
@@ -357,7 +363,7 @@ ax.plot(hist_luc_net.loc[selected_country].index[-data_len:],
 
 
 #add line at 2050:
-ax.axvline(x=2050, color='r', linestyle='--', linewidth=0.5, label='2050')
+#ax.axvline(x=2050, color='r', linestyle='--', linewidth=0.5, label='2050')
 
 
 
