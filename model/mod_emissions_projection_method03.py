@@ -172,7 +172,7 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,duncond=1.0,dcond=1.
           if Enear<Elong: Elong=Enear
 
           #--set Elong 0 for non nz countries:
-          if emiss_nz['Neutrality']=='No': Elong=0
+          if emiss_nz['Neutrality'] !='Yes': Elong=0
 
 
           #initial guesses
