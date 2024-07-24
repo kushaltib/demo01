@@ -126,7 +126,7 @@ def em_lg(dg_long,dg_near,E0,g0,Elong,yr_last,yr_near,yr_long):
      
      
 
-def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02,duncond=1.0,dcond=1.0,dndcyr=0,dnzyr=0):
+def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,duncond=1.0,dcond=1.0,dndcyr=0,dnzyr=0):
      
      E0=emiss_hist.values[-1]  #-- emissions at t=0
      yr_last = emiss_hist.index[-1] 
@@ -222,7 +222,7 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02,du
                     print(country,' ',emiss_proj.index[i],':did not converge')
 
 
-     return emiss_proj,x_res,ndc_shift,E0,g0           
+     return emiss_proj#,x_res,ndc_shift,E0,g0           
 
 #--END--
 

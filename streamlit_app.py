@@ -6,7 +6,7 @@ import textwrap
 import streamlit as st
 
 
-from model import mod_read_input, mod_nearterm_CO2eq, mod_longterm_CO2eq, mod_emissions_projection
+from model import mod_read_input, mod_nearterm_CO2eq, mod_longterm_CO2eq, mod_emissions_projection, mod_emissions_projection_method03
 
 def format_text(value):
     value = int(value)
@@ -42,22 +42,17 @@ NDC,co2eq,co2eq_excl,co2eq_luc,co2eq_nz = get_ndc()
 
 #Ask for choices:
 
-
-#col1,col2=st.columns([2,1])
-#col1,col2,col3,col4=st.columns(4)
-
 with st.sidebar:
     
-#with col1:
+    #---country
     #selected_country= st.selectbox("Choose Country:",NDC.index)
     selected_country= st.selectbox("Country:",sorted(co2eq_excl.index[co2eq_excl['Processed']=='Yes']))
-    
 
-#with col2:
+    #---inventory
     selected_inventory= st.selectbox("Historical Inventory:",['PRIMAPv5','EDGARv6'])
     hist_co2eq_excl = mod_read_input.read_hist(selected_inventory,'CO2eq','excl') #read historical emissions data
 
-#with col3:
+    #--land-use data source
     selected_luc = st.selectbox("Land-use data:",['OSCAR+DGVM','NGHGI'])
     if selected_luc=='OSCAR+DGVM':
         hist_luc_emiss = mod_read_input.read_luc('emiss','OSCAR')
@@ -67,7 +62,7 @@ with st.sidebar:
     if selected_luc=='NGHGI':
         hist_luc_net = mod_read_input.read_luc('net','NGHGI')
 
-#with col4:
+    #--years for the display plot
     start, end = st.slider("Range of years", 
                            min_value=1850,
                            max_value=2100,
@@ -75,8 +70,8 @@ with st.sidebar:
                            step=1
                           )
     
-    #match = pd.DataFrame(np.arange(273),index=np.arange(1750,2023),columns=['values'])
-
+    
+    #--allowance limit of negative emissions
     eneg = st.slider(label="Allow neg emission (rel. to present emissions)",
                      min_value=10,
                      max_value=100,
@@ -85,62 +80,57 @@ with st.sidebar:
                      #key='slider3'
                      )
     
-    
-    gmax = st.slider(label="Annual growth rate (%)",
-                     min_value=10,
-                     max_value=40,
-                     value=10,
-                     step=1,
-                     #key='slider3'
-                     )
-    
+    #--limit of minimum value of growth rate
+    #gmax = st.slider(label="Annual growth rate (%)",
+    #                 min_value=10,
+    #                 max_value=40,
+    #                 value=10,
+    #                 step=1,
+    #                 #key='slider3'
+    #                 )
 
-    dg = st.slider(label="Annual change in growth rate (%)",
-                     min_value=2,
-                     max_value=6,
-                     value=2,
-                     step=1,
-                     #key='slider3'
-                     )
-
-
+    #--controlling the change in growth rate
+    #dg = st.slider(label="Annual change in growth rate (%)",
+    #                 min_value=2,
+    #                 max_value=6,
+    #                 value=2,
+    #                 step=1,
+    #                 #key='slider3'
+    #                 )
 
 
+    #--parameters relevant for the Olivier's method:
+    #if st.checkbox('Remove quardractic correction'):
+    #    corr=0
+    #else:
+    #    corr=1
 
-    if st.checkbox('Remove quardractic correction'):
-        corr=0
-    else:
-        corr=1
-
-    if st.checkbox('Do not overwrite asymptotic emissions with net-zero pledge'):
-        asm=0
-    else:
-        asm=1
-
-    
-
+    #if st.checkbox('Do not overwrite asymptotic emissions with net-zero pledge'):
+    #    asm=0
+    #else:
+    #    asm=1
 
 #st.markdown("<hr>", unsafe_allow_html=True)
 
+
+#--controlling shifts in NDC levels, NDC year and NZ year
 col1,col2=st.columns(2)
 
 with col1: 
-    st.markdown(f"<div style='text-align: center;'>Adjust emissions level rel. to declared in pledge.<br>(<b>>1</b> = more emissions) </div>",
+    st.markdown(f"<div style='text-align: center;'>Adjust emissions w.r.t. declared targets<br>(<b>>1</b> = more emissions) </div>",
                 unsafe_allow_html=True)
     
 with col2:
-    st.markdown(f"<div style='text-align: center;'>Adjust year rel. to declared in pledge.<br> (<b>>0</b> = delay it further) </div>",
+    st.markdown(f"<div style='text-align: center;'>Adjust year w.r.t declared targets<br> (<b>>0</b> = delay it further) </div>",
                 unsafe_allow_html=True)
     
-
-
 
 col1,col2,col3,col4=st.columns(4)
 
 default=[1.0,1.0,0,0]
 
 with col1:
-    duncond= st.slider(label="Unconditional emissions",
+    duncond= st.slider(label="Uncond. emissions",
                        min_value=0.7,
                        max_value=1.3,
                        value=default[0],
@@ -149,7 +139,7 @@ with col1:
                        )
 
 with col2:
-    dcond= st.slider(label="Conditional emissions",
+    dcond= st.slider(label="Cond. emissions",
                      min_value=0.7,
                      max_value=1.3,
                      value=default[1],
@@ -158,7 +148,7 @@ with col2:
                     )
 
 with col3:
-    dndcyr= st.slider(label="NDC target year",
+    dndcyr= st.slider(label="NDC year",
                       min_value=0,
                       max_value=10,
                       value=default[2],
@@ -167,7 +157,7 @@ with col3:
                       )
 
 with col4:
-    dnzyr= st.slider(label="Net-zero target year",
+    dnzyr= st.slider(label="Net-zero year",
                      min_value=-10,
                      max_value=10,
                      value=default[3],
@@ -176,21 +166,32 @@ with col4:
                      )
 
 
-#compute the trajectory for selected country:
+#--collect historical emissions, NDC and NZ information for selected country:
 ehist = hist_co2eq_excl.loc[selected_country]
 endc = co2eq_excl.loc[selected_country]
 enz = co2eq_nz.loc[selected_country]
 
-#ndc base trajectory
-emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm)
+#--base trajectory
+#----Olivier's method
+#emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm)
 
-#adjusted enhanced/delayed trajectories
-emiss_uncond= mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,duncond=duncond)
-emiss_cond = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dcond=dcond)
-emiss_ndcyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dndcyr=dndcyr)
-emiss_nzyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dnzyr=dnzyr)
+#----New method
+emiss_coun = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz)
 
-#emiss_coun = emiss_nzyr.copy()
+#--------------------------------------------------------------------------------------------
+#--adjusted enhanced/delayed trajectories
+#----Olivier's method
+#emiss_uncond= mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,duncond=duncond)
+#emiss_cond = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dcond=dcond)
+#emiss_ndcyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dndcyr=dndcyr)
+#emiss_nzyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dnzyr=dnzyr)
+
+#----New method
+emiss_uncond= mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,duncond=duncond)
+emiss_cond = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,dcond=dcond)
+emiss_ndcyr = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,dndcyr=dndcyr)
+emiss_nzyr = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,dnzyr=dnzyr)
+
 
 
 
