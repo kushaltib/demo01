@@ -208,9 +208,10 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,duncond=1.0,dcond=1.
                          
                          #--print info:
                          #print(country,' ',emiss_proj.index[i],': converged')
+
                else:
                     emi_list = np.array(emi_calc(E0,g0,Elong,dg_near,dg_long,yr_last+1,yr_near,yr_near))
-                    emiss_proj.iloc[i,0:9] = emi_list#+emi_list[yr_near-yr_last]*(2100-yr_near)
+                    emiss_proj.iloc[i] = E0
 
      return emiss_proj#,x_res,ndc_shift,E0,g0           
 
