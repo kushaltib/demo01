@@ -152,7 +152,7 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,duncond=1.0,dcond=1.
 
 
      Elong = emiss_nz['co2eq_excl']+0.001
-     Elong = emiss_nz['co2eq_excl']-(0.05*E0)
+     #Elong = emiss_nz['co2eq_excl']-(0.05*E0)
 
 
      #--initialize empty dataframe to store projected timeseries:
