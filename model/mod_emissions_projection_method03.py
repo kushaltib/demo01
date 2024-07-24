@@ -160,48 +160,44 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,duncond=1.0,dcond=1.
      x_res = pd.DataFrame(0.0,index=['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB'],columns=['near','long'])
      ndc_shift = pd.DataFrame(0.0,index=['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB'],columns=['Year','Value'])
 
-     if emiss_nz['Neutrality']=='Yes':
+     for i in range(4):
           
-          for i in range(4):
+          #convert the emissions into kT/year
+          Enear=emiss_near[i]*1000
+
+          #adjust for user specificed changes to NDC targets
+          Enear=Enear*dnear[i]
+
+          #--adjust Elong if 2030 value is lower
+          if Enear<Elong: Elong=Enear
+
+
+          #initial guesses
+          dg_near=0.00
+          dg_long=0.00
                
-               #convert the emissions into kT/year
-               Enear=emiss_near[i]*1000
-
-               #adjust for user specificed changes to NDC targets
-               Enear=Enear*dnear[i]
-
-               #--adjust Elong if 2030 value is lower
-               if Enear<Elong: Elong=Enear
-
-
-               #initial guesses
-               dg_near=0.00
-               dg_long=0.00
+          #first fix dg_near:
+          solution_near = fsolve(em_nr, dg_near, args=(E0,g0,Enear,Elong,yr_last,yr_near))
+          
+          #--flag to detect if minimisation algorithm has converged
+          near_success=True
+          
+          if near_success:
+                 
+               dg_near = solution_near[0]
+               emi_list = np.array(emi_calc(E0,g0,Elong,dg_near,dg_long,yr_last+1,yr_near,yr_near))
+               emiss_proj.iloc[i] = emi_list+[emi_list[yr_near-yr_last]]*(2100-yr_near)
                
-               #first fix dg_near:
-               #solution_near = minimize(em_nr, dg_near, args=(E0,g0,Enear,Elong,yr_last,yr_near), method='SLSQP')
-               solution_near = fsolve(em_nr, dg_near, args=(E0,g0,Enear,Elong,yr_last,yr_near))
-
-               #--flag to detect if minimisation algorithm has converged
-               #near_success=solution_near['success']
-               near_success=True
-
-               #--sto ndc info:
-               ndc_shift.iloc[i]=[yr_near,Enear]
-
-               if near_success:
-                    dg_near = solution_near[0]#['x']
-
+               if emiss_nz['Neutrality']=='Yes':
+                    
                     #second fix dg_long:
-                    #solution_long = minimize(em_lg, dg_long, args=(dg_near,E0,g0,Elong,yr_last,yr_near,yr_nz), method='SLSQP')
                     solution_long = fsolve(em_lg, dg_long, args=(dg_near,E0,g0,Elong,yr_last,yr_near,yr_nz))
 
                     #--flag to detect if minimisation algorithm has converged
-                    #long_success=solution_long['success']
                     long_success=True
 
                     if long_success:
-                         dg_long = solution_long[0]#['x']
+                         dg_long = solution_long[0]
                          
                          #--recompute CO2 emission trajectory for vector x
                          emi_list=np.array(emi_calc(E0,g0,Elong,dg_near,dg_long,yr_last+1,yr_near))
@@ -211,16 +207,9 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,duncond=1.0,dcond=1.
                          
                          #--store optimization results
                          x_res.iloc[i]=[dg_near,dg_long]
-
                          
-
                          #--print info:
-                         print(country,' ',emiss_proj.index[i],': converged')
-
-                                   
-               else:
-                    print(country,' ',emiss_proj.index[i],':did not converge')
-
+                         #print(country,' ',emiss_proj.index[i],': converged')
 
      return emiss_proj#,x_res,ndc_shift,E0,g0           
 
