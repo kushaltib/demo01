@@ -267,12 +267,12 @@ ax.plot(hist_co2eq_excl.loc[selected_country].index,
 
 ax.plot(emiss_coun.iloc[0].index,
         emiss_coun.iloc[0].values/1000,
-        'o-', color='grey',alpha=1, lw=2, label='Uncond LB',mec='k',mew=0.5,ms=6
+        'o-', color='grey',alpha=1, lw=2, label='Uncond LB',mec='k',mew=0.5,ms=4
         )
 
 ax.plot(emiss_coun.iloc[1].index,
         emiss_coun.iloc[1].values/1000,
-        'o-', color='grey',alpha=1, lw=2, label='Uncond UB',mec='k',mew=0.5,ms=6
+        'o-', color='grey',alpha=1, lw=2, label='Uncond UB',mec='k',mew=0.5,ms=4
         )
 
 
