@@ -112,7 +112,7 @@ def em_lg(dg_long,dg_near,E0,g0,Elong,yr_last,yr_near,yr_long):
      emi_list=emi_calc(E0,g0,Elong,dg_near,dg_long,yr_last+1,yr_near)
 
      #--compute the 0.X% emissions
-     emi_pntXper = Elong + (0.005*(E0-Elong))
+     emi_pntXper = Elong + (0.00005*(E0-Elong))
 
      #--modelled emissions at NZ year
      emi_nz_mod = emi_list[yr_long-yr_last] 
