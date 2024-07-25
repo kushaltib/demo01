@@ -276,6 +276,17 @@ ax.plot(emiss_coun.iloc[1].index,
         )
 
 
+ax.plot(emiss_nzyr.iloc[0].index,
+        emiss_nzyr.iloc[0].values/1000,
+        'o-', color='lightgrey',alpha=1, lw=2, label='adj NZ',mec='k',mew=0.5,ms=4
+        )
+
+ax.plot(emiss_nzyr.iloc[1].index,
+        emiss_nzyr.iloc[1].values/1000,
+        'o-', color='lightgrey',alpha=1, lw=2, label='adj NZ',mec='k',mew=0.5,ms=4
+        )
+
+
 plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
             co2eq_excl.loc[selected_country,co2eq_excl.columns[4:6]].values,
             label='NDC Condititonal',color='lightblue',marker='x',s=30,zorder=20)
@@ -335,7 +346,7 @@ i= 1 if dndcyr>0 else 0
 x = emiss_coun.iloc[i].index
 y1 = emiss_coun.iloc[i].values/1000
 y2 = emiss_ndcyr.iloc[i].values/1000
-ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='khaki',interpolate=True,alpha=0.5)
+#ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='khaki',interpolate=True,alpha=0.5)
 
 
 #plot luc emissions:
