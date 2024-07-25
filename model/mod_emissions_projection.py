@@ -76,7 +76,7 @@ def emi_calc(E0,g0,Eneg,dg,year_start=2023,gmax=0.1):
         #--growth rate is reduced linearly
         g=g-dg
         #--growth rate cannot be less than -gmax (-10%)
-        #g=max(g,-gmax)
+        g=max(g,-gmax)
         #--growth rate is appended to list
         g_list.append(g)
     #--return list of emissions
