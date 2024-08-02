@@ -361,7 +361,7 @@ i= 1 if dndcyr>0 else 0
 x = emiss_coun.iloc[i].index
 y1 = emiss_coun.iloc[i].values/1000
 y2 = emiss_ndcyr.iloc[i].values/1000
-#ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='khaki',interpolate=True,alpha=0.5)
+ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='khaki',interpolate=True,alpha=0.5)
 
 
 #plot luc emissions:
