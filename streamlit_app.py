@@ -442,6 +442,8 @@ ax.grid(which='major', axis='y', lw=0.4)
 
 st.pyplot(fig)
 
+st.markdown("For India and China - it CO2 emissions and for others CO2eq", unsafe_allow_html=True)
+
 sentence = (
     "<b style='color: black;'>Historical emissions excl. land-use</b> | "
     "<b style='color: royalblue;'>Unconditional NDC</b> | "
