@@ -206,6 +206,7 @@ if selected_fitmethod=='Olivier old':
     emiss_cond = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dcond=dcond)
     emiss_ndcyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dndcyr=dndcyr)
     emiss_nzyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dnzyr=dnzyr)
+    emiss_allchg = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,duncond=duncond,dcond=dcond,dndcyr=dndcyr,dnzyr=dnzyr)
 
 if selected_fitmethod=='Olivier revised':
     #----New method
@@ -213,6 +214,7 @@ if selected_fitmethod=='Olivier revised':
     emiss_cond = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,dcond=dcond)
     emiss_ndcyr = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,dndcyr=dndcyr)
     emiss_nzyr = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,dnzyr=dnzyr)
+    emiss_allchg = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,duncond=duncond,dcond=dcond,dndcyr=dndcyr,dnzyr=dnzyr)
 
 
 
@@ -300,6 +302,18 @@ ax.plot(emiss_nzyr.iloc[1].index,
         emiss_nzyr.iloc[1].values/1000,
         'o-', color='lightgrey',alpha=1, lw=2, label='adj NZ',mec='k',mew=0.5,ms=4
         )
+
+
+ax.plot(emiss_allchg.iloc[0].index,
+        emiss_allchg.iloc[0].values/1000,
+        'o-', color='coral',alpha=1, lw=2, label='adj all',mec='k',mew=0.5,ms=4
+        )
+
+ax.plot(emiss_allchg.iloc[1].index,
+        emiss_allchg.iloc[1].values/1000,
+        'o-', color='coral',alpha=1, lw=2, label='adj all',mec='k',mew=0.5,ms=4
+        )
+
 
 
 plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
