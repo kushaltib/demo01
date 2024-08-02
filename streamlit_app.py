@@ -293,15 +293,15 @@ ax.plot(emiss_coun.iloc[1].index,
         )
 
 
-ax.plot(emiss_nzyr.iloc[0].index,
-        emiss_nzyr.iloc[0].values/1000,
-        'o-', color='lightgrey',alpha=1, lw=2, label='adj NZ',mec='k',mew=0.5,ms=4
-        )
+#ax.plot(emiss_nzyr.iloc[0].index,
+#        emiss_nzyr.iloc[0].values/1000,
+#        'o-', color='lightgrey',alpha=1, lw=2, label='adj NZ',mec='k',mew=0.5,ms=4
+#        )
 
-ax.plot(emiss_nzyr.iloc[1].index,
-        emiss_nzyr.iloc[1].values/1000,
-        'o-', color='lightgrey',alpha=1, lw=2, label='adj NZ',mec='k',mew=0.5,ms=4
-        )
+#ax.plot(emiss_nzyr.iloc[1].index,
+#        emiss_nzyr.iloc[1].values/1000,
+#        'o-', color='lightgrey',alpha=1, lw=2, label='adj NZ',mec='k',mew=0.5,ms=4
+#        )
 
 
 ax.plot(emiss_allchg.iloc[0].index,
