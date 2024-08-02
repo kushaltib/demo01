@@ -182,6 +182,9 @@ ehist = hist_co2eq_excl.loc[selected_country]
 if selected_country=='China':
     ehist = hist_co2_excl.loc[selected_country]
 
+if selected_country=='India':
+    ehist = hist_co2_excl.loc[selected_country]
+
 endc = co2eq_excl.loc[selected_country]
 enz = co2eq_nz.loc[selected_country]
 
