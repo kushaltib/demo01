@@ -275,8 +275,8 @@ ax.plot(hist_co2eq_excl.loc[selected_country].index,
         )
 
 ax.plot(ehist.index,
-        ehist.values/1000000,
-        '-', color='black',alpha=1, lw=2, label='CO2eq historical',mec='k',mew=0.5,ms=6
+        ehist.values/1000,
+        '-', color='blue',alpha=1, lw=2, label='CO2eq historical',mec='k',mew=0.5,ms=6
         )
 
 
