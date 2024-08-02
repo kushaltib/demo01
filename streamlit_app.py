@@ -30,6 +30,8 @@ def get_ndc():
     #process NDC
     co2eq = mod_nearterm_CO2eq.grp_emiss(NDC,'CO2eq')
     co2eq = mod_nearterm_CO2eq.grp_percent_abs(NDC,'CO2eq',data=co2eq)
+    co2eq = mod_nearterm_CO2eq.grp_percent_int(NDC,'CO2eq',data=co2eq)
+    co2eq = mod_nearterm_CO2eq.grp_percent_int(NDC,'CO2',data=co2eq)
     co2eq_excl,co2eq_luc = mod_nearterm_CO2eq.to_total_excl(NDC,'CO2eq',data=co2eq)
     co2eq_nz = mod_longterm_CO2eq.grp_nz(NDC,process='co2eq')
 
@@ -51,6 +53,7 @@ with st.sidebar:
     #---inventory
     selected_inventory= st.selectbox("Historical Inventory:",['PRIMAPv5','EDGARv6'])
     hist_co2eq_excl = mod_read_input.read_hist(selected_inventory,'CO2eq','excl') #read historical emissions data
+    hist_co2_excl = mod_read_input.read_hist(selected_inventory,'CO2','excl') #read historical emissions data
 
     #--land-use data source
     selected_luc = st.selectbox("Land-use data:",['OSCAR+DGVM','NGHGI'])
@@ -175,6 +178,10 @@ with col4:
 
 #--collect historical emissions, NDC and NZ information for selected country:
 ehist = hist_co2eq_excl.loc[selected_country]
+
+if selected_country=='China':
+    ehist = hist_co2_excl.loc[selected_country]
+
 endc = co2eq_excl.loc[selected_country]
 enz = co2eq_nz.loc[selected_country]
 
@@ -261,6 +268,11 @@ ax.set_title(selected_country,fontfamily="Arial",fontsize=10)
 
 ax.plot(hist_co2eq_excl.loc[selected_country].index,
         hist_co2eq_excl.loc[selected_country].values/1000,
+        '-', color='black',alpha=1, lw=2, label='CO2eq historical',mec='k',mew=0.5,ms=6
+        )
+
+ax.plot(ehist.index,
+        ehist.values/1000000,
         '-', color='black',alpha=1, lw=2, label='CO2eq historical',mec='k',mew=0.5,ms=6
         )
 
