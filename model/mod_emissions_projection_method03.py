@@ -150,8 +150,11 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,duncond=1.0,dcond=1.
      yr_nz = emiss_nz['Year']+dnzyr
      if yr_nz>2100: yr_nz=2100
 
-
-     Elong = emiss_nz['co2eq_excl']+0.001
+     if is_nan(emiss_nz['co2eq_excl']):
+          Elong = emiss_nz['co2_excl']+0.001
+     else:
+          Elong = emiss_nz['co2eq_excl']+0.001
+          
      #Elong = emiss_nz['co2eq_excl']-(0.05*E0)
 
 
