@@ -20,7 +20,12 @@ def read_ndc():
     
     #--read the NDC file
     #NDC = pd.read_excel("./data/NDCdata_As12Jun2024_Upd12Jun2024_v2.xlsx")
-    NDC = pd.read_excel("./data/NDCdata_As12Jun2024_Upd29Jul2024_v2.xlsx")
+    #NDC = pd.read_excel("./data/NDCdata_As12Jun2024_Upd29Jul2024_v2.xlsx")
+    NDC = pd.read_excel("./data/NDCdata_As12Jun2024_Upd29Jul2024_v2_othercountries.xlsx")
+
+
+
+
     NDC.drop(columns=['Categories'],inplace=True)
     NDC = NDC.T
     header_col = NDC.iloc[0]
