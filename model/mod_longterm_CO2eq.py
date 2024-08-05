@@ -78,6 +78,54 @@ def grp_nz(ndc_table,country_list=None,data=None,process='all'):
 
      
      return data
+
+
+def co2_nz(ndc_table,ch4_summ,n2o_summ,country_list=None,data=None):
+
+     NDC = ndc_table
+
+     #choose the list of countries on which operation is to be carried out
+     if country_list is None:
+        country_list = NDC.index
+
+     #create grouped list of countries     
+     nz = create_lists(country_list,NDC,'Neutrality',NDC['Neutrality'].unique().tolist())
+     nz_applies = create_lists(country_list,NDC,'Neutrality_applies_to',NDC['Neutrality_applies_to'].unique().tolist())
+
+     if data is None:
+          columns = ['Neutrality','Year','CO2_nz_uncond_lb','CO2_nz_uncond_ub','CO2_nz_cond_lb','CO2_nz_cond_ub','Processed']
+          data = pd.DataFrame(columns=columns,index=country_list)
+          
+
+     for country in set(nz['Yes']):
+
+          if country in nz_applies['CO2eq']:
+
+               data.loc[country,'Neutrality'] = NDC.loc[country,'Neutrality']
+               data.loc[country,'Year'] = NDC.loc[country,'Neutrality_year']
+               data.loc[country,'CO2_nz_uncond_lb'] = -ch4_summ.loc[country,'Unconditional_LB']*28-n2o_summ.loc[country,'Unconditional_LB']*265
+               data.loc[country,'CO2_nz_uncond_ub'] = -ch4_summ.loc[country,'Unconditional_UB']*28-n2o_summ.loc[country,'Unconditional_UB']*265
+               data.loc[country,'CO2_nz_cond_lb'] = -ch4_summ.loc[country,'Conditional_LB']*28-n2o_summ.loc[country,'Conditional_LB']*265
+               data.loc[country,'CO2_nz_cond_ub'] = -ch4_summ.loc[country,'Conditional_UB']*28-n2o_summ.loc[country,'Conditional_UB']*265
+               data.loc[country,'Processed'] = 'Yes'
+          
+          if country in nz_applies['CO2']:
+
+               data.loc[country,'Neutrality'] = NDC.loc[country,'Neutrality']
+               data.loc[country,'Year'] = NDC.loc[country,'Neutrality_year']
+               data.loc[country,'CO2_nz_uncond_lb'] = 0
+               data.loc[country,'CO2_nz_uncond_ub'] = 0
+               data.loc[country,'CO2_nz_cond_lb'] = 0
+               data.loc[country,'CO2_nz_cond_ub'] = 0
+               data.loc[country,'Processed'] = 'Yes'
+
+     return data
+
+
+
+
+
+
      
 
 

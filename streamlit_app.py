@@ -6,7 +6,7 @@ import textwrap
 import streamlit as st
 
 
-from model import mod_read_input, mod_nearterm_CO2eq, mod_longterm_CO2eq, mod_emissions_projection, mod_emissions_projection_method03
+from model import mod_read_input, mod_nearterm_CO2eq, mod_longterm_CO2eq, mod_emissions_projection, mod_emissions_projection_method03,mod_CH4,mod_N2O
 
 def format_text(value):
     value = int(value)
@@ -21,26 +21,25 @@ def format_text(value):
 
 st.title("NDC pledges for selected countries")
 
-
 #read and process NDC data:
 #@st.cache_data
 def get_ndc():
     NDC = mod_read_input.read_ndc()
     
     #process NDC
-    co2eq = mod_nearterm_CO2eq.grp_emiss(NDC,'CO2eq')
-    co2eq = mod_nearterm_CO2eq.grp_percent_abs(NDC,'CO2eq',data=co2eq)
-    co2eq = mod_nearterm_CO2eq.grp_percent_int(NDC,'CO2eq',data=co2eq)
-    co2eq = mod_nearterm_CO2eq.grp_percent_int(NDC,'CO2',data=co2eq)
-    co2eq_excl,co2eq_luc = mod_nearterm_CO2eq.to_total_excl(NDC,'CO2eq',data=co2eq)
-    #co2eq_excl,co2eq_luc = mod_nearterm_CO2eq.to_total_excl(NDC,'CO2',data=co2eq_excl)
-    co2eq_nz = mod_longterm_CO2eq.grp_nz(NDC,process='all')
+    #co2eq = mod_nearterm_CO2eq.grp_emiss(NDC,'CO2eq')
+    #co2eq = mod_nearterm_CO2eq.grp_percent_abs(NDC,'CO2eq',data=co2eq)
+    #co2eq = mod_nearterm_CO2eq.grp_percent_int(NDC,'CO2eq',data=co2eq)
+    #co2eq = mod_nearterm_CO2eq.grp_percent_int(NDC,'CO2',data=co2eq)
+    #co2eq_excl,co2eq_luc = mod_nearterm_CO2eq.to_total_excl(NDC,'CO2eq',data=co2eq)
+    
+    #near-term parameters
+    co2eq, co2eq_excl,co2eq_luc = mod_nearterm_CO2eq.create_ndc_table(NDC)
+    
 
-    return NDC,co2eq,co2eq_excl,co2eq_luc,co2eq_nz
+    return NDC,co2eq,co2eq_excl,co2eq_luc
 
-NDC,co2eq,co2eq_excl,co2eq_luc,co2eq_nz = get_ndc()
-
-
+NDC,co2eq,co2eq_excl,co2eq_luc = get_ndc()
 
 
 #Ask for choices:
@@ -51,10 +50,15 @@ with st.sidebar:
     #selected_country= st.selectbox("Choose Country:",NDC.index)
     selected_country= st.selectbox("Country:",sorted(co2eq_excl.index[co2eq_excl['Processed']=='Yes']))
 
+    
     #---inventory
     selected_inventory= st.selectbox("Historical Inventory:",['PRIMAPv5','EDGARv6'])
     hist_co2eq_excl = mod_read_input.read_hist(selected_inventory,'CO2eq','excl') #read historical emissions data
     hist_co2_excl = mod_read_input.read_hist(selected_inventory,'CO2','excl') #read historical emissions data
+    hist_ch4 = mod_read_input.read_hist('PRIMAPv5','CH4','net')
+    hist_n2o = mod_read_input.read_hist('PRIMAPv5','N2O','net')
+
+
 
     #--land-use data source
     selected_luc = st.selectbox("Land-use data:",['OSCAR+DGVM','NGHGI'])
@@ -76,7 +80,8 @@ with st.sidebar:
     
 
     #--fitting method
-    selected_fitmethod = st.selectbox("Fitting method",['Olivier old','Olivier revised'])
+    #selected_fitmethod = st.selectbox("Fitting method",['Olivier old','Olivier revised'])
+    selected_fitmethod = st.selectbox("Fitting method",['Olivier revised'])
     
     
     #--allowance limit of negative emissions
@@ -122,6 +127,16 @@ with st.sidebar:
         asm=1
 
 #st.markdown("<hr>", unsafe_allow_html=True)
+
+
+#more ndc and long term parameters:
+ch4_summ = mod_CH4.def_ch4(NDC,co2eq_excl,hist_ch4,hist_co2_excl,hist_co2eq_excl)
+
+n2o_summ = mod_N2O.def_n2o(NDC,co2eq_excl,hist_n2o)
+
+
+#co2eq_nz = mod_longterm_CO2eq.grp_nz(NDC,process='co2eq')
+co2eq_nz = mod_longterm_CO2eq.co2_nz(NDC,ch4_summ,n2o_summ)
 
 
 #--controlling shifts in NDC levels, NDC year and NZ year
@@ -178,16 +193,13 @@ with col4:
 
 
 #--collect historical emissions, NDC and NZ information for selected country:
-ehist = hist_co2eq_excl.loc[selected_country]
+#ehist = hist_co2eq_excl.loc[selected_country]
 
-if selected_country=='China':
-    ehist = hist_co2_excl.loc[selected_country]
-
-if selected_country=='India':
-    ehist = hist_co2_excl.loc[selected_country]
-
+ehist = hist_co2_excl.loc[selected_country]
 endc = co2eq_excl.loc[selected_country]
 enz = co2eq_nz.loc[selected_country]
+ndc_ch4 = ch4_summ.loc[selected_country]
+ndc_n2o = n2o_summ.loc[selected_country]
 
 #--base trajectory
 if selected_fitmethod=='Olivier old':
@@ -196,7 +208,7 @@ if selected_fitmethod=='Olivier old':
 
 if selected_fitmethod=='Olivier revised':
     #----New method
-    emiss_coun = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz)
+    emiss_coun = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
 
 #--------------------------------------------------------------------------------------------
 #--adjusted enhanced/delayed trajectories
@@ -211,11 +223,11 @@ if selected_fitmethod=='Olivier old':
 
 if selected_fitmethod=='Olivier revised':
     #----New method
-    emiss_uncond= mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,duncond=duncond)
-    emiss_cond = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,dcond=dcond)
-    emiss_ndcyr = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,dndcyr=dndcyr)
-    emiss_nzyr = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,dnzyr=dnzyr)
-    emiss_allchg = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,duncond=duncond,dcond=dcond,dndcyr=dndcyr,dnzyr=dnzyr)
+    emiss_uncond= mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,duncond=duncond)
+    emiss_cond = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,dcond=dcond)
+    emiss_ndcyr = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,dndcyr=dndcyr)
+    emiss_nzyr = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,dnzyr=dnzyr)
+    emiss_allchg = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,duncond=duncond,dcond=dcond,dndcyr=dndcyr,dnzyr=dnzyr)
 
 
 
@@ -279,18 +291,18 @@ ax.plot(hist_co2eq_excl.loc[selected_country].index,
 
 ax.plot(ehist.index,
         ehist.values/1000,
-        '-', color='blue',alpha=1, lw=2, label='CO2eq historical',mec='k',mew=0.5,ms=6
+        '-', color='blue',alpha=1, lw=2, label='CO2 historical',mec='k',mew=0.5,ms=6
         )
 
 
 ax.plot(emiss_coun.iloc[0].index,
         emiss_coun.iloc[0].values/1000,
-        'o-', color='grey',alpha=1, lw=2, label='Uncond LB',mec='k',mew=0.5,ms=4
+        'o-', color='grey',alpha=1, lw=2, label='Uncond LB',mec='k',mew=0.5,ms=3
         )
 
 ax.plot(emiss_coun.iloc[1].index,
         emiss_coun.iloc[1].values/1000,
-        'o-', color='grey',alpha=1, lw=2, label='Uncond UB',mec='k',mew=0.5,ms=4
+        'o-', color='grey',alpha=1, lw=2, label='Uncond UB',mec='k',mew=0.5,ms=3
         )
 
 
@@ -318,12 +330,12 @@ ax.plot(emiss_allchg.iloc[1].index,
 
 
 plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
-            co2eq_excl.loc[selected_country,co2eq_excl.columns[4:6]].values,
+            co2eq_excl.loc[selected_country,co2eq_excl.columns[5:7]].values,
             label='NDC Condititonal',color='lightblue',marker='x',s=30,zorder=20)
 
 
 plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
-            co2eq_excl.loc[selected_country,co2eq_excl.columns[2:4]].values,
+            co2eq_excl.loc[selected_country,co2eq_excl.columns[3:5]].values,
             label='NDC Uncondititonal',color='royalblue',marker='x',s=30,zorder=20)
 
 plt.scatter(co2eq_nz .loc[selected_country,'Year'],

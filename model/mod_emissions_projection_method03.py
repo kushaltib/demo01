@@ -61,7 +61,7 @@ def emi_calc(E0,g0,Eneg,dg_near,dg_long,year_start=2023,year_ndc=2030,year_end=2
     g=g0           #--growth rate
     g_list=[g]     #--list of yearly g values
 
-    #--loop on years "year_start" to "NDC year"
+    #--loop on years "year_start" to "year_end"
     for yr in range(year_start,year_end+1):
         
         g = np.round(g,5)
@@ -112,7 +112,7 @@ def em_lg(dg_long,dg_near,E0,g0,Elong,yr_last,yr_near,yr_long):
      emi_list=emi_calc(E0,g0,Elong,dg_near,dg_long,yr_last+1,yr_near)
 
      #--compute the 0.X% emissions
-     emi_pntXper = Elong + (0.0027*(E0-Elong))
+     emi_pntXper = Elong + (0.005*(E0-Elong))
 
      #--modelled emissions at NZ year
      emi_nz_mod = emi_list[yr_long-yr_last] 
@@ -126,7 +126,7 @@ def em_lg(dg_long,dg_near,E0,g0,Elong,yr_last,yr_near,yr_long):
      
      
 
-def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,duncond=1.0,dcond=1.0,dndcyr=0,dnzyr=0):
+def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,gmax=0.1,dg0=0.02,duncond=1.0,dcond=1.0,dndcyr=0,dnzyr=0):
      
      E0=emiss_hist.values[-1]  #-- emissions at t=0
      yr_last = emiss_hist.index[-1] 
@@ -142,19 +142,21 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,duncond=1.0,dcond=1.
      
 
      
-     #--getting the near-term and long-term parameters:
+     #--getting the near-term parameters:
      yr_near = emiss_ndc['Year']+dndcyr
      emiss_near = emiss_ndc[['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB']].values.tolist()
      dnear=[duncond,duncond,dcond,dcond]
      
+     emiss_ch4 = ndc_ch4[['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB']].values.tolist()
+     emiss_n2o = ndc_n2o[['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB']].values.tolist()
+
+     
+     #--getting long-term parameters:
      yr_nz = emiss_nz['Year']+dnzyr
      if yr_nz>2100: yr_nz=2100
 
-     if is_nan(emiss_nz['co2eq_excl']):
-          Elong = emiss_nz['co2_excl']+0.001
-     else:
-          Elong = emiss_nz['co2eq_excl']+0.001
-          
+     emiss_long = emiss_nz[['CO2_nz_uncond_lb','CO2_nz_uncond_ub','CO2_nz_cond_lb','CO2_nz_cond_ub']].values.tolist()
+     #Elong = emiss_nz['co2eq_excl']+0.001
      #Elong = emiss_nz['co2eq_excl']-(0.05*E0)
 
 
@@ -165,12 +167,21 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,duncond=1.0,dcond=1.
 
      for i in range(4):
           
+          #Convert to CO2 emissions if NDC has CO2eq:
+          if emiss_ndc['Applies']=='CO2eq':
+               Enear = emiss_near[i]-(emiss_ch4[i]*28)-(emiss_n2o[i]*265)
+          else:
+               Enear=emiss_near[i]
+               
           #convert the emissions into kT/year
-          Enear=emiss_near[i]*1000
+          Enear=Enear*1000
 
           #adjust for user specificed changes to NDC targets
           Enear=Enear*dnear[i]
 
+          #CO2 for net-zero:
+          Elong = emiss_long[i]*1000
+               
           #--adjust Elong if 2030 value is lower
           if Enear<Elong: Elong=Enear
 
@@ -184,16 +195,18 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,duncond=1.0,dcond=1.
                
           #first fix dg_near:
           solution_near = fsolve(em_nr, dg_near, args=(E0,g0,Enear,Elong,yr_last,yr_near))
-          
+
           #--flag to detect if minimisation algorithm has converged
           near_success=True
-          
+
+          #--sto ndc info:
+          #ndc_shift.iloc[i]=[yr_near,Enear]
+
           if near_success:
-                 
-               dg_near = solution_near[0]
-                              
+               
+               dg_near = solution_near[0]#['x']
+
                if emiss_nz['Neutrality']=='Yes':
-                    
                     #second fix dg_long:
                     solution_long = fsolve(em_lg, dg_long, args=(dg_near,E0,g0,Elong,yr_last,yr_near,yr_nz))
 
@@ -201,24 +214,32 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,duncond=1.0,dcond=1.
                     long_success=True
 
                     if long_success:
-                         dg_long = solution_long[0]
-                         
+                         dg_long = solution_long[0]#['x']
+
                          #--recompute CO2 emission trajectory for vector x
                          emi_list=np.array(emi_calc(E0,g0,Elong,dg_near,dg_long,yr_last+1,yr_near))
-                         
+
                          #--replace with recomputed emi_list
                          emiss_proj.iloc[i]=emi_list
-                         
-                         #--store optimization results
-                         x_res.iloc[i]=[dg_near,dg_long]
-                         
-                         #--print info:
-                         #print(country,' ',emiss_proj.index[i],': converged')
 
                else:
+
                     emi_list = np.array(emi_calc(E0,g0,Elong,dg_near,dg_long,yr_last+1,yr_near,yr_near))
                     emiss_proj.iloc[i,0:yr_near-yr_last+1] = emi_list#+emi_list[yr_near-yr_last]*(2100-yr_near)
                     emiss_proj.iloc[i,yr_near-yr_last+1:] = Enear
+
+                   
+               #--store optimization results
+               #x_res.iloc[i]=[dg_near,dg_long]
+                         
+
+               #--print info:
+               print(country,' ',emiss_proj.index[i],': converged')
+
+                                   
+          else:
+               print(country,' ',emiss_proj.index[i],':did not converge')
+
 
      return emiss_proj#,x_res,ndc_shift,E0,g0           
 

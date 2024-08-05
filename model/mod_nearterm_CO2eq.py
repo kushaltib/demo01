@@ -40,6 +40,19 @@ def create_lists(country_list,table,group_name,group):
 
     return lists
 
+
+#to initialize the dataframe for storing the summary of near-term parameters
+def init_neardata(country_list):
+
+     columns = ['Year','Scope','Applies','Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB','Processed']
+     data = pd.DataFrame(columns=columns,index=country_list)
+
+     return data
+
+
+
+
+
 #this function summarizes country-wise future CO2eq or CO2 emissions for the NDC-year for Total-net or Total-excl
 #for countries which directly report their emissions
 def grp_emiss(ndc_table,applies_to,country_list=None,data=None):
@@ -58,11 +71,7 @@ def grp_emiss(ndc_table,applies_to,country_list=None,data=None):
 
      
      #check if a data table is provided for update else create empty dataframe to store future emissions by country:
-     if data is None:
-          columns = ['Year','Scope','Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB','Processed']
-          data = pd.DataFrame(columns=columns,index=country_list)
-
-
+     if data is None:  data = init_neardata(country_list)
      
      if not target_applies[applies_to]:
           print("No country with direct 'Emissions' values for the future that applies to "+applies_to+"\n")
@@ -76,6 +85,7 @@ def grp_emiss(ndc_table,applies_to,country_list=None,data=None):
             if country in target_scope['Total-net']:
                  data.loc[country] = [NDC.loc[country,'Target_year'],\
                                        NDC.loc[country,'Target_scope'],\
+                                       applies_to,\
                                        NDC.loc[country,'Target_'+applies_to+'_emissions_LB_unconditional_Total-net'],\
                                        NDC.loc[country,'Target_'+applies_to+'_emissions_UB_unconditional_Total-net'],\
                                        NDC.loc[country,'Target_'+applies_to+'_emissions_LB_conditional_Total-net'],\
@@ -86,6 +96,7 @@ def grp_emiss(ndc_table,applies_to,country_list=None,data=None):
             if country in target_scope['Total-excl']:
                  data.loc[country] = [NDC.loc[country,'Target_year'],\
                                        NDC.loc[country,'Target_scope'],\
+                                       applies_to,\
                                        NDC.loc[country,'Target_'+applies_to+'_emissions_LB_unconditional_Total-excl'],\
                                        NDC.loc[country,'Target_'+applies_to+'_emissions_UB_unconditional_Total-excl'],\
                                        NDC.loc[country,'Target_'+applies_to+'_emissions_LB_conditional_Total-excl'],\
@@ -130,9 +141,7 @@ def grp_percent_abs(ndc_table,applies_to,country_list=None,data=None):
      target_reference = create_lists(country_list,NDC,target[4],NDC[target[4]].unique().tolist())
      
      #check if a data table is provided for update else create empty dataframe to store future emissions by country:
-     if data is None:
-          columns = ['Year','Scope','Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB','Processed']
-          data = pd.DataFrame(columns=columns,index=country_list)
+     if data is None:  data = init_neardata(country_list)
 
 
      
@@ -145,11 +154,13 @@ def grp_percent_abs(ndc_table,applies_to,country_list=None,data=None):
           for reference in ['bau','base']:
 
                if reference=='bau': REF ='BAU'
-               else: REF = 'Base'               
+               else: REF = 'Base'
+
+                             
 
                print("\nReading data for countries with 'Reduction relative to "+reference+"' \n")
 
-               for country in set(target_applies['CO2eq']) & set(target_type['absolute']) & set(target_format['percent']) & set(target_reference[reference]):
+               for country in set(target_applies[applies_to]) & set(target_type['absolute']) & set(target_format['percent']) & set(target_reference[reference]):
                     #check if reference is present:
 
                     if NDC.loc[country,REF]=='Yes':
@@ -164,6 +175,7 @@ def grp_percent_abs(ndc_table,applies_to,country_list=None,data=None):
 
                               data.loc[country] = [NDC.loc[country,'Target_year'],\
                                                    NDC.loc[country,'Target_scope'],\
+                                                   applies_to,\
                                                    uncond_lb,\
                                                    uncond_ub,\
                                                    cond_lb,\
@@ -179,13 +191,14 @@ def grp_percent_abs(ndc_table,applies_to,country_list=None,data=None):
 
                               data.loc[country] = [NDC.loc[country,'Target_year'],\
                                                    NDC.loc[country,'Target_scope'],\
+                                                   applies_to,\
                                                    uncond_lb,\
                                                    uncond_ub,\
                                                    cond_lb,\
                                                    cond_ub,\
                                                    'Yes'
                                                   ]
-                         #replace NaN for cond emissions if there is an uncond emission     
+                         #replace NaN for cond emissions with uncond emission     
                          if is_nan(data.loc[country,'Conditional_LB']):
                               data.loc[country,'Conditional_LB'] = data.loc[country,'Unconditional_LB']
                               data.loc[country,'Conditional_UB'] = data.loc[country,'Unconditional_UB']
@@ -196,6 +209,7 @@ def grp_percent_abs(ndc_table,applies_to,country_list=None,data=None):
           print("\n",len(processsed_data.index)," countries have been processed out of ",len(country_list))       
           
      return data
+
 
 
 #this function summarizes country-wise future CO2eq or CO2 emissions for the NDC-year for Total-net or Total-excl
@@ -219,10 +233,7 @@ def grp_percent_int(ndc_table,applies_to,country_list=None,data=None):
      target_reference = create_lists(country_list,NDC,target[4],NDC[target[4]].unique().tolist())
      
      #check if a data table is provided for update else create empty dataframe to store future emissions by country:
-     if data is None:
-          columns = ['Year','Scope','Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB','Processed']
-          data = pd.DataFrame(columns=columns,index=country_list)
-
+     if data is None:  data = init_neardata(country_list)
 
      
      if not target_applies[applies_to]:
@@ -272,6 +283,7 @@ def grp_percent_int(ndc_table,applies_to,country_list=None,data=None):
 
                               data.loc[country] = [NDC.loc[country,'Target_year'],\
                                                    NDC.loc[country,'Target_scope'],\
+                                                   applies_to,\
                                                    uncond_lb,\
                                                    uncond_ub,\
                                                    cond_lb,\
@@ -280,6 +292,7 @@ def grp_percent_int(ndc_table,applies_to,country_list=None,data=None):
                                                    ]
                               
                          if country in target_scope['Total-excl']:
+
                               uncond_lb = NDC.loc[country,REF+'_'+applies_to+'_emissions_Total-excl']*(1-NDC.loc[country,'Target_'+applies_to+'_percent_UB_unconditional_Total-excl']/100)
                               uncond_ub = NDC.loc[country,REF+'_'+applies_to+'_emissions_Total-excl']*(1-NDC.loc[country,'Target_'+applies_to+'_percent_LB_unconditional_Total-excl']/100)
                               cond_lb = NDC.loc[country,REF+'_'+applies_to+'_emissions_Total-excl']*(1-NDC.loc[country,'Target_'+applies_to+'_percent_UB_conditional_Total-excl']/100)
@@ -287,6 +300,7 @@ def grp_percent_int(ndc_table,applies_to,country_list=None,data=None):
 
                               data.loc[country] = [NDC.loc[country,'Target_year'],\
                                                    NDC.loc[country,'Target_scope'],\
+                                                   applies_to,\
                                                    uncond_lb,\
                                                    uncond_ub,\
                                                    cond_lb,\
@@ -311,7 +325,7 @@ def grp_percent_int(ndc_table,applies_to,country_list=None,data=None):
 
 #this function adjusts country-wise future CO2eq or CO2 emissions for the NDC-year for Total-excl
 #for countries which report in terms of Total-net
-def to_total_excl(ndc_table,applies_to,data=None):
+def to_total_excl(ndc_table,data=None):
 
      NDC = ndc_table
 
@@ -328,10 +342,8 @@ def to_total_excl(ndc_table,applies_to,data=None):
           luc_separate = create_lists(country_list,NDC,'LULUCF_separate_info',NDC['LULUCF_separate_info'].unique().tolist())
 
           for country in country_for_adjust['Total-net']:
-
-               applies_to = NDC.loc[country,'Target_applies_to']
-
-
+               
+               applies_to = data.loc[country,'Applies']
 
                if country in luc_separate['Yes']:
                     adj_uncond_lb = NDC.loc[country,'Target_'+applies_to+'_emissions_LB_unconditional_LULUCF']
@@ -353,11 +365,11 @@ def to_total_excl(ndc_table,applies_to,data=None):
                if is_nan(adj_cond_lb): adj_cond_lb = adj_uncond_lb
                if is_nan(adj_cond_ub): adj_cond_ub = adj_uncond_ub
 
+
                data_luc.loc[country,'Unconditional_LB'] = adj_uncond_lb
                data_luc.loc[country,'Unconditional_UB'] = adj_uncond_ub
                data_luc.loc[country,'Conditional_LB'] = adj_cond_lb
                data_luc.loc[country,'conditional_UB'] = adj_cond_ub
-
 
                
                data_adj.loc[country,'Unconditional_LB'] = min(data.loc[country,'Unconditional_LB']-adj_uncond_lb,data.loc[country,'Unconditional_LB']-adj_uncond_ub)
@@ -375,7 +387,41 @@ def to_total_excl(ndc_table,applies_to,data=None):
 
      return data_adj,data_luc          
                
+#applies_to = ALL, CO2eq or CO2
+def create_ndc_table(ndc_table,applies_to='ALL',country_list=None):
+     
+     NDC = ndc_table
 
+     #choose the list of countries on which operation is to be carried out
+     if country_list is None:
+        country_list = NDC.index
+
+     data_ndc = init_neardata(country_list)
+
+     if applies_to=='ALL' or applies_to=='CO2eq':
+          data_ndc = grp_emiss(NDC,'CO2eq',country_list,data_ndc)
+          data_ndc = grp_percent_abs(NDC,'CO2eq',country_list,data_ndc)
+          data_ndc = grp_percent_int(NDC,'CO2eq',country_list,data_ndc)
+          data_ndc = grp_percent_int(NDC,'CO2eq',country_list,data_ndc)
+
+         
+
+     if applies_to=='ALL' or applies_to=='CO2':
+
+          data_ndc = grp_emiss(NDC,'CO2',country_list,data_ndc)
+          data_ndc = grp_percent_abs(NDC,'CO2',country_list,data_ndc)
+          data_ndc = grp_percent_int(NDC,'CO2',country_list,data_ndc)
+          data_ndc = grp_percent_int(NDC,'CO2',country_list,data_ndc)
+
+     
+     data_ndc_noluc,data_luc = to_total_excl(NDC,data=data_ndc)
+
+
+     return data_ndc,data_ndc_noluc,data_luc
+
+
+
+     
 
 
 
