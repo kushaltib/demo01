@@ -80,8 +80,8 @@ with st.sidebar:
     
 
     #--fitting method
-    #selected_fitmethod = st.selectbox("Fitting method",['Olivier old','Olivier revised'])
-    selected_fitmethod = st.selectbox("Fitting method",['Olivier revised'])
+    selected_fitmethod = st.selectbox("Fitting method",['Olivier old','Olivier revised'])
+    #selected_fitmethod = st.selectbox("Fitting method",['Olivier revised'])
     
     
     #--allowance limit of negative emissions
@@ -204,7 +204,7 @@ ndc_n2o = n2o_summ.loc[selected_country]
 #--base trajectory
 if selected_fitmethod=='Olivier old':
     #----Olivier's method
-    emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm)
+    emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm)
 
 if selected_fitmethod=='Olivier revised':
     #----New method
@@ -215,11 +215,11 @@ if selected_fitmethod=='Olivier revised':
 
 if selected_fitmethod=='Olivier old':
     #----Olivier's method
-    emiss_uncond= mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,duncond=duncond)
-    emiss_cond = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dcond=dcond)
-    emiss_ndcyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dndcyr=dndcyr)
-    emiss_nzyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dnzyr=dnzyr)
-    emiss_allchg = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,duncond=duncond,dcond=dcond,dndcyr=dndcyr,dnzyr=dnzyr)
+    emiss_uncond= mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,duncond=duncond)
+    emiss_cond = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dcond=dcond)
+    emiss_ndcyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dndcyr=dndcyr)
+    emiss_nzyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dnzyr=dnzyr)
+    emiss_allchg = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,duncond=duncond,dcond=dcond,dndcyr=dndcyr,dnzyr=dnzyr)
 
 if selected_fitmethod=='Olivier revised':
     #----New method
