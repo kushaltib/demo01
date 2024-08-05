@@ -207,7 +207,7 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,gmax
                     Enear=emiss_near[i]
                
                #convert the emissions into kT/year
-               Enear=Enear[i]*1000
+               Enear=Enear*1000
 
                #adjust for user specificed changes to NDC targets
                Enear=Enear*dnear[i]
