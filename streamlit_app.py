@@ -408,12 +408,13 @@ else:
 
 
 #plot net emissions:
-data_len = min(len(hist_co2eq_excl.loc[selected_country].values),len(hist_luc_net.loc[selected_country].values))
+if selected_country not in ['Int. Aviation','Int. Shipping']:
+    data_len = min(len(hist_co2eq_excl.loc[selected_country].values),len(hist_luc_net.loc[selected_country].values))
 
-ax.plot(hist_luc_net.loc[selected_country].index[-data_len:],
-        hist_co2eq_excl.loc[selected_country].values[-data_len:]/1000+hist_luc_net.loc[selected_country].values[-data_len:]/1000,
-        '--', color='orange',alpha=1, lw=2, label='CO2eq historical net',mec='k',mew=0.5,ms=6
-        ) 
+    ax.plot(hist_luc_net.loc[selected_country].index[-data_len:],
+            hist_co2eq_excl.loc[selected_country].values[-data_len:]/1000+hist_luc_net.loc[selected_country].values[-data_len:]/1000,
+            '--', color='orange',alpha=1, lw=2, label='CO2eq historical net',mec='k',mew=0.5,ms=6
+            ) 
 
 
 
