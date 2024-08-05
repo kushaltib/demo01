@@ -380,9 +380,10 @@ ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='khaki',interpolate=True,alpha=
 
 
 #plot luc emissions:
-ax.plot(hist_luc_net.loc[selected_country].index,
-        hist_luc_net.loc[selected_country].values/1000,
-        '-', color='yellowgreen',alpha=1, lw=2, label='CO2eq historical luc net',mec='k',mew=0.5,ms=6
+if selected_country not in ['Int. Aviation','Int. Shipping']:
+    ax.plot(hist_luc_net.loc[selected_country].index,
+            hist_luc_net.loc[selected_country].values/1000,
+            '-', color='yellowgreen',alpha=1, lw=2, label='CO2eq historical luc net',mec='k',mew=0.5,ms=6
         )
 
 if np.isnan(np.asarray(NDC.loc[selected_country,['Target_CO2eq_emissions_LB_conditional_LULUCF','Target_CO2eq_emissions_UB_conditional_LULUCF']].values,dtype=float)).any():
