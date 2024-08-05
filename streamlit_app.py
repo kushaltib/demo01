@@ -33,6 +33,7 @@ def get_ndc():
     co2eq = mod_nearterm_CO2eq.grp_percent_int(NDC,'CO2eq',data=co2eq)
     co2eq = mod_nearterm_CO2eq.grp_percent_int(NDC,'CO2',data=co2eq)
     co2eq_excl,co2eq_luc = mod_nearterm_CO2eq.to_total_excl(NDC,'CO2eq',data=co2eq)
+    co2eq_excl,co2eq_luc = mod_nearterm_CO2eq.to_total_excl(NDC,'CO2',data=co2eq_excl)
     co2eq_nz = mod_longterm_CO2eq.grp_nz(NDC,process='all')
 
     return NDC,co2eq,co2eq_excl,co2eq_luc,co2eq_nz
