@@ -124,7 +124,7 @@ def cost(x,E0,gi0,Enear,Elong,yr_last,yr_near,yr_long):
 
 
 
-def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02,eneg=10,corr=1,asm=1,duncond=1,dcond=1,dndcyr=0,dnzyr=0):
+def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,gmax=0.1,dg0=0.02,eneg=10,corr=1,asm=1,duncond=1,dcond=1,dndcyr=0,dnzyr=0):
      
      E0=emiss_hist.values[-1]  #-- emissions at t=0
      yr_last = emiss_hist.index[-1] 
@@ -162,12 +162,20 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02,en
      yr_near = emiss_ndc['Year']+dndcyr
      emiss_near = emiss_ndc[['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB']].values.tolist()
      dnear=[duncond,duncond,dcond,dcond]
+
+     emiss_ch4 = ndc_ch4[['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB']].values.tolist()
+     emiss_n2o = ndc_n2o[['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB']].values.tolist()
+
+
      yr_nz = emiss_nz['Year']+dnzyr
 
-     if is_nan(emiss_nz['co2eq_excl']):
-          Elong = emiss_nz['co2_excl']
-     else:
-          Elong = emiss_nz['co2eq_excl']
+
+     emiss_long = emiss_nz[['CO2_nz_uncond_lb','CO2_nz_uncond_ub','CO2_nz_cond_lb','CO2_nz_cond_ub']].values.tolist()
+
+     #if is_nan(emiss_nz['co2eq_excl']):
+     #     Elong = emiss_nz['co2_excl']
+     #else:
+     #     Elong = emiss_nz['co2eq_excl']
      
      #Elong = emiss_nz['co2eq_excl']
 
@@ -192,11 +200,20 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02,en
           
           for i in range(4):
                
+               #Convert to CO2 emissions if NDC has CO2eq:
+               if emiss_ndc['Applies']=='CO2eq':
+                    Enear = emiss_near[i]-(emiss_ch4[i]*28)-(emiss_n2o[i]*265)
+               else:
+                    Enear=emiss_near[i]
+               
                #convert the emissions into kT/year
-               Enear=emiss_near[i]*1000
+               Enear=Enear[i]*1000
 
                #adjust for user specificed changes to NDC targets
                Enear=Enear*dnear[i]
+               
+               #CO2 for net-zero:
+               Elong = emiss_long[i]*1000
 
                #--adjust Elong if 2030 value is lower
                if Enear<Elong: Elong=Enear
