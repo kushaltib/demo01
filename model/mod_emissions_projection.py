@@ -163,7 +163,13 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,gmax=0.1,dg0=0.02,en
      emiss_near = emiss_ndc[['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB']].values.tolist()
      dnear=[duncond,duncond,dcond,dcond]
      yr_nz = emiss_nz['Year']+dnzyr
-     Elong = emiss_nz['co2eq_excl']
+
+     if is_nan(emiss_nz['co2eq_excl']):
+          Elong = emiss_nz['co2_excl']
+     else:
+          Elong = emiss_nz['co2eq_excl']
+     
+     #Elong = emiss_nz['co2eq_excl']
 
 
      #
