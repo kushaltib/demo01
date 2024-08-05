@@ -291,7 +291,7 @@ ax.plot(hist_co2eq_excl.loc[selected_country].index,
 
 ax.plot(ehist.index,
         ehist.values/1000,
-        '-', color='blue',alpha=1, lw=2, label='CO2 historical',mec='k',mew=0.5,ms=6
+        '-', color='dodgerblue',alpha=1, lw=2, label='CO2 historical',mec='k',mew=0.5,ms=6
         )
 
 
@@ -307,12 +307,12 @@ ax.plot(emiss_coun.iloc[1].index,
 
 ax.plot(emiss_coun.iloc[0].index,
         emiss_coun.iloc[0].values/1000,
-        'o-', color='blue',alpha=1, lw=2, label='Cond LB',mec='k',mew=0.5,ms=3
+        'o-', color='violet',alpha=1, lw=2, label='Cond LB',mec='purple',mew=0.5,ms=3
         )
 
 ax.plot(emiss_coun.iloc[1].index,
         emiss_coun.iloc[1].values/1000,
-        'o-', color='blue',alpha=1, lw=2, label='Cond UB',mec='k',mew=0.5,ms=3
+        'o-', color='violet',alpha=1, lw=2, label='Cond UB',mec='purple',mew=0.5,ms=3
         )
 
 
