@@ -328,6 +328,11 @@ def to_total_excl(ndc_table,applies_to,data=None):
           luc_separate = create_lists(country_list,NDC,'LULUCF_separate_info',NDC['LULUCF_separate_info'].unique().tolist())
 
           for country in country_for_adjust['Total-net']:
+
+               applies_to = NDC.loc[country,'Target_applies_to']
+
+
+
                if country in luc_separate['Yes']:
                     adj_uncond_lb = NDC.loc[country,'Target_'+applies_to+'_emissions_LB_unconditional_LULUCF']
                     adj_uncond_ub = NDC.loc[country,'Target_'+applies_to+'_emissions_UB_unconditional_LULUCF']
