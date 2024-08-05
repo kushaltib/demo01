@@ -305,6 +305,16 @@ ax.plot(emiss_coun.iloc[1].index,
         'o-', color='grey',alpha=1, lw=2, label='Uncond UB',mec='k',mew=0.5,ms=3
         )
 
+ax.plot(emiss_coun.iloc[0].index,
+        emiss_coun.iloc[0].values/1000,
+        'o-', color='blue',alpha=1, lw=2, label='Cond LB',mec='k',mew=0.5,ms=3
+        )
+
+ax.plot(emiss_coun.iloc[1].index,
+        emiss_coun.iloc[1].values/1000,
+        'o-', color='blue',alpha=1, lw=2, label='Cond UB',mec='k',mew=0.5,ms=3
+        )
+
 
 #ax.plot(emiss_nzyr.iloc[0].index,
 #        emiss_nzyr.iloc[0].values/1000,
