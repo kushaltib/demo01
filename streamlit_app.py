@@ -327,15 +327,15 @@ ax.plot(emiss_coun.iloc[1].index,
 #        )
 
 
-ax.plot(emiss_allchg.iloc[0].index,
-        emiss_allchg.iloc[0].values/1000,
-        'o-', color='coral',alpha=1, lw=2, label='adj all',mec='k',mew=0.5,ms=4
-        )
+#ax.plot(emiss_allchg.iloc[0].index,
+#        emiss_allchg.iloc[0].values/1000,
+#        'o-', color='coral',alpha=1, lw=2, label='adj all',mec='k',mew=0.5,ms=4
+#        )
 
-ax.plot(emiss_allchg.iloc[1].index,
-        emiss_allchg.iloc[1].values/1000,
-        'o-', color='coral',alpha=1, lw=2, label='adj all',mec='k',mew=0.5,ms=4
-        )
+#ax.plot(emiss_allchg.iloc[1].index,
+#        emiss_allchg.iloc[1].values/1000,
+#        'o-', color='coral',alpha=1, lw=2, label='adj all',mec='k',mew=0.5,ms=4
+#        )
 
 
 
