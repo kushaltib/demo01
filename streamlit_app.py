@@ -201,6 +201,10 @@ if selected_fitmethod=='Olivier revised':
     #----New method
     emiss_coun = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
 
+
+
+
+
 #--------------------------------------------------------------------------------------------
 #--adjusted enhanced/delayed trajectories
 
@@ -221,6 +225,9 @@ if selected_fitmethod=='Olivier revised':
     emiss_allchg = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,duncond=duncond,dcond=dcond,dndcyr=dndcyr,dnzyr=dnzyr)
 
 
+#--for comparing to old version in the paper:
+paper = pd.read_excel("./data/comparing/paper_co2_nogmp.xlsx",index_col=0)
+emiss_paper = paper.loc[selected_country]
 
 
 #show the change in cumm. CO2eq with each type of change
@@ -307,7 +314,10 @@ ax.plot(emiss_coun.iloc[1].index,
         'o-', color='grey',alpha=1, lw=2, label='Uncond UB',mec='k',mew=0.5,ms=3
         )
 
-
+ax.plot(emiss_paper.index,
+        emiss_paper.values/1000,
+        ':', color='pink',alpha=1, lw=2, label='Uncond UB',mec='k',mew=0.5,ms=3
+        )
 
 
 #ax.plot(emiss_nzyr.iloc[0].index,
