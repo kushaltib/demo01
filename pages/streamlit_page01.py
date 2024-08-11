@@ -19,7 +19,7 @@ def format_text(value):
 
 
 
-def page01(selected_fitmethod,selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg,gmax,dg,asm,corr,emiss_coun,hist_co2eq_excl,emiss_paper,co2eq_excl,NDC,hist_luc_net,start,end):
+def page01(selected_fitmethod,selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg,gmax,dg,asm,corr,emiss_coun,hist_co2eq_excl,emiss_paper,co2eq_excl,co2eq_nz,NDC,hist_luc_net,start,end):
 
     #--controlling shifts in NDC levels, NDC year and NZ year
     col1,col2=st.columns(2)
@@ -199,7 +199,7 @@ def page01(selected_fitmethod,selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,en
                 co2eq_excl.loc[selected_country,co2eq_excl.columns[3:5]].values,
                 label='NDC Uncondititonal',color='royalblue',marker='x',s=30,zorder=20)
 
-    plt.scatter(co2eq_nz .loc[selected_country,'Year'],
+    plt.scatter(co2eq_nz.loc[selected_country,'Year'],
                 0,
                 label='Net-zero',color='red',marker='x',s=50,zorder=20)
 

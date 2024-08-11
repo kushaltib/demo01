@@ -151,4 +151,4 @@ emiss_paper = paper.loc[selected_country]
 
 
 if show==1:
-    streamlit_page01.page01(selected_fitmethod,selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg,gmax,dg,asm,corr,emiss_coun,hist_co2eq_excl,emiss_paper,co2eq_excl,NDC,hist_luc_net,start,end)
+    streamlit_page01.page01(selected_fitmethod,selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg,gmax,dg,asm,corr,emiss_coun,hist_co2eq_excl,emiss_paper,co2eq_excl,co2eq_nz,NDC,hist_luc_net,start,end)
