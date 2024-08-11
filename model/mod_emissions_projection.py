@@ -15,6 +15,7 @@ import pathlib
 import argparse
 #
 
+
 #--keep the warnings silent
 warnings.simplefilter("ignore", OptimizeWarning)
 
@@ -133,8 +134,17 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,gmax
 
      #----g0: initial growth rate
      #--perform fit to diganose a priori initial rate of emission by using last 5 years of hist emissions
-     X_yr = np.array(emiss_hist.index[-5:]).reshape(-1, 1)
-     Y_emiss = emiss_hist.values[-5:].reshape(-1, 1)
+
+     #set index to just skip 2020 for whatever may be the last-year of inventory
+     ind_2020 = len(emiss_hist.index.tolist()) - emiss_hist.index.tolist().index(2020)
+     
+     if ind_2020>5:
+          X_yr = np.array(emiss_hist.index[-5:]).reshape(-1, 1)
+          Y_emiss = emiss_hist.values[-5:].reshape(-1, 1)
+     else:
+          X_yr = np.array(emiss_hist.index[-6:][:-ind_2020].tolist()+emiss_hist.index[-6:][-ind_2020+1:].tolist()).reshape(-1, 1)
+          Y_emiss = np.array(emiss_hist.values[-6:][:-ind_2020].tolist()+emiss_hist.values[-6:][-ind_2020+1:].tolist()).reshape(-1, 1)
+
      model = LinearRegression().fit(X_yr,Y_emiss)
      
      Ep0=model.coef_[0]                    #--rate of emissions change at t=0
@@ -154,11 +164,16 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,gmax
      x0=[g0,Eneg0,dg]
      x0 = np.array(x0, dtype=object)
 
+     #--define bounds for minimation of control vector x
+     #---- g0 +/- dg0: on initial growth rate
+     #---- Eneg_max to 0 for asymptotic negative emissions
+     #---- 0 to gmax for initial increment in growth rate
 
+     bnds = ([g0-dg0,g0+dg0],[Eneg_max,0.0],[0,gmax])
+     #bnds = ([g0-dg0,g0+dg0],[Elong,0.0],[0,gmax])
+     #     
 
-     
-
-     #--getting the near-term and long-term parameters:
+     #--getting the near-term:
      yr_near = emiss_ndc['Year']+dndcyr
      emiss_near = emiss_ndc[['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB']].values.tolist()
      dnear=[duncond,duncond,dcond,dcond]
@@ -167,57 +182,36 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,gmax
      emiss_n2o = ndc_n2o[['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB']].values.tolist()
 
 
+     #--getting long-term parameters:
      yr_nz = emiss_nz['Year']+dnzyr
-
-
+     if yr_nz>2100: yr_nz=2100
+     
      emiss_long = emiss_nz[['CO2_nz_uncond_lb','CO2_nz_uncond_ub','CO2_nz_cond_lb','CO2_nz_cond_ub']].values.tolist()
-
-     #if is_nan(emiss_nz['co2eq_excl']):
-     #     Elong = emiss_nz['co2_excl']
-     #else:
-     #     Elong = emiss_nz['co2eq_excl']
-     
-     #Elong = emiss_nz['co2eq_excl']
-
-
-     #
-     
-     #--define bounds for minimation of control vector x
-     #---- g0 +/- dg0: on initial growth rate
-     #---- Eneg_max to 0 for asymptotic negative emissions
-     #---- 0 to gmax for initial increment in growth rate
-
-     bnds = ([g0-dg0,g0+dg0],[Eneg_max,0.0],[0,gmax])
-     #bnds = ([g0-dg0,g0+dg0],[Elong,0.0],[0,gmax])
-     #
-
-
 
      #--initialize empty dataframe to store projected timeseries:
      emiss_proj=pd.DataFrame(0.0,index=['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB'],columns=range(yr_last,2101))
 
-     if emiss_nz['Neutrality']=='Yes':
-          
-          for i in range(4):
-               
-               #Convert to CO2 emissions if NDC has CO2eq:
-               if emiss_ndc['Applies']=='CO2eq':
+
+     for i in range(4):
+            #Convert to CO2 emissions if NDC has CO2eq:
+            if emiss_ndc['Applies']=='CO2eq':
                     Enear = emiss_near[i]-(emiss_ch4[i]*28)-(emiss_n2o[i]*265)
-               else:
+            else:
                     Enear=emiss_near[i]
                
-               #convert the emissions into kT/year
-               Enear=Enear*1000
+            #convert the emissions into kT/year
+            Enear=Enear*1000
 
-               #adjust for user specificed changes to NDC targets
-               Enear=Enear*dnear[i]
+            #adjust for user specificed changes to NDC targets
+            Enear=Enear*dnear[i]
                
-               #CO2 for net-zero:
-               Elong = emiss_long[i]*1000
+            #CO2 for net-zero:
+            Elong = emiss_long[i]*1000
 
-               #--adjust Elong if 2030 value is lower
-               if Enear<Elong: Elong=Enear
+            #--adjust Elong if 2030 value is lower
+            if Enear<Elong: Elong=Enear
 
+            if emiss_nz['Neutrality']=='Yes':
                #--low ambition: emission trajectory minimization with x0 as initial conditions and bnds bounds
                #cost(x,E0,gi0,Enear,Elong,yr_last,yr_near,yr_long)
                #cost(x,E0,gi0,E2030,Elong,yr_long)
@@ -245,6 +239,29 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,gmax
                                    
                else:
                     print(country,': neutrality low optimisation did not converge')
+            
+            else:
+               #initiate the time-series with emissions for last year
+               emi_list=[E0]
+               
+               for yr in range(yr_last+1,2101):
+                                          
+                     if yr<yr_near:
+                           emi = ((yr-yr_last)*((Enear-E0)/(yr_near-yr_last)))+E0
+
+                     elif yr==yr_near:
+                           emi = Enear
+                     else:
+                           emi=Enear
+                     
+                     #--emission is appended to list
+                     emi_list.append(emi)
+               
+               #--save the projection to the dataframe
+               emiss_proj.iloc[i] = emi_list 
+                 
+
+                 
 
 
      return emiss_proj           

@@ -158,31 +158,8 @@ def  def_ch4(ndc_table,ndc_summ,ch4_hist,co2_hist,co2eq_hist,data=None,prop_year
 
       return data
 
-      
-#the function takes one country info at a time and projects the CH4 timeline
 
-def ch4_projection(ch4_ndc,ch4_hist):
-      
-      #lst year inventory information:
-      yr_last = ch4_hist.index[-1]
-      emiss_last = ch4_hist.values[-1]
-      
 
-      yr_near = ch4_ndc['Year']
-      emiss_near = ch4_ndc[['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB']].values.tolist()
-
-      #--initialize empty dataframe to store projected timeseries:
-      emiss_proj=pd.DataFrame(0.0,index=['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB'],columns=range(yr_last,2101))
-
-      for i in range(4):
-               
-               #convert the emissions into kT/year
-               Enear=emiss_near[i]*1000
-
-               #put ndc year values in time series data
-               emiss_proj[i,yr_near-yr_last]=Enear
-
-               #for yr in 
 
       
 

@@ -103,12 +103,6 @@ def  def_n2o(ndc_table,ndc_summ,n2o_hist,data=None):
 
       return data
 
-      
-
-      
-    
-
-
 
 
 #--END--

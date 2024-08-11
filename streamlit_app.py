@@ -21,44 +21,22 @@ def format_text(value):
 
 st.title("NDC pledges for selected countries")
 
-#read and process NDC data:
+
 #@st.cache_data
-def get_ndc():
-    NDC = mod_read_input.read_ndc()
-    
-    #process NDC
-    #co2eq = mod_nearterm_CO2eq.grp_emiss(NDC,'CO2eq')
-    #co2eq = mod_nearterm_CO2eq.grp_percent_abs(NDC,'CO2eq',data=co2eq)
-    #co2eq = mod_nearterm_CO2eq.grp_percent_int(NDC,'CO2eq',data=co2eq)
-    #co2eq = mod_nearterm_CO2eq.grp_percent_int(NDC,'CO2',data=co2eq)
-    #co2eq_excl,co2eq_luc = mod_nearterm_CO2eq.to_total_excl(NDC,'CO2eq',data=co2eq)
-    
-    #near-term parameters
-    co2eq, co2eq_excl,co2eq_luc = mod_nearterm_CO2eq.create_ndc_table(NDC)
-    
-
-    return NDC,co2eq,co2eq_excl,co2eq_luc
-
-NDC,co2eq,co2eq_excl,co2eq_luc = get_ndc()
 
 
-#Ask for choices:
+
+
 
 with st.sidebar:
     
-    #---country
-    #selected_country= st.selectbox("Choose Country:",NDC.index)
-    selected_country= st.selectbox("Country:",sorted(co2eq_excl.index[co2eq_excl['Processed']=='Yes']))
-
-    
+        
     #---inventory
     selected_inventory= st.selectbox("Historical Inventory:",['PRIMAPv5','EDGARv6'])
     hist_co2eq_excl = mod_read_input.read_hist(selected_inventory,'CO2eq','excl') #read historical emissions data
     hist_co2_excl = mod_read_input.read_hist(selected_inventory,'CO2','excl') #read historical emissions data
     hist_ch4 = mod_read_input.read_hist('PRIMAPv5','CH4','net')
     hist_n2o = mod_read_input.read_hist('PRIMAPv5','N2O','net')
-
-
 
     #--land-use data source
     selected_luc = st.selectbox("Land-use data:",['OSCAR+DGVM','NGHGI'])
@@ -69,6 +47,19 @@ with st.sidebar:
     
     if selected_luc=='NGHGI':
         hist_luc_net = mod_read_input.read_luc('net','NGHGI')
+
+    #--GDP
+    gdp = mod_read_input.read_gdp()
+
+
+    #read and process NDC data:
+    NDC = mod_read_input.read_ndc()
+    #near-term parameters
+    co2eq, co2eq_excl,co2eq_luc = mod_nearterm_CO2eq.create_ndc_table(NDC,hist_luc_net,hist_co2_excl,hist_co2eq_excl,gdp)
+
+    #---country
+    #selected_country= st.selectbox("Choose Country:",NDC.index)
+    selected_country= st.selectbox("Country:",sorted(co2eq_excl.index[co2eq_excl['Processed']=='Yes']))
 
     #--years for the display plot
     start, end = st.slider("Range of years", 
@@ -208,7 +199,7 @@ if selected_fitmethod=='Olivier old':
 
 if selected_fitmethod=='Olivier revised':
     #----New method
-    emiss_coun = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
+    emiss_coun = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
 
 #--------------------------------------------------------------------------------------------
 #--adjusted enhanced/delayed trajectories
@@ -223,11 +214,11 @@ if selected_fitmethod=='Olivier old':
 
 if selected_fitmethod=='Olivier revised':
     #----New method
-    emiss_uncond= mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,duncond=duncond)
-    emiss_cond = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,dcond=dcond)
-    emiss_ndcyr = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,dndcyr=dndcyr)
-    emiss_nzyr = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,dnzyr=dnzyr)
-    emiss_allchg = mod_emissions_projection_method03.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,duncond=duncond,dcond=dcond,dndcyr=dndcyr,dnzyr=dnzyr)
+    emiss_uncond= mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,duncond=duncond)
+    emiss_cond = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,dcond=dcond)
+    emiss_ndcyr = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,dndcyr=dndcyr)
+    emiss_nzyr = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,dnzyr=dnzyr)
+    emiss_allchg = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,duncond=duncond,dcond=dcond,dndcyr=dndcyr,dnzyr=dnzyr)
 
 
 
