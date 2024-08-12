@@ -125,7 +125,7 @@ def cost(x,E0,gi0,Enear,Elong,yr_last,yr_near,yr_long):
 
 
 
-def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,gmax=0.1,dg0=0.02,eneg=10,corr=1,asm=1,duncond=1,dcond=1,dndcyr=0,dnzyr=0):
+def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,gmax=0.1,dg0=0.02,eneg=10,corr=1,asm=1):
      
      E0=emiss_hist.values[-1]  #-- emissions at t=0
      yr_last = emiss_hist.index[-1] 
@@ -174,16 +174,16 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,gmax
      #     
 
      #--getting the near-term:
-     yr_near = emiss_ndc['Year']+dndcyr
+     yr_near = emiss_ndc['Year']
      emiss_near = emiss_ndc[['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB']].values.tolist()
-     dnear=[duncond,duncond,dcond,dcond]
+     
 
      emiss_ch4 = ndc_ch4[['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB']].values.tolist()
      emiss_n2o = ndc_n2o[['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB']].values.tolist()
 
 
      #--getting long-term parameters:
-     yr_nz = emiss_nz['Year']+dnzyr
+     yr_nz = emiss_nz['Year']
      if yr_nz>2100: yr_nz=2100
      
      emiss_long = emiss_nz[['CO2_nz_uncond_lb','CO2_nz_uncond_ub','CO2_nz_cond_lb','CO2_nz_cond_ub']].values.tolist()
@@ -202,9 +202,6 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,gmax
             #convert the emissions into kT/year
             Enear=Enear*1000
 
-            #adjust for user specificed changes to NDC targets
-            Enear=Enear*dnear[i]
-               
             #CO2 for net-zero:
             Elong = emiss_long[i]*1000
 

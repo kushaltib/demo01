@@ -47,15 +47,12 @@ with st.sidebar:
     #--GDP
     gdp = mod_read_input.read_gdp()
 
-
+   
+    #---country
     #read and process NDC data:
     NDC = mod_read_input.read_ndc()
-    #near-term parameters
-    co2eq, co2eq_excl,co2eq_luc = mod_nearterm_CO2eq.create_ndc_table(NDC,hist_luc_net,hist_co2_excl,hist_co2eq_excl,gdp)
-
-    #---country
     #selected_country= st.selectbox("Choose Country:",NDC.index)
-    selected_country= st.selectbox("Country:",sorted(co2eq_excl.index[co2eq_excl['Processed']=='Yes']))
+    selected_country= st.selectbox("Country:",sorted(NDC.index))
 
     #--years for the display plot
     start, end = st.slider("Range of years", 
@@ -67,9 +64,11 @@ with st.sidebar:
     
 
     #--fitting method
-    selected_fitmethod = st.selectbox("Fitting method",['Olivier old','Olivier revised'])
+    selected_fitmethod = st.selectbox("Fitting method",['Old','Revised'])
     #selected_fitmethod = st.selectbox("Fitting method",['Olivier revised'])
     
+    
+    #--parameters relevant for the Olivier's method:
     
     #--allowance limit of negative emissions
     eneg = st.slider(label="Allow neg emission (rel. to present emissions)",
@@ -79,30 +78,8 @@ with st.sidebar:
                      step=10,
                      #key='slider3'
                      )
+      
     
-    
-    #--limit of minimum value of growth rate
-    #gmax = st.slider(label="Annual growth rate (%)",
-    #                 min_value=10,
-    #                 max_value=40,
-    #                 value=10,
-    #                 step=1,
-    #                 #key='slider3'
-    #                 )
-    gmax=10
-
-    #--controlling the change in growth rate
-    #dg = st.slider(label="Annual change in growth rate (%)",
-    #                 min_value=2,
-    #                 max_value=6,
-    #                 value=2,
-    #                 step=1,
-    #                 #key='slider3'
-    #                 )
-    dg=2
-
-
-    #--parameters relevant for the Olivier's method:
     if st.checkbox('Remove quardractic correction'):
         corr=0
     else:
@@ -118,9 +95,7 @@ with st.sidebar:
 
 #more ndc and long term parameters:
 ch4_summ = mod_CH4.def_ch4(NDC,co2eq_excl,hist_ch4,hist_co2_excl,hist_co2eq_excl)
-
 n2o_summ = mod_N2O.def_n2o(NDC,co2eq_excl,hist_n2o)
-
 
 #co2eq_nz = mod_longterm_CO2eq.grp_nz(NDC,process='co2eq')
 co2eq_nz = mod_longterm_CO2eq.co2_nz(NDC,ch4_summ,n2o_summ,hist_co2_excl,hist_co2eq_excl)
