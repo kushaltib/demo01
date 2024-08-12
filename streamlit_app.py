@@ -123,7 +123,7 @@ n2o_summ = mod_N2O.def_n2o(NDC,co2eq_excl,hist_n2o)
 
 
 #co2eq_nz = mod_longterm_CO2eq.grp_nz(NDC,process='co2eq')
-co2eq_nz = mod_longterm_CO2eq.co2_nz(NDC,ch4_summ,n2o_summ)
+co2eq_nz = mod_longterm_CO2eq.co2_nz(NDC,ch4_summ,n2o_summ,hist_co2_excl,hist_co2eq_excl)
 
 ehist = hist_co2_excl.loc[selected_country]
 endc = co2eq_excl.loc[selected_country]

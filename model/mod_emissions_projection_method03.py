@@ -181,15 +181,13 @@ def create_timeseries_equ(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,
 
      for i in range(4):
           
-          
           #Convert to CO2 emissions if NDC has CO2eq:
           if emiss_ndc['Applies']=='CO2eq':
                Enear = emiss_near[i]-(emiss_ch4[i]*28)-(emiss_n2o[i]*265)
           else:
                Enear=emiss_near[i]
           
-          print(Enear)
-               
+                         
           #convert the emissions into kT/year
           Enear=Enear*1000
 
@@ -223,7 +221,7 @@ def create_timeseries_equ(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,
                
                dg_near = solution_near[0]#['x']
 
-               if emiss_nz['Neutrality']=='Yes':
+               if emiss_nz['Neutrality']=='Yes' or emiss_nz['Neutrality']=='Other':
                     #second fix dg_long:
                     solution_long = fsolve(em_lg, dg_long, args=(dg_near,E0,g0,Elong,yr_last,yr_near,yr_nz,country))
 
@@ -251,12 +249,14 @@ def create_timeseries_equ(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,
                          
 
                #--print info:
-               print(country,' ',emiss_proj.index[i],': converged')
+               #print(country,' ',emiss_proj.index[i],': converged')
 
                                    
-          else:
-               print(country,' ',emiss_proj.index[i],':did not converge')
+          #else:
+               #print(country,' ',emiss_proj.index[i],':did not converge')
+     
 
+     print(country)
 
      return emiss_proj#,x_res,ndc_shift,E0,g0
 
@@ -304,6 +304,31 @@ def create_timeseries_near(country,emiss_ndc,emiss_hist):
       print(country+" done")
       
       return emiss_proj
+
+
+
+def create_timeseries_notar(country,emiss_hist):
+
+      #lst year inventory information:
+      yr_last = emiss_hist.index[-1]
+      emiss_last = emiss_hist.values[-1]
+
+      #--initialize dataframe to store projected timeseries:
+      emiss_proj=pd.DataFrame(emiss_last,index=['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB'],columns=range(yr_last,2101))
+
+
+      print(country)
+     
+      return emiss_proj
+
+                
+           
+
+
+
+
+
+
 
 
 #--END--

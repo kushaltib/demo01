@@ -87,6 +87,15 @@ countries_GMP=['EU27','United States','Albania','Andorra','Antigua and Barbuda',
                 'Ukraine','United Arab Emirates','United Kingdom','Uruguay','Uzbekistan','Vanuatu','Viet Nam','Yemen','Zambia']
 
 
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+#--EU27
+EU27=['Austria','Belgium','Bulgaria','Croatia','Cyprus','Czech Republic','Denmark','Estonia','Finland','France',\
+      'Germany','Greece','Hungary','Ireland','Italy','Latvia','Lithuania','Luxembourg','Malta','Netherlands','Poland',\
+      'Portugal','Romania','Slovakia','Slovenia','Spain','Sweden']
+
+
+
+
 
 #to update methane pledge list 
 def add_to_GMP(country_list):
@@ -114,14 +123,18 @@ def  def_ch4(ndc_table,ndc_summ,ch4_hist,co2_hist,co2eq_hist,data=None,prop_year
                       
                         
             #collect historical co2 or coeq emissions
-            if ndc_summ.loc[country,'Applies']=='CO2': c_hist = co2_hist.loc[country]
-            if ndc_summ.loc[country,'Applies']=='CO2eq': c_hist = co2eq_hist.loc[country]
+            if ndc_summ.loc[country,'Applies']=='CO2': c_hist = co2_hist.loc[country]/1000
+            if ndc_summ.loc[country,'Applies']=='CO2eq': c_hist = co2eq_hist.loc[country]/1000
 
+            
+            
             #collect ndc co2 or co2eq emissions
             cndc = ndc_summ.loc[country,['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB']]
+
+
             
             #collect historical methane emissions
-            m_hist = ch4_hist.loc[country]
+            m_hist = ch4_hist.loc[country]/1000
 
             #set relevant years 
 
@@ -157,6 +170,38 @@ def  def_ch4(ndc_table,ndc_summ,ch4_hist,co2_hist,co2eq_hist,data=None,prop_year
                                  ]
 
       return data
+
+
+def gmp_ch4(data,ch4_hist,country_add_GMP=['EU27'],gmp_red=0.3):
+
+      data_adj = data.copy()
+      
+      #add new countries to GMP list as per user
+      add_to_GMP(country_add_GMP)
+
+      for country in countries_GMP:
+            
+            if country in data.index:
+                  #get the reference emission to implement GMP            
+                  ref_emiss = ch4_hist.loc[country,2019]/1000
+
+                  #calculate GMP compliant emission
+                  gmp_emiss = ref_emiss*(1-gmp_red)
+
+                  data_adj.loc[country,'Unconditional_LB'] = min(data.loc[country,'Unconditional_LB'],gmp_emiss)
+                  data_adj.loc[country,'Unconditional_UB'] = min(data.loc[country,'Unconditional_UB'],gmp_emiss)
+                  data_adj.loc[country,'Conditional_LB'] = min(data.loc[country,'Conditional_LB'],gmp_emiss)
+                  data_adj.loc[country,'Conditional_UB'] = min(data.loc[country,'Conditional_UB'],gmp_emiss)
+
+      return data_adj
+
+
+
+            
+
+
+      
+
 
 
 

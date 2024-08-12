@@ -80,13 +80,16 @@ def grp_nz(ndc_table,country_list=None,data=None,process='all'):
      return data
 
 
-def co2_nz(ndc_table,ch4_summ,n2o_summ,country_list=None,data=None):
+def co2_nz(ndc_table,ch4_summ,n2o_summ,co2_hist,co2eq_hist,country_list=None,data=None):
 
      NDC = ndc_table
 
      #choose the list of countries on which operation is to be carried out
      if country_list is None:
         country_list = NDC.index
+     
+     #countries for adjusting the net-zero year:
+
 
      #create grouped list of countries     
      nz = create_lists(country_list,NDC,'Neutrality',NDC['Neutrality'].unique().tolist())
@@ -118,9 +121,65 @@ def co2_nz(ndc_table,ch4_summ,n2o_summ,country_list=None,data=None):
                data.loc[country,'CO2_nz_cond_lb'] = 0
                data.loc[country,'CO2_nz_cond_ub'] = 0
                data.loc[country,'Processed'] = 'Yes'
+     
+     for country in set(nz['Other']):
+
+          if country in nz_applies['CO2eq']:
+
+               emiss_nz = co2eq_hist.loc[country,NDC.loc[country,'Base_year']]/1000*(1-NDC.loc[country,'Neutrality_percent']/100)
+
+               data.loc[country,'Neutrality'] = NDC.loc[country,'Neutrality']
+               data.loc[country,'Year'] = NDC.loc[country,'Neutrality_year']
+               data.loc[country,'CO2_nz_uncond_lb'] = emiss_nz-ch4_summ.loc[country,'Unconditional_LB']*28-n2o_summ.loc[country,'Unconditional_LB']*265
+               data.loc[country,'CO2_nz_uncond_ub'] = emiss_nz-ch4_summ.loc[country,'Unconditional_UB']*28-n2o_summ.loc[country,'Unconditional_UB']*265
+               data.loc[country,'CO2_nz_cond_lb'] = emiss_nz-ch4_summ.loc[country,'Conditional_LB']*28-n2o_summ.loc[country,'Conditional_LB']*265
+               data.loc[country,'CO2_nz_cond_ub'] = emiss_nz-ch4_summ.loc[country,'Conditional_UB']*28-n2o_summ.loc[country,'Conditional_UB']*265
+               data.loc[country,'Processed'] = 'Yes'
+          
+          if country in nz_applies['CO2']:
+
+               emiss_nz = co2_hist.loc[country,NDC.loc[country,'Base_year']]/1000*(1-NDC.loc[country,'Neutrality_percent']/100)
+
+               data.loc[country,'Neutrality'] = NDC.loc[country,'Neutrality']
+               data.loc[country,'Year'] = NDC.loc[country,'Neutrality_year']
+               data.loc[country,'CO2_nz_uncond_lb'] = emiss_nz
+               data.loc[country,'CO2_nz_uncond_ub'] = emiss_nz
+               data.loc[country,'CO2_nz_cond_lb'] = emiss_nz
+               data.loc[country,'CO2_nz_cond_ub'] = emiss_nz
+               data.loc[country,'Processed'] = 'Yes'
+
+
+          
 
      return data
 
+def shift_nz(data,country_adj_list=None,nzyr=2070,dnzyr=0):
+
+     if country_adj_list==None:
+          country_adj_list=[]
+
+     if country_adj_list=='all':
+          country_adj_list=data.index
+
+     
+     for country in country_adj_list:
+
+          #for countries not having net-zero
+          if country in data[data['Processed']!='Yes'].index:
+               data.loc[country,'Neutrality'] = 'Yes'
+               data.loc[country,'Year'] = nzyr
+               data.loc[country,'CO2_nz_uncond_lb'] = 0
+               data.loc[country,'CO2_nz_uncond_ub'] = 0
+               data.loc[country,'CO2_nz_cond_lb'] = 0
+               data.loc[country,'CO2_nz_cond_ub'] = 0
+               data.loc[country,'Processed'] = 'Yes'
+          
+          if country in data[data['Processed']=='Yes'].index:
+               data.loc[country,'Year'] = data.loc[country,'Year']+dnzyr
+
+     return data 
+
+     
 
 
 
