@@ -398,10 +398,11 @@ if selected_gas=='CO2eq':
     plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
                  co2eq_excl.loc[selected_country,co2eq_excl.columns[3:5]].values,
                  label='NDC Uncondititonal',color='royalblue',marker='x',s=30,zorder=20)
-
-    plt.scatter(co2eq_nz .loc[selected_country,'Year'],
-                0,
-                label='Net-zero',color='red',marker='x',s=50,zorder=20)
+    
+    if selected_country in co2eq_nz[co2eq_nz['Neutrality']=='Yes'].index:
+        plt.scatter(co2eq_nz.loc[selected_country,'Year'],
+                    0,
+                    label='Net-zero',color='red',marker='x',s=50,zorder=20)
     
     
     axis_label = "GHG emissions (Mt CO2eq / yr) "
