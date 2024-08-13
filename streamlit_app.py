@@ -344,35 +344,36 @@ plt.scatter(NDC.loc[selected_country,'Base_year'],
 #plotting for adjusted targets
 
 #for net-zero year
-i= 1 if dnzyr>0 else 0
 
-x = emiss_coun.iloc[i].index
-y1 = emiss_coun.iloc[i].values/1000
-y2 = emiss_nzyr.iloc[i].values/1000
-ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='dodgerblue',interpolate=True,alpha=0.5)
+# i= 1 if dnzyr>0 else 0
 
-#for ndc unconditional
-i=1 if duncond>1 else 0
-x = emiss_coun.iloc[i].index
-y1 = emiss_coun.iloc[i].values/1000
-y2 = emiss_uncond.iloc[i].values/1000
-ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='orange',interpolate=True,alpha=0.5)
+# x = emiss_coun.iloc[i].index
+# y1 = emiss_coun.iloc[i].values/1000
+# y2 = emiss_nzyr.iloc[i].values/1000
+# ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='dodgerblue',interpolate=True,alpha=0.5)
+
+# #for ndc unconditional
+# i=1 if duncond>1 else 0
+# x = emiss_coun.iloc[i].index
+# y1 = emiss_coun.iloc[i].values/1000
+# y2 = emiss_uncond.iloc[i].values/1000
+# ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='orange',interpolate=True,alpha=0.5)
 
 
-#for ndc conditional
-i=3 if dcond>1 else 2
-x = emiss_coun.iloc[i].index
-y1 = emiss_coun.iloc[i].values/1000
-y2 = emiss_cond.iloc[i].values/1000
-ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='brown',interpolate=True,alpha=0.5)
+# #for ndc conditional
+# i=3 if dcond>1 else 2
+# x = emiss_coun.iloc[i].index
+# y1 = emiss_coun.iloc[i].values/1000
+# y2 = emiss_cond.iloc[i].values/1000
+# ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='brown',interpolate=True,alpha=0.5)
 
-#for ndc year
-i= 1 if dndcyr>0 else 0
+# #for ndc year
+# i= 1 if dndcyr>0 else 0
 
-x = emiss_coun.iloc[i].index
-y1 = emiss_coun.iloc[i].values/1000
-y2 = emiss_ndcyr.iloc[i].values/1000
-ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='khaki',interpolate=True,alpha=0.5)
+# x = emiss_coun.iloc[i].index
+# y1 = emiss_coun.iloc[i].values/1000
+# y2 = emiss_ndcyr.iloc[i].values/1000
+# ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='khaki',interpolate=True,alpha=0.5)
 
 
 #plot luc emissions:
