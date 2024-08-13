@@ -134,9 +134,17 @@ emiss_co2eq_excl = emiss_co2_excl+28*emiss_ch4+265*emiss_n2o
 emiss_co2eq_net = emiss_co2eq_excl+emiss_luc
 
 #--for comparing to old version in the paper:
-paper = pd.read_excel("./data/precalculated/paper_co2_nogmp.xlsx",index_col=0)
-emiss_paper = paper.loc[selected_country]
-emiss_paper_glob_tot = paper.sum()
+paper_co2_uncond = pd.read_excel("./data/precalculated/paper_co2_nogmp_uncond.xlsx",index_col=0)
+emiss_paper_co2_uncond = paper_co2_uncond.loc[selected_country]
+emiss_paper_glob_tot_co2_uncond = paper_co2_uncond.sum()
+
+paper_co2_cond = pd.read_excel("./data/precalculated/paper_co2_nogmp_cond.xlsx",index_col=0)
+emiss_paper_co2_cond = paper_co2_cond.loc[selected_country]
+emiss_paper_glob_tot_co2_cond = paper_co2_cond.sum()
+
+
+
+
 
 #--for global data:
 revised_glob_tot = pd.read_excel("./data/precalculated/CO2_excl_bycountry_revisedmethod.xlsx",index_col=0)
@@ -543,8 +551,8 @@ if selected_gas=='CO2':
             '-', color='dodgerblue',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
             )
 
-    ax.plot(emiss_paper_glob_tot.index.values,
-            emiss_paper_glob_tot.values/1000000,
+    ax.plot(emiss_paper_glob_tot_co2_uncond.index.values,
+            emiss_paper_glob_tot_co2_uncond.values/1000000,
             ':', color='pink',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
             )
 
