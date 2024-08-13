@@ -143,15 +143,28 @@ emiss_paper_co2_cond = paper_co2_cond.loc[selected_country]
 emiss_paper_glob_tot_co2_cond = paper_co2_cond.sum()
 
 
+paper_co2eq_uncond = pd.read_excel("./data/precalculated/paper_co2eq_nogmp_uncond.xlsx",index_col=0)
+emiss_paper_co2eq_uncond = paper_co2eq_uncond.loc[selected_country]
+emiss_paper_glob_tot_co2eq_uncond = paper_co2eq_uncond.sum()
 
+paper_co2eq_cond = pd.read_excel("./data/precalculated/paper_co2eq_nogmp_cond.xlsx",index_col=0)
+emiss_paper_co2eq_cond = paper_co2eq_cond.loc[selected_country]
+emiss_paper_glob_tot_co2eq_cond = paper_co2eq_cond.sum()
 
 
 #--for global data:
-revised_glob_tot = pd.read_excel("./data/precalculated/CO2_excl_bycountry_revisedmethod.xlsx",index_col=0)
-emiss_revised_glob_tot = revised_glob_tot.sum()
+revised_glob_tot_co2_uncond = pd.read_excel("./data/precalculated/CO2_excl_bycountry_revisedmethod_uncond.xlsx",index_col=0)
+emiss_revised_glob_tot_co2_uncond = revised_glob_tot_co2_uncond.sum()
 
-revised_glob_tot_co2eq = pd.read_excel("./data/precalculated/CO2eq_excl_bycountry_revisedmethod.xlsx",index_col=0)
-emiss_revised_glob_tot_co2eq = revised_glob_tot_co2eq.sum()
+revised_glob_tot_co2_cond = pd.read_excel("./data/precalculated/CO2_excl_bycountry_revisedmethod_cond.xlsx",index_col=0)
+emiss_revised_glob_tot_co2_cond = revised_glob_tot_co2_cond.sum()
+
+revised_glob_tot_co2eq_uncond = pd.read_excel("./data/precalculated/CO2eq_excl_bycountry_revisedmethod_uncond.xlsx",index_col=0)
+emiss_revised_glob_tot_co2eq_uncond = revised_glob_tot_co2eq_uncond.sum()
+
+revised_glob_tot_co2eq_cond = pd.read_excel("./data/precalculated/CO2eq_excl_bycountry_revisedmethod_cond.xlsx",index_col=0)
+emiss_revised_glob_tot_co2eq_cond = revised_glob_tot_co2eq_cond.sum()
+
 
 
 #----------------------------------------------------------------------------------------------
@@ -313,6 +326,16 @@ if selected_gas=='CO2eq':
             'o-', color='grey',alpha=1, lw=2, label='UnCond UB',mec='purple',mew=0.5,ms=3
             )
     
+    ax.plot(emiss_paper_co2eq_uncond.index,
+            emiss_paper_co2eq_uncond.values/1000,
+            ':', color='lightgrey',alpha=1, lw=2, label='Uncond',mec='k',mew=0.5,ms=3
+            )
+    
+    ax.plot(emiss_paper_co2eq_cond.index,
+            emiss_paper_co2eq_cond.values/1000,
+            ':', color='pink',alpha=1, lw=2, label='Cond',mec='k',mew=0.5,ms=3
+            )
+    
     #plot net emissions:
     # if selected_country not in ['Int. Aviation','Int. Shipping']:
         
@@ -413,7 +436,12 @@ if selected_gas=='CO2':
 
     ax.plot(emiss_paper_co2_uncond.index,
             emiss_paper_co2_uncond.values/1000,
-            ':', color='pink',alpha=1, lw=2, label='Uncond UB',mec='k',mew=0.5,ms=3
+            ':', color='lightgrey',alpha=1, lw=2, label='Uncond',mec='k',mew=0.5,ms=3
+            )
+    
+    ax.plot(emiss_paper_co2_cond.index,
+            emiss_paper_co2_cond.values/1000,
+            ':', color='pink',alpha=1, lw=2, label='Cond',mec='k',mew=0.5,ms=3
             )
     
     axis_label = "CO2 emissions (Mt / yr) "
@@ -546,20 +574,49 @@ fig2, ax = plt.subplots()
 ax.set_title('World',fontfamily="Arial",fontsize=10)
 
 if selected_gas=='CO2':
-    ax.plot(emiss_revised_glob_tot.index.values,
-            emiss_revised_glob_tot.values/1000000,
-            '-', color='dodgerblue',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
+    
+    ax.plot(emiss_revised_glob_tot_co2_cond.index.values,
+            emiss_revised_glob_tot_co2_cond.values/1000000,
+            '-', color='violet',alpha=1, lw=2, label='CO2_excl_cond',mec='k',mew=0.5,ms=6
             )
+    
+    ax.plot(emiss_revised_glob_tot_co2_uncond.index.values,
+            emiss_revised_glob_tot_co2_uncond.values/1000000,
+            '-', color='grey',alpha=1, lw=2, label='CO2_excl_uncond',mec='k',mew=0.5,ms=6
+            )
+    
+    ax.plot(emiss_paper_glob_tot_co2_cond.index.values,
+            emiss_paper_glob_tot_co2_cond.values/1000000,
+            ':', color='pink',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
+            )  
+
 
     ax.plot(emiss_paper_glob_tot_co2_uncond.index.values,
             emiss_paper_glob_tot_co2_uncond.values/1000000,
-            ':', color='pink',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
+            ':', color='lightgrey',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
             )
 
 if selected_gas=='CO2eq':
-    ax.plot(emiss_revised_glob_tot_co2eq.index.values,
-            emiss_revised_glob_tot_co2eq.values/1000000,
-            '-', color='dodgerblue',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
+
+    ax.plot(emiss_revised_glob_tot_co2eq_cond.index.values,
+            emiss_revised_glob_tot_co2eq_cond.values/1000000,
+            '-', color='violet',alpha=1, lw=2, label='CO2_excl_cond',mec='k',mew=0.5,ms=6
+            )
+    
+    ax.plot(emiss_revised_glob_tot_co2eq_uncond.index.values,
+            emiss_revised_glob_tot_co2eq_uncond.values/1000000,
+            '-', color='grey',alpha=1, lw=2, label='CO2_excl_uncond',mec='k',mew=0.5,ms=6
+            )
+    
+    ax.plot(emiss_paper_glob_tot_co2eq_cond.index.values,
+            emiss_paper_glob_tot_co2eq_cond.values/1000000,
+            ':', color='pink',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
+            )  
+
+
+    ax.plot(emiss_paper_glob_tot_co2eq_uncond.index.values,
+            emiss_paper_glob_tot_co2eq_uncond.values/1000000,
+            ':', color='lightgrey',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
             )
 
     
