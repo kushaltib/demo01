@@ -687,8 +687,8 @@ else:
         "<b style='color: black;'>Legend</b> <br>"
         
         
-        "<b style='color: dodgerblue;'>CO2 emissions excl. land-use</b> | <br>"
-        "<b style='color: pink;'>CO2 emissions from our paper version, just for comparison here</b> | <br>"
+        "<b style='color: grey;'>Solids lines from revised model</b> | <br>"
+        "<b style='color: pink;'>Dotted lines from our paper version, just for comparison here</b> | <br>"
 
 
     )
