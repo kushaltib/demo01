@@ -124,7 +124,7 @@ if selected_fitmethod=='Revised':
     emiss_coun = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
 
 #calculate CH4 and N2O:
-emiss_ch4 = mod_emissions_projection_method03.create_timeseries_near(selected_country,ndc_ch4,hist_ch4[selected_country])
+emiss_ch4 = mod_emissions_projection_method03.create_timeseries_near(selected_country,ndc_ch4,hist_ch4.loc[selected_country])
 emiss_n2o = mod_emissions_projection_method03.create_timeseries_near(selected_country,ndc_n2o,hist_n2o.loc[selected_country])
 emiss_luc = mod_emissions_projection_method03.create_timeseries_near(selected_country,co2eq_luc.loc[selected_country],hist_luc_net.loc[selected_country]) 
 
