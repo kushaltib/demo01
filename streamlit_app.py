@@ -125,68 +125,61 @@ emiss_paper = paper.loc[selected_country]
 #----------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------
 
-#--controlling shifts in NDC levels, NDC year and NZ year
-col1,col2=st.columns(2)
+# #--controlling shifts in NDC levels, NDC year and NZ year
+# col1,col2=st.columns(2)
 
-with col1: 
-    st.markdown(f"<div style='text-align: center;'>Adjust emissions w.r.t. declared targets<br>(<b>>1</b> = more emissions) </div>",
-                unsafe_allow_html=True)
+# with col1: 
+#     st.markdown(f"<div style='text-align: center;'>Adjust emissions w.r.t. declared targets<br>(<b>>1</b> = more emissions) </div>",
+#                 unsafe_allow_html=True)
     
-with col2:
-    st.markdown(f"<div style='text-align: center;'>Adjust year w.r.t declared targets<br> (<b>>0</b> = delay it further) </div>",
-                unsafe_allow_html=True)
+# with col2:
+#     st.markdown(f"<div style='text-align: center;'>Adjust year w.r.t declared targets<br> (<b>>0</b> = delay it further) </div>",
+#                 unsafe_allow_html=True)
     
 
-col1,col2,col3,col4=st.columns(4)
+# col1,col2,col3,col4=st.columns(4)
 
-default=[1.0,1.0,0,0]
+# default=[1.0,1.0,0,0]
 
-with col1:
-    duncond= st.slider(label="Uncond. emissions",
-                       min_value=0.7,
-                       max_value=1.3,
-                       value=default[0],
-                       step=0.05,
-                       #key='slider1'
-                       )
+# with col1:
+#     duncond= st.slider(label="Uncond. emissions",
+#                        min_value=0.7,
+#                        max_value=1.3,
+#                        value=default[0],
+#                        step=0.05,
+#                        #key='slider1'
+#                        )
 
-with col2:
-    dcond= st.slider(label="Cond. emissions",
-                     min_value=0.7,
-                     max_value=1.3,
-                     value=default[1],
-                     step=0.05,
-                     #key='slider2'
-                    )
+# with col2:
+#     dcond= st.slider(label="Cond. emissions",
+#                      min_value=0.7,
+#                      max_value=1.3,
+#                      value=default[1],
+#                      step=0.05,
+#                      #key='slider2'
+#                     )
 
-with col3:
-    dndcyr= st.slider(label="NDC year",
-                      min_value=0,
-                      max_value=10,
-                      value=default[2],
-                      step=1,
-                      #key='slider3'
-                      )
+# with col3:
+#     dndcyr= st.slider(label="NDC year",
+#                       min_value=0,
+#                       max_value=10,
+#                       value=default[2],
+#                       step=1,
+#                       #key='slider3'
+#                       )
 
-with col4:
-    dnzyr= st.slider(label="Net-zero year",
-                     min_value=-10,
-                     max_value=10,
-                     value=default[3],
-                     step=1,
-                     #key='slider4'
-                     )
+# with col4:
+#     dnzyr= st.slider(label="Net-zero year",
+#                      min_value=-10,
+#                      max_value=10,
+#                      value=default[3],
+#                      step=1,
+#                      #key='slider4'
+#                      )
 
 
 #--------------------------------------------------------------------------------------------
 #--adjusted enhanced/delayed trajectories
-
-
-
-
-
-
-
 if selected_fitmethod=='Old':
     #----Olivier's method
     emiss_uncond= mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
@@ -204,55 +197,55 @@ if selected_fitmethod=='Revised':
 
 
 
+# #show the change in cumm. CO2eq with each type of change
+# #for net-zero year
+# i= 1 if dnzyr>0 else 0
+# cumm_nzyr = emiss_nzyr.iloc[i].sum()/1000000 -emiss_coun.iloc[i].sum()/1000000
 
 
-#show the change in cumm. CO2eq with each type of change
-#for net-zero year
-i= 1 if dnzyr>0 else 0
-#cumm_nzyr = emiss_nzyr.iloc[i].sum()/1000000 -emiss_coun.iloc[i].sum()/1000000
-cumm_nzyr = 0
+# #for ndc unconditional
+# i=1 if duncond>1 else 0
+# cumm_uncond = emiss_uncond.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
 
-#for ndc unconditional
-i=1 if duncond>1 else 0
-cumm_uncond = emiss_uncond.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
+# #for ndc conditional
+# i=3 if dcond>1 else 2
+# cumm_cond = emiss_cond.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
 
-#for ndc conditional
-i=3 if dcond>1 else 2
-cumm_cond = emiss_cond.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
-
-#for ndc year
-i= 1 if dndcyr>0 else 0
-cumm_ndcyr = emiss_ndcyr.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
+# #for ndc year
+# i= 1 if dndcyr>0 else 0
+# cumm_ndcyr = emiss_ndcyr.iloc[i].sum()/1000000 - emiss_coun.iloc[i].sum()/1000000
 
 
 
 
-sentence = (
-    "Cumulative emissions "
-    "<b style='color: green;'>avoided</b> or "
-    "<b style='color: red;'>added</b>"
-    " for each type of change."
-)
+# sentence = (
+#     "Cumulative emissions "
+#     "<b style='color: green;'>avoided</b> or "
+#     "<b style='color: red;'>added</b>"
+#     " for each type of change."
+# )
 
-# Display the sentence
-st.markdown(sentence, unsafe_allow_html=True)
+# # Display the sentence
+# st.markdown(sentence, unsafe_allow_html=True)
 
 
-col1,col2,col3,col4=st.columns(4)
+# col1,col2,col3,col4=st.columns(4)
 
-with col1:
-    st.markdown(format_text(cumm_uncond), unsafe_allow_html=True)
+# with col1:
+#     st.markdown(format_text(cumm_uncond), unsafe_allow_html=True)
 
-with col2:
-    st.markdown(format_text(cumm_cond), unsafe_allow_html=True)
+# with col2:
+#     st.markdown(format_text(cumm_cond), unsafe_allow_html=True)
 
-with col3:
-    st.markdown(format_text(cumm_ndcyr), unsafe_allow_html=True)
+# with col3:
+#     st.markdown(format_text(cumm_ndcyr), unsafe_allow_html=True)
 
-with col4:
-    st.markdown(format_text(cumm_nzyr), unsafe_allow_html=True)
+# with col4:
+#     st.markdown(format_text(cumm_nzyr), unsafe_allow_html=True)
 
 st.markdown("<hr>", unsafe_allow_html=True)
+
+
 
 #display the plot
 fig, ax = plt.subplots()
