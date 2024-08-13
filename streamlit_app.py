@@ -329,9 +329,9 @@ if selected_gas=='CO2eq':
     #             )
 
     #plot base year values from NDC
-    plt.scatter(NDC.loc[selected_country,'Base_year'],
-                NDC.loc[selected_country,'Base_CO2eq_emissions_Total-net'],
-                label='Base net CO2eq',color='red',marker='o',edgecolors='orange',linewidths=1.5,s=40,zorder=20)
+    #plt.scatter(NDC.loc[selected_country,'Base_year'],
+    #            NDC.loc[selected_country,'Base_CO2eq_emissions_Total-net'],
+    #            label='Base net CO2eq',color='red',marker='o',edgecolors='orange',linewidths=1.5,s=40,zorder=20)
 
     plt.scatter(NDC.loc[selected_country,'Base_year'],
                 NDC.loc[selected_country,'Base_CO2eq_emissions_Total-excl'],
@@ -411,8 +411,8 @@ if selected_gas=='CO2':
             'o-', color='grey',alpha=1, lw=2, label='Uncond UB',mec='k',mew=0.5,ms=3
             )
 
-    ax.plot(emiss_paper.index,
-            emiss_paper.values/1000,
+    ax.plot(emiss_paper_co2_uncond.index,
+            emiss_paper_co2_uncond.values/1000,
             ':', color='pink',alpha=1, lw=2, label='Uncond UB',mec='k',mew=0.5,ms=3
             )
     
