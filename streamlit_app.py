@@ -67,7 +67,7 @@ with st.sidebar:
                            step=1
                           )
     
-    if glob_tot=0:
+    if glob_tot==0:
         #--fitting method
         selected_fitmethod = st.selectbox("Fitting method",['Old','Revised'])
         #selected_fitmethod = st.selectbox("Fitting method",['Olivier revised'])
