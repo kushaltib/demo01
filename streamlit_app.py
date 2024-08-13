@@ -19,7 +19,7 @@ def format_text(value):
 
 
 
-st.title("NDC pledges for selected countries")
+st.title("Emissions projections based on National Climate pledges")
 
 
 #@st.cache_data
@@ -113,7 +113,7 @@ enz = co2eq_nz.loc[selected_country]
 ndc_ch4 = ch4_summ.loc[selected_country]
 ndc_n2o = n2o_summ.loc[selected_country]
 
-
+#calculate CO2 trajectory:
 #--base trajectory
 if selected_fitmethod=='Old':
     #----Olivier's method
@@ -122,6 +122,15 @@ if selected_fitmethod=='Old':
 if selected_fitmethod=='Revised':
     #----New method
     emiss_coun = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
+
+#calculate CH4 and N2O:
+emiss_ch4 = mod_emissions_projection_method03.create_timeseries_near(selected_country,ndc_ch4,hist_ch4[selected_country])
+emiss_n2o = mod_emissions_projection_method03.create_timeseries_near(selected_country,ndc_n2o,hist_n2o.loc[selected_country])
+emiss_luc = mod_emissions_projection_method03.create_timeseries_near(selected_country,co2eq_luc.loc[selected_country],hist_luc_net.loc[selected_country]) 
+
+#calculate CO2eq:
+emiss_co2eq_excl = emiss_coun+28*emiss_ch4+265*emiss_n2o
+emiss_co2eq_net = emiss_co2eq_excl+emiss_luc
 
 #--for comparing to old version in the paper:
 paper = pd.read_excel("./data/precalculated/paper_co2_nogmp.xlsx",index_col=0)
@@ -267,6 +276,17 @@ ax.plot(hist_co2eq_excl.loc[selected_country].index,
         hist_co2eq_excl.loc[selected_country].values/1000,
         '-', color='black',alpha=1, lw=2, label='CO2eq historical',mec='k',mew=0.5,ms=6
         )
+
+ax.plot(emiss_co2eq_excl.iloc[0].index,
+        emiss_co2eq_excl.iloc[1].values/1000,
+        'o-', color='violet',alpha=1, lw=2, label='UnCond LB',mec='purple',mew=0.5,ms=3
+        )
+
+ax.plot(emiss_co2eq_excl.iloc[3].index,
+        emiss_co2eq_excl.iloc[3].values/1000,
+        'o-', color='violet',alpha=1, lw=2, label='UnCond UB',mec='purple',mew=0.5,ms=3
+        )
+
 
 ax.plot(ehist.index,
         ehist.values/1000,
