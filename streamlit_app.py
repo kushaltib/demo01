@@ -21,6 +21,7 @@ def format_text(value):
 
 st.title("Emissions projections based on National Climate pledges")
 
+selected_gas = st.selectbox("Choose gas:",['CO2eq','CO2','CH4','N2O'])
 
 #@st.cache_data
 
@@ -117,11 +118,11 @@ ndc_n2o = n2o_summ.loc[selected_country]
 #--base trajectory
 if selected_fitmethod=='Old':
     #----Olivier's method
-    emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
+    emiss_co2_excl = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
 
 if selected_fitmethod=='Revised':
     #----New method
-    emiss_coun = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
+    emiss_co2_excl = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
 
 #calculate CH4 and N2O:
 emiss_ch4 = mod_emissions_projection_method03.create_timeseries_near(selected_country,ndc_ch4,hist_ch4.loc[selected_country])
@@ -129,7 +130,7 @@ emiss_n2o = mod_emissions_projection_method03.create_timeseries_near(selected_co
 emiss_luc = mod_emissions_projection_method03.create_timeseries_near(selected_country,co2eq_luc.loc[selected_country],hist_luc_net.loc[selected_country]) 
 
 #calculate CO2eq:
-emiss_co2eq_excl = emiss_coun+28*emiss_ch4+265*emiss_n2o
+emiss_co2eq_excl = emiss_co2_excl+28*emiss_ch4+265*emiss_n2o
 emiss_co2eq_net = emiss_co2eq_excl+emiss_luc
 
 #--for comparing to old version in the paper:
@@ -200,20 +201,20 @@ emiss_revised_glob_tot = revised_glob_tot.sum()
 
 #--------------------------------------------------------------------------------------------
 #--adjusted enhanced/delayed trajectories
-if selected_fitmethod=='Old':
-    #----Olivier's method
-    emiss_uncond= mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
-    emiss_cond = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
-    emiss_ndcyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
-    emiss_nzyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
-    emiss_allchg = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
+# if selected_fitmethod=='Old':
+#     #----Olivier's method
+#     emiss_uncond= mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
+#     emiss_cond = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
+#     emiss_ndcyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
+#     emiss_nzyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
+#     emiss_allchg = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
 
-if selected_fitmethod=='Revised':
-    #----New method
-    emiss_uncond= mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
-    emiss_cond = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
-    emiss_ndcyr = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
-    emiss_nzyr = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
+# if selected_fitmethod=='Revised':
+#     #----New method
+#     emiss_uncond= mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
+#     emiss_cond = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
+#     emiss_ndcyr = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
+#     emiss_nzyr = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
 
 
 
@@ -272,53 +273,118 @@ fig, ax = plt.subplots()
 
 ax.set_title(selected_country,fontfamily="Arial",fontsize=10)
 
-ax.plot(hist_co2eq_excl.loc[selected_country].index,
-        hist_co2eq_excl.loc[selected_country].values/1000,
-        '-', color='black',alpha=1, lw=2, label='CO2eq historical',mec='k',mew=0.5,ms=6
-        )
+if selected_gas=='CO2eq':
 
-ax.plot(emiss_co2eq_excl.iloc[0].index,
-        emiss_co2eq_excl.iloc[1].values/1000,
-        'o-', color='violet',alpha=1, lw=2, label='UnCond LB',mec='purple',mew=0.5,ms=3
-        )
+    #lines:
+    ax.plot(hist_co2eq_excl.loc[selected_country].index,
+            hist_co2eq_excl.loc[selected_country].values/1000,
+            '-', color='black',alpha=1, lw=2, label='CO2eq historical',mec='k',mew=0.5,ms=6
+            )
 
-ax.plot(emiss_co2eq_excl.iloc[3].index,
-        emiss_co2eq_excl.iloc[3].values/1000,
-        'o-', color='violet',alpha=1, lw=2, label='UnCond UB',mec='purple',mew=0.5,ms=3
-        )
+    ax.plot(emiss_co2eq_excl.iloc[2].index,
+            emiss_co2eq_excl.iloc[2].values/1000,
+            'o-', color='violet',alpha=1, lw=2, label='Cond LB',mec='purple',mew=0.5,ms=3
+            )
 
-
-ax.plot(ehist.index,
-        ehist.values/1000,
-        '-', color='dodgerblue',alpha=1, lw=2, label='CO2 historical',mec='k',mew=0.5,ms=6
-        )
-
-ax.plot(emiss_coun.iloc[2].index,
-        emiss_coun.iloc[2].values/1000,
-        'o-', color='violet',alpha=1, lw=2, label='Cond LB',mec='purple',mew=0.5,ms=3
-        )
-
-ax.plot(emiss_coun.iloc[3].index,
-        emiss_coun.iloc[3].values/1000,
-        'o-', color='violet',alpha=1, lw=2, label='Cond UB',mec='purple',mew=0.5,ms=3
-        )
+    ax.plot(emiss_co2eq_excl.iloc[3].index,
+            emiss_co2eq_excl.iloc[3].values/1000,
+            'o-', color='violet',alpha=1, lw=2, label='Cond UB',mec='purple',mew=0.5,ms=3
+            )
 
 
+    ax.plot(emiss_co2eq_excl.iloc[0].index,
+            emiss_co2eq_excl.iloc[0].values/1000,
+            'o-', color='grey',alpha=1, lw=2, label='UnCond LB',mec='purple',mew=0.5,ms=3
+            )
 
-ax.plot(emiss_coun.iloc[0].index,
-        emiss_coun.iloc[0].values/1000,
-        'o-', color='grey',alpha=1, lw=2, label='Uncond LB',mec='k',mew=0.5,ms=3
-        )
+    ax.plot(emiss_co2eq_excl.iloc[1].index,
+            emiss_co2eq_excl.iloc[1].values/1000,
+            'o-', color='grey',alpha=1, lw=2, label='UnCond UB',mec='purple',mew=0.5,ms=3
+            )
+    
+    #plot net emissions:
+    # if selected_country not in ['Int. Aviation','Int. Shipping']:
+        
+    #     data_len = min(len(hist_co2eq_excl.loc[selected_country].values),len(hist_luc_net.loc[selected_country].values))
 
-ax.plot(emiss_coun.iloc[1].index,
-        emiss_coun.iloc[1].values/1000,
-        'o-', color='grey',alpha=1, lw=2, label='Uncond UB',mec='k',mew=0.5,ms=3
-        )
+    #     ax.plot(hist_luc_net.loc[selected_country].index[-data_len:],
+    #             hist_co2eq_excl.loc[selected_country].values[-data_len:]/1000+hist_luc_net.loc[selected_country].values[-data_len:]/1000,
+    #             '--', color='orange',alpha=1, lw=2, label='CO2eq historical net',mec='k',mew=0.5,ms=6
+    #             )
+        
+    #     ax.plot(emiss_co2eq_net.iloc[0].index,
+    #             emiss_co2eq_net.iloc[0].values/1000,
+    #             'o-', color='grey',alpha=1, lw=2, label='UnCond LB',mec='purple',mew=0.5,ms=3
+    #             )
 
-ax.plot(emiss_paper.index,
-        emiss_paper.values/1000,
-        ':', color='pink',alpha=1, lw=2, label='Uncond UB',mec='k',mew=0.5,ms=3
-        )
+    #plot base year values from NDC
+    plt.scatter(NDC.loc[selected_country,'Base_year'],
+                NDC.loc[selected_country,'Base_CO2eq_emissions_Total-net'],
+                label='Base net CO2eq',color='red',marker='o',edgecolors='orange',linewidths=1.5,s=40,zorder=20)
+
+    plt.scatter(NDC.loc[selected_country,'Base_year'],
+                NDC.loc[selected_country,'Base_CO2eq_emissions_Total-excl'],
+                label='Base excl CO2eq',color='grey',marker='o',edgecolors='black',linewidths=2,s=40,zorder=20)
+    
+
+    #plot luc emissions:
+    if selected_country not in ['Int. Aviation','Int. Shipping']:
+        ax.plot(hist_luc_net.loc[selected_country].index,
+                hist_luc_net.loc[selected_country].values/1000,
+                '-', color='yellowgreen',alpha=1, lw=2, label='CO2eq historical luc net',mec='k',mew=0.5,ms=6
+                )
+
+    if np.isnan(np.asarray(NDC.loc[selected_country,['Target_CO2eq_emissions_LB_conditional_LULUCF','Target_CO2eq_emissions_UB_conditional_LULUCF']].values,dtype=float)).any():
+        plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
+                    NDC.loc[selected_country,['Supp_Target_CO2eq_emissions_LB_conditional_LULUCF','Supp_Target_CO2eq_emissions_UB_conditional_LULUCF']].values,
+                    label='NDC Condititonal',color='limegreen',marker='o',s=30,zorder=20)
+    else:
+        plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
+                    NDC.loc[selected_country,['Target_CO2eq_emissions_LB_conditional_LULUCF','Target_CO2eq_emissions_UB_conditional_LULUCF']].values,
+                    label='NDC Condititonal',color='limegreen',marker='o',s=30,zorder=20)
+
+
+    if np.isnan(np.asarray(NDC.loc[selected_country,['Target_CO2eq_emissions_LB_unconditional_LULUCF','Target_CO2eq_emissions_UB_unconditional_LULUCF']].values,dtype=float)).any():
+        plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
+                    NDC.loc[selected_country,['Supp_Target_CO2eq_emissions_LB_unconditional_LULUCF','Supp_Target_CO2eq_emissions_UB_unconditional_LULUCF']].values,
+                    label='NDC Condititonal',color='darkgreen',marker='o',s=30,zorder=20)
+    else:
+        plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
+                    NDC.loc[selected_country,['Target_CO2eq_emissions_LB_unconditional_LULUCF','Target_CO2eq_emissions_UB_unconditional_LULUCF']].values,
+                    label='NDC Condititonal',color='darkgreen',marker='o',s=30,zorder=20)
+
+   
+if selected_gas=='CO2':
+    
+    ax.plot(ehist.index,
+            ehist.values/1000,
+            '-', color='dodgerblue',alpha=1, lw=2, label='CO2 historical',mec='k',mew=0.5,ms=6
+            )
+
+    ax.plot(emiss_co2_excl.iloc[2].index,
+            emiss_co2_excl.iloc[2].values/1000,
+            'o-', color='violet',alpha=1, lw=2, label='Cond LB',mec='purple',mew=0.5,ms=3
+            )
+
+    ax.plot(emiss_co2_excl.iloc[3].index,
+            emiss_co2_excl.iloc[3].values/1000,
+            'o-', color='violet',alpha=1, lw=2, label='Cond UB',mec='purple',mew=0.5,ms=3
+            )
+
+    ax.plot(emiss_co2_excl.iloc[0].index,
+            emiss_co2_excl.iloc[0].values/1000,
+            'o-', color='grey',alpha=1, lw=2, label='Uncond LB',mec='k',mew=0.5,ms=3
+            )
+
+    ax.plot(emiss_co2_excl.iloc[1].index,
+            emiss_co2_excl.iloc[1].values/1000,
+            'o-', color='grey',alpha=1, lw=2, label='Uncond UB',mec='k',mew=0.5,ms=3
+            )
+
+    ax.plot(emiss_paper.index,
+            emiss_paper.values/1000,
+            ':', color='pink',alpha=1, lw=2, label='Uncond UB',mec='k',mew=0.5,ms=3
+            )
 
 
 #ax.plot(emiss_nzyr.iloc[0].index,
@@ -345,29 +411,19 @@ ax.plot(emiss_paper.index,
 
 
 plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
-            co2eq_excl.loc[selected_country,co2eq_excl.columns[5:7]].values,
-            label='NDC Condititonal',color='lightblue',marker='x',s=30,zorder=20)
+             co2eq_excl.loc[selected_country,co2eq_excl.columns[5:7]].values,
+             label='NDC Condititonal',color='lightblue',marker='x',s=30,zorder=20)
 
 
 plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
-            co2eq_excl.loc[selected_country,co2eq_excl.columns[3:5]].values,
-            label='NDC Uncondititonal',color='royalblue',marker='x',s=30,zorder=20)
+             co2eq_excl.loc[selected_country,co2eq_excl.columns[3:5]].values,
+             label='NDC Uncondititonal',color='royalblue',marker='x',s=30,zorder=20)
 
 plt.scatter(co2eq_nz .loc[selected_country,'Year'],
             0,
             label='Net-zero',color='red',marker='x',s=50,zorder=20)
 
 
-
-
-#plot base year values from NDC
-plt.scatter(NDC.loc[selected_country,'Base_year'],
-            NDC.loc[selected_country,'Base_CO2eq_emissions_Total-net'],
-            label='Base net CO2eq',color='red',marker='o',edgecolors='orange',linewidths=1.5,s=40,zorder=20)
-
-plt.scatter(NDC.loc[selected_country,'Base_year'],
-            NDC.loc[selected_country,'Base_CO2eq_emissions_Total-excl'],
-            label='Base excl CO2eq',color='grey',marker='o',edgecolors='black',linewidths=2,s=40,zorder=20)
 
 
 
@@ -407,45 +463,6 @@ plt.scatter(NDC.loc[selected_country,'Base_year'],
 # ax.fill_between(x,y1,y2, where=y2!=y1, facecolor='khaki',interpolate=True,alpha=0.5)
 
 
-#plot luc emissions:
-if selected_country not in ['Int. Aviation','Int. Shipping']:
-    ax.plot(hist_luc_net.loc[selected_country].index,
-            hist_luc_net.loc[selected_country].values/1000,
-            '-', color='yellowgreen',alpha=1, lw=2, label='CO2eq historical luc net',mec='k',mew=0.5,ms=6
-        )
-
-if np.isnan(np.asarray(NDC.loc[selected_country,['Target_CO2eq_emissions_LB_conditional_LULUCF','Target_CO2eq_emissions_UB_conditional_LULUCF']].values,dtype=float)).any():
-    plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
-                NDC.loc[selected_country,['Supp_Target_CO2eq_emissions_LB_conditional_LULUCF','Supp_Target_CO2eq_emissions_UB_conditional_LULUCF']].values,
-                label='NDC Condititonal',color='limegreen',marker='o',s=30,zorder=20)
-else:
-    plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
-                NDC.loc[selected_country,['Target_CO2eq_emissions_LB_conditional_LULUCF','Target_CO2eq_emissions_UB_conditional_LULUCF']].values,
-                label='NDC Condititonal',color='limegreen',marker='o',s=30,zorder=20)
-
-
-if np.isnan(np.asarray(NDC.loc[selected_country,['Target_CO2eq_emissions_LB_unconditional_LULUCF','Target_CO2eq_emissions_UB_unconditional_LULUCF']].values,dtype=float)).any():
-    plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
-                NDC.loc[selected_country,['Supp_Target_CO2eq_emissions_LB_unconditional_LULUCF','Supp_Target_CO2eq_emissions_UB_unconditional_LULUCF']].values,
-                label='NDC Condititonal',color='darkgreen',marker='o',s=30,zorder=20)
-else:
-    plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
-                NDC.loc[selected_country,['Target_CO2eq_emissions_LB_unconditional_LULUCF','Target_CO2eq_emissions_UB_unconditional_LULUCF']].values,
-                label='NDC Condititonal',color='darkgreen',marker='o',s=30,zorder=20)    
-
-
-
-#plot net emissions:
-if selected_country not in ['Int. Aviation','Int. Shipping']:
-    data_len = min(len(hist_co2eq_excl.loc[selected_country].values),len(hist_luc_net.loc[selected_country].values))
-
-    ax.plot(hist_luc_net.loc[selected_country].index[-data_len:],
-            hist_co2eq_excl.loc[selected_country].values[-data_len:]/1000+hist_luc_net.loc[selected_country].values[-data_len:]/1000,
-            '--', color='orange',alpha=1, lw=2, label='CO2eq historical net',mec='k',mew=0.5,ms=6
-            ) 
-
-
-
 #add line at 2050:
 #ax.axvline(x=2050, color='r', linestyle='--', linewidth=0.5, label='2050')
 
@@ -470,9 +487,6 @@ for tick in ax.get_yticklabels():
     #tick.set_fontweight('bold')
 
 ax.grid(which='major', axis='y', lw=0.4)
-
-
-
 
 
 fig2, ax = plt.subplots()
