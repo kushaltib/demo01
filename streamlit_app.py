@@ -460,12 +460,12 @@ fig2, ax = plt.subplots()
 ax.set_title('World',fontfamily="Arial",fontsize=10)
 
 ax.plot(emiss_revised_glob_tot.index.values,
-        emiss_revised_glob_tot.values/1000,
+        emiss_revised_glob_tot.values/1000000,
         '-', color='dodgerblue',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
         )
 
 ax.plot(emiss_paper_glob_tot.index.values,
-        emiss_paper_glob_tot.values/1000,
+        emiss_paper_glob_tot.values/1000000,
         ':', color='pink',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
         )
 
@@ -478,7 +478,7 @@ ax.set_xlim(start,end)
 #ax.set_yticks([0,10,20,30,40,50])
 ax.tick_params(axis='y', length=0)
 ax.tick_params(labelsize=9)
-ax.set_ylabel("GHG emissions (Mt CO2eq / yr) ",fontfamily="Arial",fontsize=9,y=0.5)
+ax.set_ylabel("CO2 emissions (Gt/yr) ",fontfamily="Arial",fontsize=9,y=0.5)
 
 for tick in ax.get_xticklabels():
     tick.set_fontname("Arial")
