@@ -7,23 +7,6 @@ import streamlit as st
 
 from model import mod_read_input, mod_nearterm_CO2eq, mod_longterm_CO2eq, mod_emissions_projection, mod_emissions_projection_method03,mod_CH4,mod_N2O
 
-st.markdown(
-    """
-    <style>
-    .css-1d391kg {
-        width: 100px;  /* Adjust the width here */
-    }
-    .css-1d391kg .css-163ttbj {
-        width: 300px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-
-
-
 
 def format_text(value):
     value = int(value)
