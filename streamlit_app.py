@@ -110,11 +110,11 @@ ndc_n2o = n2o_summ.loc[selected_country]
 
 
 #--base trajectory
-if selected_fitmethod=='Olivier old':
+if selected_fitmethod=='Old':
     #----Olivier's method
     emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
 
-if selected_fitmethod=='Olivier revised':
+if selected_fitmethod=='Revised':
     #----New method
     emiss_coun = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
 
@@ -187,7 +187,7 @@ with col4:
 
 
 
-if selected_fitmethod=='Olivier old':
+if selected_fitmethod=='Old':
     #----Olivier's method
     emiss_uncond= mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
     emiss_cond = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
@@ -195,7 +195,7 @@ if selected_fitmethod=='Olivier old':
     emiss_nzyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
     emiss_allchg = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
 
-if selected_fitmethod=='Olivier revised':
+if selected_fitmethod=='Revised':
     #----New method
     emiss_uncond= mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
     emiss_cond = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
