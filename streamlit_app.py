@@ -497,30 +497,41 @@ ax.grid(which='major', axis='y', lw=0.4)
 if glob_tot==0:
     st.pyplot(fig)
 
+    sentence = (
+        "<b style='color: black;'>Legend</b> <br>"
+        "Lines <br>"
+        
+        "<b style='color: black;'>Historical CO2eq emissions excl. land-use</b> | "
+        "<b style='color: dodgerblue;'>Historical CO2 emissions excl. land-use</b> | <br>"
+        
+        "<b style='color: yellowgreen;'>Historical net land-use managed lands</b> | "        
+        
+        "<b style='color: orange;'>Historical CO2eq emissions net</b> | <br>"
+    )
+
+    # Display the sentence
+    st.markdown(sentence, unsafe_allow_html=True)
+
+    sentence = (
+            "Dots <br>"
+            
+            "<b style='color: royalblue;'>Unconditional NDC CO2eq</b> | "
+            "<b style='color: lightblue;'>Conditional NDC CO2eq</b> | <br>"
+            
+            "<b style='color: darkgreen;'>NDC uncond. land-use </b> | "
+            "<b style='color: limegreen;'>NDC cond. land-use </b> <br>"
+            
+            "*Double dots with same colour denote the upper and lower bounds. <br>"
+            )
+            
+     
+    st.markdown(sentence, unsafe_allow_html=True)
+
 else:
     st.pyplot(fig2)
 
 
-st.markdown("For India and China - it CO2 emissions and for others CO2eq", unsafe_allow_html=True)
 
-sentence = (
-    "<b style='color: black;'>Historical emissions excl. land-use</b> | "
-    "<b style='color: royalblue;'>Unconditional NDC</b> | "
-    "<b style='color: lightblue;'>Conditional NDC</b> | <br>"
-    "<b style='color: yellowgreen;'>Historical net land-use managed lands</b> | "
-    "<b style='color: darkgreen;'>NDC uncond. land-use </b> | "
-    "<b style='color: limegreen;'>NDC cond. land-use </b> <br>"
-    "<b style='color: orange;'>Historical emissions net</b> | "
-
-    
-)
-
-# Display the sentence
-st.markdown(sentence, unsafe_allow_html=True)
-
-sentence = ("*Double dots with same colour denote the upper and lower bounds. <br>"
-            "**Shaded area represents the additional emissions added or removed because of the adjustment")
-st.markdown(sentence, unsafe_allow_html=True)
 
 
 #st.write("Solid line represents the historical emissions")
