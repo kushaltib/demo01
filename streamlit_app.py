@@ -139,8 +139,11 @@ emiss_paper = paper.loc[selected_country]
 emiss_paper_glob_tot = paper.sum()
 
 #--for global data:
-revised_glob_tot = paper = pd.read_excel("./data/precalculated/CO2_excl_bycountry_revisedmethod.xlsx",index_col=0)
+revised_glob_tot = pd.read_excel("./data/precalculated/CO2_excl_bycountry_revisedmethod.xlsx",index_col=0)
 emiss_revised_glob_tot = revised_glob_tot.sum()
+
+revised_glob_tot_co2eq = pd.read_excel("./data/precalculated/CO2eq_excl_bycountry_revisedmethod.xlsx",index_col=0)
+emiss_revised_glob_tot_co2eq = revised_glob_tot_co2eq.sum()
 
 
 #----------------------------------------------------------------------------------------------
@@ -326,6 +329,8 @@ if selected_gas=='CO2eq':
                 NDC.loc[selected_country,'Base_CO2eq_emissions_Total-excl'],
                 label='Base excl CO2eq',color='grey',marker='o',edgecolors='black',linewidths=2,s=40,zorder=20)
     
+    
+    
 
     #plot luc emissions:
     if selected_country not in ['Int. Aviation','Int. Shipping']:
@@ -353,12 +358,29 @@ if selected_gas=='CO2eq':
                     NDC.loc[selected_country,['Target_CO2eq_emissions_LB_unconditional_LULUCF','Target_CO2eq_emissions_UB_unconditional_LULUCF']].values,
                     label='NDC Condititonal',color='darkgreen',marker='o',s=30,zorder=20)
 
+    #NDC points
+    plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
+             co2eq_excl.loc[selected_country,co2eq_excl.columns[5:7]].values,
+             label='NDC Condititonal',color='lightblue',marker='x',s=30,zorder=20)
+
+
+    plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
+                 co2eq_excl.loc[selected_country,co2eq_excl.columns[3:5]].values,
+                 label='NDC Uncondititonal',color='royalblue',marker='x',s=30,zorder=20)
+
+    plt.scatter(co2eq_nz .loc[selected_country,'Year'],
+                0,
+                label='Net-zero',color='red',marker='x',s=50,zorder=20)
+    
+    
+    axis_label = "GHG emissions (Mt CO2eq / yr) "
+
    
 if selected_gas=='CO2':
     
     ax.plot(ehist.index,
             ehist.values/1000,
-            '-', color='dodgerblue',alpha=1, lw=2, label='CO2 historical',mec='k',mew=0.5,ms=6
+            '-', color='black',alpha=1, lw=2, label='CO2 historical',mec='k',mew=0.5,ms=6
             )
 
     ax.plot(emiss_co2_excl.iloc[2].index,
@@ -385,45 +407,35 @@ if selected_gas=='CO2':
             emiss_paper.values/1000,
             ':', color='pink',alpha=1, lw=2, label='Uncond UB',mec='k',mew=0.5,ms=3
             )
+    
+    axis_label = "CO2 emissions (Mt / yr) "
+
+if selected_gas == "CH4":
+    ax.plot(hist_ch4.loc[selected_country].index,
+            hist_ch4.loc[selected_country].values/1000,
+            '-', color='black',alpha=1, lw=2, label='CO2eq historical',mec='k',mew=0.5,ms=6
+            )
+
+    ax.plot(emiss_ch4.iloc[2].index,
+            emiss_ch4.iloc[2].values/1000,
+            'o-', color='violet',alpha=1, lw=2, label='Cond LB',mec='purple',mew=0.5,ms=3
+            )
+
+    ax.plot(emiss_ch4.iloc[3].index,
+            emiss_ch4.iloc[3].values/1000,
+            'o-', color='violet',alpha=1, lw=2, label='Cond UB',mec='purple',mew=0.5,ms=3
+            )
 
 
-#ax.plot(emiss_nzyr.iloc[0].index,
-#        emiss_nzyr.iloc[0].values/1000,
-#        'o-', color='lightgrey',alpha=1, lw=2, label='adj NZ',mec='k',mew=0.5,ms=4
-#        )
+    ax.plot(emiss_ch4.iloc[0].index,
+            emiss_ch4.iloc[0].values/1000,
+            'o-', color='grey',alpha=1, lw=2, label='UnCond LB',mec='purple',mew=0.5,ms=3
+            )
 
-#ax.plot(emiss_nzyr.iloc[1].index,
-#        emiss_nzyr.iloc[1].values/1000,
-#        'o-', color='lightgrey',alpha=1, lw=2, label='adj NZ',mec='k',mew=0.5,ms=4
-#        )
-
-
-#ax.plot(emiss_allchg.iloc[0].index,
-#        emiss_allchg.iloc[0].values/1000,
-#        'o-', color='coral',alpha=1, lw=2, label='adj all',mec='k',mew=0.5,ms=4
-#        )
-
-#ax.plot(emiss_allchg.iloc[1].index,
-#        emiss_allchg.iloc[1].values/1000,
-#        'o-', color='coral',alpha=1, lw=2, label='adj all',mec='k',mew=0.5,ms=4
-#        )
-
-
-
-plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
-             co2eq_excl.loc[selected_country,co2eq_excl.columns[5:7]].values,
-             label='NDC Condititonal',color='lightblue',marker='x',s=30,zorder=20)
-
-
-plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
-             co2eq_excl.loc[selected_country,co2eq_excl.columns[3:5]].values,
-             label='NDC Uncondititonal',color='royalblue',marker='x',s=30,zorder=20)
-
-plt.scatter(co2eq_nz .loc[selected_country,'Year'],
-            0,
-            label='Net-zero',color='red',marker='x',s=50,zorder=20)
-
-
+    ax.plot(emiss_ch4.iloc[1].index,
+            emiss_ch4.iloc[1].values/1000,
+            'o-', color='grey',alpha=1, lw=2, label='UnCond UB',mec='purple',mew=0.5,ms=3
+            )
 
 
 
@@ -477,7 +489,7 @@ ax.set_xlim(start,end)
 #ax.set_yticks([0,10,20,30,40,50])
 ax.tick_params(axis='y', length=0)
 ax.tick_params(labelsize=9)
-ax.set_ylabel("GHG emissions (Mt CO2eq / yr) ",fontfamily="Arial",fontsize=9,y=0.5)
+ax.set_ylabel(axis_label,fontfamily="Arial",fontsize=9,y=0.5)
 
 for tick in ax.get_xticklabels():
     tick.set_fontname("Arial")
@@ -491,17 +503,27 @@ ax.grid(which='major', axis='y', lw=0.4)
 
 fig2, ax = plt.subplots()
 
+
 ax.set_title('World',fontfamily="Arial",fontsize=10)
 
-ax.plot(emiss_revised_glob_tot.index.values,
-        emiss_revised_glob_tot.values/1000000,
-        '-', color='dodgerblue',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
-        )
+if selected_gas=='CO2':
+    ax.plot(emiss_revised_glob_tot.index.values,
+            emiss_revised_glob_tot.values/1000000,
+            '-', color='dodgerblue',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
+            )
 
-ax.plot(emiss_paper_glob_tot.index.values,
-        emiss_paper_glob_tot.values/1000000,
-        ':', color='pink',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
-        )
+    ax.plot(emiss_paper_glob_tot.index.values,
+            emiss_paper_glob_tot.values/1000000,
+            ':', color='pink',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
+            )
+
+if selected_gas=='CO2eq':
+    ax.plot(emiss_revised_glob_tot_co2eq.index.values,
+            emiss_revised_glob_tot_co2eq.values/1000000,
+            '-', color='dodgerblue',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
+            )
+
+    
 
 ax.spines.left.set_position(('data', start))
 ax.spines.bottom.set_position(('data', 0))
@@ -533,13 +555,14 @@ if glob_tot==0:
         "<b style='color: black;'>Legend</b> <br>"
         "Lines <br>"
         
-        "<b style='color: black;'>Historical CO2eq emissions excl. land-use</b> | "
-        "<b style='color: dodgerblue;'>Historical CO2 emissions excl. land-use</b> | <br>"
-        
-        "<b style='color: yellowgreen;'>Historical net land-use managed lands</b> | "        
-        
+        "<b style='color: black;'>Historical emissions excl. land-use</b> | "
+        "<b style='color: grey;'>Unconditional emissions excl. land-use</b> | "
+        "<b style='color: violet;'>Conditional emissions excl. land-use</b> | <br>"
+
         "<b style='color: orange;'>Historical CO2eq emissions net</b> | <br>"
 
+        "<b style='color: yellowgreen;'>Historical net land-use managed lands</b> | "        
+        
         "<b style='color: pink;'>CO2 emissions from our paper version, just for comparison here</b> | <br>"
 
 
