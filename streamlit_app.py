@@ -69,7 +69,7 @@ with st.sidebar:
     
 
     #--fitting method
-    selected_fitmethod = st.selectbox("Fitting method",['Old','Revised'])
+    selected_fitmethod = st.selectbox("Fitting method",['Revised','Old'])
     #selected_fitmethod = st.selectbox("Fitting method",['Olivier revised'])
     
     
