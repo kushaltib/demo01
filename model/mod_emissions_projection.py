@@ -136,15 +136,21 @@ def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,gmax
      #--perform fit to diganose a priori initial rate of emission by using last 5 years of hist emissions
 
      #set index to just skip 2020 for whatever may be the last-year of inventory
-     ind_2020 = len(emiss_hist.index.tolist()) - emiss_hist.index.tolist().index(2020)
-     
-     if ind_2020>5:
+     if yr_last>2020:
+          ind_2020 = len(emiss_hist.index.tolist()) - emiss_hist.index.tolist().index(2020)
+
+          if ind_2020>5:
+               X_yr = np.array(emiss_hist.index[-5:]).reshape(-1, 1)
+               Y_emiss = emiss_hist.values[-5:].reshape(-1, 1)
+          else:
+               X_yr = np.array(emiss_hist.index[-6:][:-ind_2020].tolist()+emiss_hist.index[-6:][-ind_2020+1:].tolist()).reshape(-1, 1)
+               Y_emiss = np.array(emiss_hist.values[-6:][:-ind_2020].tolist()+emiss_hist.values[-6:][-ind_2020+1:].tolist()).reshape(-1, 1)
+          
+     else:
           X_yr = np.array(emiss_hist.index[-5:]).reshape(-1, 1)
           Y_emiss = emiss_hist.values[-5:].reshape(-1, 1)
-     else:
-          X_yr = np.array(emiss_hist.index[-6:][:-ind_2020].tolist()+emiss_hist.index[-6:][-ind_2020+1:].tolist()).reshape(-1, 1)
-          Y_emiss = np.array(emiss_hist.values[-6:][:-ind_2020].tolist()+emiss_hist.values[-6:][-ind_2020+1:].tolist()).reshape(-1, 1)
 
+     
      model = LinearRegression().fit(X_yr,Y_emiss)
      
      Ep0=model.coef_[0]                    #--rate of emissions change at t=0
