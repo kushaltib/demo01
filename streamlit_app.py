@@ -69,35 +69,37 @@ with st.sidebar:
     
     
     #--parameters relevant for the Olivier's method:
-    
-    #--allowance limit of negative emissions
-    eneg = st.slider(label="Allow neg emission (rel. to present emissions)",
-                     min_value=10,
-                     max_value=100,
-                     value=10,
-                     step=10,
-                     #key='slider3'
-                     )
+    if selected_fitmethod == 'Old':
+        #--set allowance limit of negative emissions
+        eneg = st.slider(label="Allow neg emission (rel. to present emissions)",
+                         min_value=10,
+                        max_value=100,
+                        value=10,
+                        step=10,
+                        #key='slider3'
+                        )
       
     
-    if st.checkbox('Remove quardractic correction'):
-        corr=0
-    else:
-        corr=1
+        if st.checkbox('Remove quardractic correction'):
+            corr=0
+        else:
+            corr=1
 
-    if st.checkbox('Do not overwrite asymptotic emissions with net-zero pledge'):
-        asm=0
-    else:
-        asm=1
+        if st.checkbox('Do not overwrite asymptotic emissions with net-zero pledge'):
+            asm=0
+        else:
+            asm=1
 
 #st.markdown("<hr>", unsafe_allow_html=True)
 
+#----------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------
 
-#more ndc and long term parameters:
+#ndc and long term parameters for BASE scenario:
+#tables for all country
+co2eq, co2eq_excl,co2eq_luc = mod_nearterm_CO2eq.create_ndc_table(NDC,hist_luc_net,hist_co2_excl,hist_co2eq_excl,gdp)
 ch4_summ = mod_CH4.def_ch4(NDC,co2eq_excl,hist_ch4,hist_co2_excl,hist_co2eq_excl)
 n2o_summ = mod_N2O.def_n2o(NDC,co2eq_excl,hist_n2o)
-
-#co2eq_nz = mod_longterm_CO2eq.grp_nz(NDC,process='co2eq')
 co2eq_nz = mod_longterm_CO2eq.co2_nz(NDC,ch4_summ,n2o_summ,hist_co2_excl,hist_co2eq_excl)
 
 ehist = hist_co2_excl.loc[selected_country]
@@ -106,10 +108,11 @@ enz = co2eq_nz.loc[selected_country]
 ndc_ch4 = ch4_summ.loc[selected_country]
 ndc_n2o = n2o_summ.loc[selected_country]
 
+
 #--base trajectory
 if selected_fitmethod=='Olivier old':
     #----Olivier's method
-    emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm)
+    emiss_coun = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
 
 if selected_fitmethod=='Olivier revised':
     #----New method
@@ -118,6 +121,9 @@ if selected_fitmethod=='Olivier revised':
 #--for comparing to old version in the paper:
 paper = pd.read_excel("./data/comparing/paper_co2_nogmp.xlsx",index_col=0)
 emiss_paper = paper.loc[selected_country]
+
+#----------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------
 
 #--controlling shifts in NDC levels, NDC year and NZ year
 col1,col2=st.columns(2)
@@ -172,30 +178,29 @@ with col4:
                      )
 
 
-#--collect historical emissions, NDC and NZ information for selected country:
-#ehist = hist_co2eq_excl.loc[selected_country]
-
-
-
-
 #--------------------------------------------------------------------------------------------
 #--adjusted enhanced/delayed trajectories
 
+
+
+
+
+
+
 if selected_fitmethod=='Olivier old':
     #----Olivier's method
-    emiss_uncond= mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,duncond=duncond)
-    emiss_cond = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dcond=dcond)
-    emiss_ndcyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dndcyr=dndcyr)
-    emiss_nzyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,dnzyr=dnzyr)
-    emiss_allchg = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,gmax=gmax/100,dg0=dg/100,corr=corr,asm=asm,duncond=duncond,dcond=dcond,dndcyr=dndcyr,dnzyr=dnzyr)
+    emiss_uncond= mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
+    emiss_cond = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
+    emiss_ndcyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
+    emiss_nzyr = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
+    emiss_allchg = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
 
 if selected_fitmethod=='Olivier revised':
     #----New method
-    emiss_uncond= mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,duncond=duncond)
-    emiss_cond = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,dcond=dcond)
-    emiss_ndcyr = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,dndcyr=dndcyr)
-    emiss_nzyr = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,dnzyr=dnzyr)
-    emiss_allchg = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,duncond=duncond,dcond=dcond,dndcyr=dndcyr,dnzyr=dnzyr)
+    emiss_uncond= mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
+    emiss_cond = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
+    emiss_ndcyr = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
+    emiss_nzyr = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
 
 
 

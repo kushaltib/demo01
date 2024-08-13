@@ -125,7 +125,7 @@ def cost(x,E0,gi0,Enear,Elong,yr_last,yr_near,yr_long):
 
 
 
-def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,gmax=0.1,dg0=0.02,eneg=10,corr=1,asm=1):
+def create_timeseries(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,gmax=0.1,dg0=0.02,eneg=10.0,corr=1,asm=1):
      
      E0=emiss_hist.values[-1]  #-- emissions at t=0
      yr_last = emiss_hist.index[-1] 
