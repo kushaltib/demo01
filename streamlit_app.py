@@ -436,6 +436,37 @@ if selected_gas == "CH4":
             emiss_ch4.iloc[1].values/1000,
             'o-', color='grey',alpha=1, lw=2, label='UnCond UB',mec='purple',mew=0.5,ms=3
             )
+    
+    axis_label = "CH4 emissions (Mt / yr) "
+
+if selected_gas == "N2O":
+    ax.plot(hist_n2o.loc[selected_country].index,
+            hist_n2o.loc[selected_country].values/1000,
+            '-', color='black',alpha=1, lw=2, label='CO2eq historical',mec='k',mew=0.5,ms=6
+            )
+
+    ax.plot(emiss_n2o.iloc[2].index,
+            emiss_n2o.iloc[2].values/1000,
+            'o-', color='violet',alpha=1, lw=2, label='Cond LB',mec='purple',mew=0.5,ms=3
+            )
+
+    ax.plot(emiss_n2o.iloc[3].index,
+            emiss_n2o.iloc[3].values/1000,
+            'o-', color='violet',alpha=1, lw=2, label='Cond UB',mec='purple',mew=0.5,ms=3
+            )
+
+
+    ax.plot(emiss_n2o.iloc[0].index,
+            emiss_n2o.iloc[0].values/1000,
+            'o-', color='grey',alpha=1, lw=2, label='UnCond LB',mec='purple',mew=0.5,ms=3
+            )
+
+    ax.plot(emiss_n2o.iloc[1].index,
+            emiss_n2o.iloc[1].values/1000,
+            'o-', color='grey',alpha=1, lw=2, label='UnCond UB',mec='purple',mew=0.5,ms=3
+            )
+    
+    axis_label = "N2O emissions (Mt / yr) "
 
 
 
