@@ -52,7 +52,7 @@ with st.sidebar:
     #read and process NDC data:
     NDC = mod_read_input.read_ndc()
     #selected_country= st.selectbox("Choose Country:",NDC.index)
-    selected_country= st.selectbox("Country:",sorted(NDC.index))
+    selected_country= st.selectbox("Country:",sorted(NDC.index),index=44)
     if st.checkbox('Show Global'):
             glob_tot=1
     else:
