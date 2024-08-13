@@ -507,6 +507,10 @@ if glob_tot==0:
         "<b style='color: yellowgreen;'>Historical net land-use managed lands</b> | "        
         
         "<b style='color: orange;'>Historical CO2eq emissions net</b> | <br>"
+
+        "<b style='color: pink;'>CO2 emissions from our paper version, just for comparison here</b> | <br>"
+
+
     )
 
     # Display the sentence
@@ -521,7 +525,7 @@ if glob_tot==0:
             "<b style='color: darkgreen;'>NDC uncond. land-use </b> | "
             "<b style='color: limegreen;'>NDC cond. land-use </b> <br>"
             
-            "*Double dots with same colour denote the upper and lower bounds. <br>"
+            "*Double dots with same colour denote the upper and lower bounds (if exists). <br>"
             )
             
      
@@ -529,6 +533,20 @@ if glob_tot==0:
 
 else:
     st.pyplot(fig2)
+
+    sentence = (
+        "<b style='color: black;'>Legend</b> <br>"
+        
+        
+        "<b style='color: dodgerblue;'>CO2 emissions excl. land-use</b> | <br>"
+        "<b style='color: pink;'>CO2 emissions from our paper version, just for comparison here</b> | <br>"
+
+
+    )
+
+    # Display the sentence
+    st.markdown(sentence, unsafe_allow_html=True)
+
 
 
 
