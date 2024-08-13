@@ -58,9 +58,7 @@ with st.sidebar:
     else:
             glob_tot=0
 
-
-
-
+    
     #--years for the display plot
     start, end = st.slider("Range of years", 
                            min_value=1850,
@@ -69,33 +67,33 @@ with st.sidebar:
                            step=1
                           )
     
-
-    #--fitting method
-    selected_fitmethod = st.selectbox("Fitting method",['Old','Revised'])
-    #selected_fitmethod = st.selectbox("Fitting method",['Olivier revised'])
+    if glob_tot=0:
+        #--fitting method
+        selected_fitmethod = st.selectbox("Fitting method",['Old','Revised'])
+        #selected_fitmethod = st.selectbox("Fitting method",['Olivier revised'])
     
     
-    #--parameters relevant for the Olivier's method:
-    if selected_fitmethod == 'Old':
-        #--set allowance limit of negative emissions
-        eneg = st.slider(label="Allow neg emission (rel. to present emissions)",
-                         min_value=10,
-                        max_value=100,
-                        value=10,
-                        step=10,
-                        #key='slider3'
-                        )
+        #--parameters relevant for the Olivier's method:
+        if selected_fitmethod == 'Old':
+            #--set allowance limit of negative emissions
+            eneg = st.slider(label="Allow neg emission (rel. to present emissions)",
+                             min_value=10,
+                            max_value=100,
+                            value=10,
+                            step=10,
+                            #key='slider3'
+                            )
       
     
-        if st.checkbox('Remove quardractic correction'):
-            corr=0
-        else:
-            corr=1
+            if st.checkbox('Remove quardractic correction'):
+                corr=0
+            else:
+                corr=1
 
-        if st.checkbox('Do not overwrite asymptotic emissions with net-zero pledge'):
-            asm=0
-        else:
-            asm=1
+            if st.checkbox('Do not overwrite asymptotic emissions with net-zero pledge'):
+                asm=0
+            else:
+                asm=1
 
 #st.markdown("<hr>", unsafe_allow_html=True)
 
