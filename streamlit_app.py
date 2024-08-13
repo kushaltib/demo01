@@ -53,6 +53,13 @@ with st.sidebar:
     NDC = mod_read_input.read_ndc()
     #selected_country= st.selectbox("Choose Country:",NDC.index)
     selected_country= st.selectbox("Country:",sorted(NDC.index))
+    if st.checkbox('Show Global'):
+            glob_tot=1
+    else:
+            glob_tot=0
+
+
+
 
     #--years for the display plot
     start, end = st.slider("Range of years", 
@@ -119,8 +126,14 @@ if selected_fitmethod=='Revised':
     emiss_coun = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
 
 #--for comparing to old version in the paper:
-paper = pd.read_excel("./data/comparing/paper_co2_nogmp.xlsx",index_col=0)
+paper = pd.read_excel("./data/precalculated/paper_co2_nogmp.xlsx",index_col=0)
 emiss_paper = paper.loc[selected_country]
+emiss_paper_glob_tot = paper.sum()
+
+#--for global data:
+revised_glob_tot = paper = pd.read_excel("./data/precalculated/CO2_excl_bycountry_revisedmethod.xlsx",index_col=0)
+emiss_revised_glob_tot = revised_glob_tot.sum()
+
 
 #----------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------
@@ -247,7 +260,7 @@ st.markdown("<hr>", unsafe_allow_html=True)
 
 
 
-#display the plot
+#display country plot
 fig, ax = plt.subplots()
 
 ax.set_title(selected_country,fontfamily="Arial",fontsize=10)
@@ -440,7 +453,53 @@ for tick in ax.get_yticklabels():
 
 ax.grid(which='major', axis='y', lw=0.4)
 
-st.pyplot(fig)
+
+
+
+
+fig2, ax = plt.subplots()
+
+ax.set_title('World',fontfamily="Arial",fontsize=10)
+
+ax.plot(emiss_revised_glob_tot.index.values,
+        emiss_revised_glob_tot.values/1000,
+        '-', color='dodgerblue',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
+        )
+
+ax.plot(emiss_paper_glob_tot.index.values,
+        emiss_paper_glob_tot.values/1000,
+        ':', color='pink',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
+        )
+
+ax.spines.left.set_position(('data', start))
+ax.spines.bottom.set_position(('data', 0))
+ax.spines[['top', 'right','left']].set_visible(False)
+
+ax.set_xlim(start,end)
+#ax.set_ylim(-5,55)
+#ax.set_yticks([0,10,20,30,40,50])
+ax.tick_params(axis='y', length=0)
+ax.tick_params(labelsize=9)
+ax.set_ylabel("GHG emissions (Mt CO2eq / yr) ",fontfamily="Arial",fontsize=9,y=0.5)
+
+for tick in ax.get_xticklabels():
+    tick.set_fontname("Arial")
+    tick.set_fontweight('bold')
+for tick in ax.get_yticklabels():
+    tick.set_fontname("Arial")
+    #tick.set_fontweight('bold')
+
+ax.grid(which='major', axis='y', lw=0.4)
+
+
+
+
+if glob_tot==0:
+    st.pyplot(fig)
+
+else:
+    st.pyplot(fig2)
+
 
 st.markdown("For India and China - it CO2 emissions and for others CO2eq", unsafe_allow_html=True)
 
