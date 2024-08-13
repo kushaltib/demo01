@@ -209,7 +209,8 @@ if selected_fitmethod=='Revised':
 #show the change in cumm. CO2eq with each type of change
 #for net-zero year
 i= 1 if dnzyr>0 else 0
-cumm_nzyr = emiss_nzyr.iloc[i].sum()/1000000 -emiss_coun.iloc[i].sum()/1000000
+#cumm_nzyr = emiss_nzyr.iloc[i].sum()/1000000 -emiss_coun.iloc[i].sum()/1000000
+cumm_nzyr = 0
 
 #for ndc unconditional
 i=1 if duncond>1 else 0
