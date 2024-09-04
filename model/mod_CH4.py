@@ -154,11 +154,17 @@ def  def_ch4(ndc_table,ndc_summ,ch4_hist,co2_hist,co2eq_hist,data=None,prop_year
             #--precalculated CO2 or CO2eq emissions in 2030 following Inventory trend
             pre_cndc = ((yr_near-prop_year)/(yr_last-prop_year))*(c_hist.loc[yr_last]-c_hist.loc[prop_year]) + c_hist.loc[prop_year]
 
-            #estimate CH4 based on proportionality
-            uncond_lb = (cndc['Unconditional_LB']/pre_cndc) * pre_mndc
-            uncond_ub = (cndc['Unconditional_UB']/pre_cndc) * pre_mndc
-            cond_lb = (cndc['Conditional_LB']/pre_cndc) * pre_mndc
-            cond_ub = (cndc['Conditional_UB']/pre_cndc) * pre_mndc
+            #estimate CH4 based on proportionality only for countries with CO2eq target
+            if ndc_summ.loc[country,'Applies']=='CO2eq':
+                  uncond_lb = (cndc['Unconditional_LB']/pre_cndc) * pre_mndc
+                  uncond_ub = (cndc['Unconditional_UB']/pre_cndc) * pre_mndc
+                  cond_lb = (cndc['Conditional_LB']/pre_cndc) * pre_mndc
+                  cond_ub = (cndc['Conditional_UB']/pre_cndc) * pre_mndc
+            else:
+                  uncond_lb = m_hist.loc[yr_last]
+                  uncond_ub = m_hist.loc[yr_last]
+                  cond_lb = m_hist.loc[yr_last]
+                  cond_ub = m_hist.loc[yr_last]
 
             data.loc[country] = [yr_near,\
                                  'CH4',\
