@@ -160,7 +160,7 @@ def  def_ch4(ndc_table,ndc_summ,ch4_hist,co2_hist,co2eq_hist,data=None,prop_year
                   uncond_ub = (cndc['Unconditional_UB']/pre_cndc) * pre_mndc
                   cond_lb = (cndc['Conditional_LB']/pre_cndc) * pre_mndc
                   cond_ub = (cndc['Conditional_UB']/pre_cndc) * pre_mndc
-            else:
+            else: #for countries with CO2 only NDC target, CH4 is kept constant to last inventory year
                   uncond_lb = m_hist.loc[yr_last]
                   uncond_ub = m_hist.loc[yr_last]
                   cond_lb = m_hist.loc[yr_last]

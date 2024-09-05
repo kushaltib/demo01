@@ -72,9 +72,20 @@ with st.sidebar:
     #--fitting method
     selected_fitmethod = st.selectbox("Fitting method",['Revised','Old'])
     #selected_fitmethod = st.selectbox("Fitting method",['Olivier revised'])
+
+    #--parameters relevant for the REVISED method:
+    if selected_fitmethod == 'Revised':
+        #--set allowance limit of negative emissions
+        xper = st.slider(label="Point X percent at net-zero year",
+                         min_value=0.1,
+                        max_value=2,
+                        value=0.5,
+                        step=0.1,
+                        #key='slider3'
+                        )
     
     
-    #--parameters relevant for the Olivier's method:
+    #--parameters relevant for the OLD method:
     if selected_fitmethod == 'Old':
         #--set allowance limit of negative emissions
         eneg = st.slider(label="Allow neg emission (rel. to present emissions)",
@@ -122,7 +133,7 @@ if selected_fitmethod=='Old':
 
 if selected_fitmethod=='Revised':
     #----New method
-    emiss_co2_excl = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o)
+    emiss_co2_excl = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,xper)
 
 #calculate CH4 and N2O:
 emiss_ch4 = mod_emissions_projection_method03.create_timeseries_near(selected_country,ndc_ch4,hist_ch4.loc[selected_country])

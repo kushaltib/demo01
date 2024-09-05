@@ -110,13 +110,13 @@ def em_nr(dg_near,E0,g0,Enear,Elong,yr_last,yr_near,country=None):
      return abs(cons1)
 
 #--constraint-02:
-def em_lg(dg_long,dg_near,E0,g0,Elong,yr_last,yr_near,yr_long,country=None):
+def em_lg(dg_long,dg_near,E0,g0,Elong,yr_last,yr_near,yr_long,xper=0.5,country=None):
      
      #--compute emission time profile
      emi_list=emi_calc(E0,g0,Elong,dg_near,dg_long,yr_last+1,yr_near,country=country)
 
      #--compute the 0.X% emissions
-     emi_pntXper = Elong + (0.005*(E0-Elong))
+     emi_pntXper = Elong + ((xper/100)*(E0-Elong))
 
      #--modelled emissions at NZ year
      emi_nz_mod = emi_list[yr_long-yr_last] 
@@ -130,7 +130,7 @@ def em_lg(dg_long,dg_near,E0,g0,Elong,yr_last,yr_near,yr_long,country=None):
      
      
 
-def create_timeseries_equ(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,gmax=0.1,dg0=0.02):
+def create_timeseries_equ(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,xper=0.5):
      
      E0=emiss_hist.values[-1]  #-- emissions at t=0
      yr_last = emiss_hist.index[-1] 
@@ -225,7 +225,7 @@ def create_timeseries_equ(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,
 
                if emiss_nz['Neutrality']=='Yes' or emiss_nz['Neutrality']=='Other':
                     #second fix dg_long:
-                    solution_long = fsolve(em_lg, dg_long, args=(dg_near,E0,g0,Elong,yr_last,yr_near,yr_nz,country))
+                    solution_long = fsolve(em_lg, dg_long, args=(dg_near,E0,g0,Elong,yr_last,yr_near,yr_nz,xper,country))
 
                     #--flag to detect if minimisation algorithm has converged
                     long_success=True
