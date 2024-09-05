@@ -75,10 +75,10 @@ with st.sidebar:
 
     #--parameters relevant for the REVISED method:
     if selected_fitmethod == 'Revised':
-        #--set allowance limit of negative emissions
+
         xper = st.slider(label="Point X percent at net-zero year",
                          min_value=0.1,
-                        max_value=2,
+                        max_value=2.0,
                         value=0.5,
                         step=0.1,
                         #key='slider3'
