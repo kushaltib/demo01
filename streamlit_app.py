@@ -78,7 +78,7 @@ with st.sidebar:
 
         xper = st.slider(label="Point X percent at net-zero year",
                          min_value=0.1,
-                        max_value=2.0,
+                        max_value=3.0,
                         value=0.5,
                         step=0.1,
                         #key='slider3'
