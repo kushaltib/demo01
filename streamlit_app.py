@@ -651,6 +651,7 @@ if selected_gas=='CO2':
     #        '-', color='grey',alpha=1, lw=2, label='CO2_excl_uncond',mec='k',mew=0.5,ms=6
     #        )
     
+    
     if pnt2==1:
         ax.plot(pnt2_co2['Cond_LB'].index.values,
                 pnt2_co2['Cond_LB'].values,
@@ -659,6 +660,50 @@ if selected_gas=='CO2':
     
         ax.plot(pnt2_co2['Uncond_LB'].index.values,
                 pnt2_co2['Uncond_LB'].values,
+                '-', color='grey',alpha=1, lw=2, label='CO2_excl_uncond',mec='k',mew=0.5,ms=6
+                )
+        
+    if pnt5==1:
+        ax.plot(pnt5_co2['Cond_LB'].index.values,
+                pnt5_co2['Cond_LB'].values,
+                '-', color='violet',alpha=1, lw=2, label='CO2_excl_cond',mec='k',mew=0.5,ms=6
+                )
+    
+        ax.plot(pnt5_co2['Uncond_LB'].index.values,
+                pnt5_co2['Uncond_LB'].values,
+                '-', color='grey',alpha=1, lw=2, label='CO2_excl_uncond',mec='k',mew=0.5,ms=6
+                )
+        
+    if c1==1:
+        ax.plot(c1_co2['Cond_LB'].index.values,
+                c1_co2['Cond_LB'].values,
+                '-', color='violet',alpha=1, lw=2, label='CO2_excl_cond',mec='k',mew=0.5,ms=6
+                )
+    
+        ax.plot(c1_co2['Uncond_LB'].index.values,
+                c1_co2['Uncond_LB'].values,
+                '-', color='grey',alpha=1, lw=2, label='CO2_excl_uncond',mec='k',mew=0.5,ms=6
+                )
+        
+    if c2==1:
+        ax.plot(c2_co2['Cond_LB'].index.values,
+                c2_co2['Cond_LB'].values,
+                '-', color='violet',alpha=1, lw=2, label='CO2_excl_cond',mec='k',mew=0.5,ms=6
+                )
+    
+        ax.plot(c2_co2['Uncond_LB'].index.values,
+                c2_co2['Uncond_LB'].values,
+                '-', color='grey',alpha=1, lw=2, label='CO2_excl_uncond',mec='k',mew=0.5,ms=6
+                )
+    
+    if c3==1:
+        ax.plot(c3_co2['Cond_LB'].index.values,
+                c3_co2['Cond_LB'].values,
+                '-', color='violet',alpha=1, lw=2, label='CO2_excl_cond',mec='k',mew=0.5,ms=6
+                )
+    
+        ax.plot(c3_co2['Uncond_LB'].index.values,
+                c3_co2['Uncond_LB'].values,
                 '-', color='grey',alpha=1, lw=2, label='CO2_excl_uncond',mec='k',mew=0.5,ms=6
                 )
 
