@@ -176,6 +176,18 @@ emiss_revised_glob_tot_co2eq_uncond = revised_glob_tot_co2eq_uncond.sum()
 revised_glob_tot_co2eq_cond = pd.read_excel("./data/precalculated/CO2eq_excl_bycountry_revisedmethod_cond.xlsx",index_col=0)
 emiss_revised_glob_tot_co2eq_cond = revised_glob_tot_co2eq_cond.sum()
 
+pnt2_co2eq = pd.read_excel("./data/precalculated/BASEpnt2_WORLD_CO2eq_excl.xlsx",index_col=0)
+pnt2_co2 = pd.read_excel("./data/precalculated/BASEpnt2_WORLD_CO2_excl.xlsx",index_col=0)
+pnt5_co2eq = pd.read_excel("./data/precalculated/BASEpnt5_WORLD_CO2eq_excl.xlsx",index_col=0)
+pnt5_co2 = pd.read_excel("./data/precalculated/BASEpnt5_WORLD_CO2_excl.xlsx",index_col=0)
+c1_co2eq = pd.read_excel("./data/precalculated/BASE1_WORLD_CO2eq_excl.xlsx",index_col=0)
+c1_co2 = pd.read_excel("./data/precalculated/BASE1_WORLD_CO2_excl.xlsx",index_col=0)
+c2_co2eq = pd.read_excel("./data/precalculated/BASE2_WORLD_CO2eq_excl.xlsx",index_col=0)
+c2_co2 = pd.read_excel("./data/precalculated/BASE2_WORLD_CO2_excl.xlsx",index_col=0)
+c3_co2eq = pd.read_excel("./data/precalculated/BASE3_WORLD_CO2eq_excl.xlsx",index_col=0)
+c3_co2 = pd.read_excel("./data/precalculated/BASE3_WORLD_CO2_excl.xlsx",index_col=0)
+
+
 
 
 #----------------------------------------------------------------------------------------------
@@ -298,6 +310,44 @@ emiss_revised_glob_tot_co2eq_cond = revised_glob_tot_co2eq_cond.sum()
 
 # with col4:
 #     st.markdown(format_text(cumm_nzyr), unsafe_allow_html=True)
+
+if glob_tot==1:
+    col1,col2,col3,col4,col5=st.columns(5)
+
+    with col1:
+        if st.checkbox('0.2%'):
+            pnt2=1
+        else:
+            pnt2=0
+
+    with col2:
+        if st.checkbox('0.5%'):
+            pnt5=1
+        else:
+            pnt5=0
+
+    with col3:
+        if st.checkbox('1%'):
+            c1=1
+        else:
+            c1=0
+    
+    with col4:
+        if st.checkbox('2%'):
+            c2=1
+        else:
+            c2=0
+
+    with col5:
+        if st.checkbox('3%'):
+            c3=1
+        else:
+            c3=0
+
+
+
+
+    
 
 st.markdown("<hr>", unsafe_allow_html=True)
 
@@ -587,16 +637,29 @@ ax.set_title('World',fontfamily="Arial",fontsize=10)
 
 if selected_gas=='CO2':
     
-    ax.plot(emiss_revised_glob_tot_co2_cond.index.values,
-            emiss_revised_glob_tot_co2_cond.values/1000000,
-            '-', color='violet',alpha=1, lw=2, label='CO2_excl_cond',mec='k',mew=0.5,ms=6
-            )
+    #ax.plot(emiss_revised_glob_tot_co2_cond.index.values,
+    #        emiss_revised_glob_tot_co2_cond.values/1000000,
+    #        '-', color='violet',alpha=1, lw=2, label='CO2_excl_cond',mec='k',mew=0.5,ms=6
+    #        )
     
-    ax.plot(emiss_revised_glob_tot_co2_uncond.index.values,
-            emiss_revised_glob_tot_co2_uncond.values/1000000,
-            '-', color='grey',alpha=1, lw=2, label='CO2_excl_uncond',mec='k',mew=0.5,ms=6
-            )
+    #ax.plot(emiss_revised_glob_tot_co2_uncond.index.values,
+    #        emiss_revised_glob_tot_co2_uncond.values/1000000,
+    #        '-', color='grey',alpha=1, lw=2, label='CO2_excl_uncond',mec='k',mew=0.5,ms=6
+    #        )
     
+    if pnt2==1:
+        ax.plot(pnt2_co2['Cond_LB'].index.values,
+                pnt2_co2['Cond_LB'].values,
+                '-', color='violet',alpha=1, lw=2, label='CO2_excl_cond',mec='k',mew=0.5,ms=6
+                )
+    
+        ax.plot(pnt2_co2['Uncond_LB'].index.values,
+                pnt2_co2['Uncond_LB'].values,
+                '-', color='grey',alpha=1, lw=2, label='CO2_excl_uncond',mec='k',mew=0.5,ms=6
+                )
+
+
+   
     ax.plot(emiss_paper_glob_tot_co2_cond.index.values,
             emiss_paper_glob_tot_co2_cond.values/1000000,
             ':', color='pink',alpha=1, lw=2, label='CO2_excl',mec='k',mew=0.5,ms=6
