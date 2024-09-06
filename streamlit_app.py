@@ -70,6 +70,7 @@ with st.sidebar:
     
     if glob_tot==1:
         selected_fitmethod = 'Revised'
+        xper = 0.5
     
 
     if glob_tot==0:
