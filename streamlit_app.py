@@ -68,6 +68,9 @@ with st.sidebar:
                            step=1
                           )
     
+    if glob_tot==1:
+        selected_fitmethod = 'Revised'
+    
 
     if glob_tot==0:
         #--fitting method
@@ -106,7 +109,7 @@ with st.sidebar:
                     asm=0
                 else:
                     asm=1
-                    
+
 
 #st.markdown("<hr>", unsafe_allow_html=True)
 
