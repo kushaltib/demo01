@@ -78,6 +78,13 @@ def emi_calc(E0,g0,Eneg,dg_near,dg_long,year_start=2023,year_ndc=2030,year_end=2
              if yr==year_ndc-1 and country=="Int. Aviation":
                   g=0
 
+             if yr==year_ndc-1 and country=="Pakistan":
+                  g=0
+             if yr==year_ndc-1 and g>0.2:
+                  g=0
+          
+          
+
         else:
              #--growth rate is reduced linearly
              g=g-dg_long
