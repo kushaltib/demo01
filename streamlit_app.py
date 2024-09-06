@@ -60,14 +60,7 @@ with st.sidebar:
             glob_tot=0
 
     
-    #--years for the display plot
-    start, end = st.slider("Range of years", 
-                           min_value=1850,
-                           max_value=2100,
-                           value=(1985, 2100),        
-                           step=1
-                          )
-    
+       
     if glob_tot==1:
         selected_fitmethod = 'Revised'
         xper = 0.5
@@ -349,7 +342,13 @@ if glob_tot==1:
         else:
             c3=0
 
-
+#--years for the display plot
+start, end = st.slider("Range of years", 
+                        min_value=1850,
+                        max_value=2100,
+                        value=(1985, 2100),        
+                        step=1
+                        )
 
 
     
