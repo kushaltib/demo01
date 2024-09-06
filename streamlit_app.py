@@ -69,43 +69,44 @@ with st.sidebar:
                           )
     
 
-    #--fitting method
-    selected_fitmethod = st.selectbox("Fitting method",['Revised','Old'])
-    #selected_fitmethod = st.selectbox("Fitting method",['Olivier revised'])
+    if glob_tot==0:
+        #--fitting method
+        selected_fitmethod = st.selectbox("Fitting method",['Revised','Old'])
+        #selected_fitmethod = st.selectbox("Fitting method",['Olivier revised'])
 
-    #--parameters relevant for the REVISED method:
-    if selected_fitmethod == 'Revised':
-
-        xper = st.slider(label="Point X percent at net-zero year",
-                         min_value=0.1,
-                        max_value=3.0,
-                        value=0.5,
-                        step=0.1,
-                        #key='slider3'
-                        )
+        #--parameters relevant for the REVISED method:
+        if selected_fitmethod == 'Revised':
+            xper = st.slider(label="Point X percent at net-zero year",
+                             min_value=0.1,
+                             max_value=3.0,
+                             value=0.5,
+                             step=0.1,
+                             #key='slider3'
+                             )
     
     
-    #--parameters relevant for the OLD method:
-    if selected_fitmethod == 'Old':
-        #--set allowance limit of negative emissions
-        eneg = st.slider(label="Allow neg emission (rel. to present emissions)",
-                         min_value=10,
-                        max_value=100,
-                        value=10,
-                        step=10,
-                        #key='slider3'
-                        )
+        #--parameters relevant for the OLD method:
+        if selected_fitmethod == 'Old':
+                #--set allowance limit of negative emissions
+                eneg = st.slider(label="Allow neg emission (rel. to present emissions)",
+                                 min_value=10,
+                                max_value=100,
+                                value=10,
+                                step=10,
+                                #key='slider3'
+                                )
       
     
-        if st.checkbox('Remove quardractic correction'):
-            corr=0
-        else:
-            corr=1
+                if st.checkbox('Remove quardractic correction'):
+                    corr=0
+                else:
+                    corr=1
 
-        if st.checkbox('Do not overwrite asymptotic emissions with net-zero pledge'):
-            asm=0
-        else:
-            asm=1
+                if st.checkbox('Do not overwrite asymptotic emissions with net-zero pledge'):
+                    asm=0
+                else:
+                    asm=1
+                    
 
 #st.markdown("<hr>", unsafe_allow_html=True)
 
