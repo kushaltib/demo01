@@ -309,6 +309,13 @@ c3_co2 = pd.read_excel("./data/precalculated/BASE3_WORLD_CO2_excl.xlsx",index_co
 # with col4:
 #     st.markdown(format_text(cumm_nzyr), unsafe_allow_html=True)
 
+if glob_tot==0:
+    pnt2=0
+    pnt5=0
+    c1=0
+    c2=0
+    c3=0
+    
 if glob_tot==1:
     col1,col2,col3,col4,col5=st.columns(5)
 
