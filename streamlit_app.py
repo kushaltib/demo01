@@ -136,7 +136,11 @@ if selected_fitmethod=='Revised':
 #calculate CH4 and N2O:
 emiss_ch4 = mod_emissions_projection_method03.create_timeseries_near(selected_country,ndc_ch4,hist_ch4.loc[selected_country])
 emiss_n2o = mod_emissions_projection_method03.create_timeseries_near(selected_country,ndc_n2o,hist_n2o.loc[selected_country])
-emiss_luc = mod_emissions_projection_method03.create_timeseries_near(selected_country,co2eq_luc.loc[selected_country],hist_luc_net.loc[selected_country]) 
+
+if selected_country is in ["Int. Shipping","Int. Aviation"]:
+    emiss_luc = 0
+else:
+    emiss_luc = mod_emissions_projection_method03.create_timeseries_near(selected_country,co2eq_luc.loc[selected_country],hist_luc_net.loc[selected_country]) 
 
 #calculate CO2eq:
 emiss_co2eq_excl = emiss_co2_excl+28*emiss_ch4+265*emiss_n2o
