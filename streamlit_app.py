@@ -137,7 +137,7 @@ if selected_fitmethod=='Revised':
 emiss_ch4 = mod_emissions_projection_method03.create_timeseries_near(selected_country,ndc_ch4,hist_ch4.loc[selected_country])
 emiss_n2o = mod_emissions_projection_method03.create_timeseries_near(selected_country,ndc_n2o,hist_n2o.loc[selected_country])
 
-if selected_country is in ["Int. Shipping","Int. Aviation"]:
+if selected_country in ["Int. Shipping","Int. Aviation"]:
     emiss_luc = 0
 else:
     emiss_luc = mod_emissions_projection_method03.create_timeseries_near(selected_country,co2eq_luc.loc[selected_country],hist_luc_net.loc[selected_country]) 
