@@ -241,14 +241,14 @@ def create_timeseries_equ(country,emiss_hist,emiss_ndc,emiss_nz,ndc_ch4,ndc_n2o,
                          dg_long = solution_long[0]#['x']
 
                          #--recompute CO2 emission trajectory for vector x
-                         emi_list=np.array(emi_calc(E0,g0,Elong,dg_near,dg_long,yr_last+1,yr_near,country=country))
+                         emi_list=np.array(emi_calc(E0,g0,Elong,dg_near,dg_long,yr_last+1,yr_near,country=country),dtype=object)
 
                          #--replace with recomputed emi_list
                          emiss_proj.iloc[i]=emi_list
 
                else:
 
-                    emi_list = np.array(emi_calc(E0,g0,Elong,dg_near,dg_long,yr_last+1,yr_near,yr_near,country=country))
+                    emi_list = np.array(emi_calc(E0,g0,Elong,dg_near,dg_long,yr_last+1,yr_near,yr_near,country=country),dtype=object)
                     emiss_proj.iloc[i,0:yr_near-yr_last+1] = emi_list#+emi_list[yr_near-yr_last]*(2100-yr_near)
                     emiss_proj.iloc[i,yr_near-yr_last+1:] = Enear
 
