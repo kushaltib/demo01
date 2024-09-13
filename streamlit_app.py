@@ -19,7 +19,7 @@ def format_text(value):
 
 
 
-st.title("Emissions projections based on National Climate pledges")
+st.title("GHG projections based on National Climate pledges")
 
 selected_gas = st.selectbox("Choose gas:",['CO2eq','CO2','CH4','N2O'])
 
