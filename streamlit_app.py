@@ -45,6 +45,12 @@ with st.sidebar:
     if selected_luc=='NGHGI':
         hist_luc_net = mod_read_input.read_luc('net','NGHGI')
 
+    #--inlcuding luc for net-zero
+    if st.checkbox('Include LUC for net-zero'):
+            incl_luc=1
+    else:
+            incl_luc=0
+
     #--GDP
     gdp = mod_read_input.read_gdp()
 
@@ -115,7 +121,7 @@ with st.sidebar:
 co2eq, co2eq_excl,co2eq_luc = mod_nearterm_CO2eq.create_ndc_table(NDC,hist_luc_net,hist_co2_excl,hist_co2eq_excl,gdp)
 ch4_summ = mod_CH4.def_ch4(NDC,co2eq_excl,hist_ch4,hist_co2_excl,hist_co2eq_excl)
 n2o_summ = mod_N2O.def_n2o(NDC,co2eq_excl,hist_n2o)
-co2eq_nz = mod_longterm_CO2eq.co2_nz(NDC,ch4_summ,n2o_summ,hist_co2_excl,hist_co2eq_excl)
+co2eq_nz = mod_longterm_CO2eq.co2_nz(NDC,ch4_summ,n2o_summ,co2eq_luc,hist_co2_excl,hist_co2eq_excl,incl_luc=incl_luc)
 
 ehist = hist_co2_excl.loc[selected_country]
 endc = co2eq_excl.loc[selected_country]

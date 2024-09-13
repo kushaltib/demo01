@@ -8,6 +8,7 @@ import numpy as np
 import math
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from pyrsistent import inc
 from sklearn.linear_model import LinearRegression
 from scipy.optimize import minimize, curve_fit, OptimizeWarning
 import pathlib
@@ -80,7 +81,7 @@ def grp_nz(ndc_table,country_list=None,data=None,process='all'):
      return data
 
 
-def co2_nz(ndc_table,ch4_summ,n2o_summ,co2_hist,co2eq_hist,country_list=None,data=None):
+def co2_nz(ndc_table,ch4_summ,n2o_summ,luc_ndc,co2_hist,co2eq_hist,country_list=None,data=None,incl_luc=0):
 
      NDC = ndc_table
 
@@ -98,7 +99,11 @@ def co2_nz(ndc_table,ch4_summ,n2o_summ,co2_hist,co2eq_hist,country_list=None,dat
      if data is None:
           columns = ['Neutrality','Year','CO2_nz_uncond_lb','CO2_nz_uncond_ub','CO2_nz_cond_lb','CO2_nz_cond_ub','Processed']
           data = pd.DataFrame(columns=columns,index=country_list)
-          
+
+
+     luc = luc_ndc[['Unconditional_LB','Unconditional_UB','Conditional_LB','Conditional_UB']]
+
+     if incl_luc==0: luc.iloc[:,:] = 0     
 
      for country in set(nz['Yes']):
 
@@ -106,20 +111,20 @@ def co2_nz(ndc_table,ch4_summ,n2o_summ,co2_hist,co2eq_hist,country_list=None,dat
 
                data.loc[country,'Neutrality'] = NDC.loc[country,'Neutrality']
                data.loc[country,'Year'] = NDC.loc[country,'Neutrality_year']
-               data.loc[country,'CO2_nz_uncond_lb'] = -ch4_summ.loc[country,'Unconditional_LB']*28-n2o_summ.loc[country,'Unconditional_LB']*265
-               data.loc[country,'CO2_nz_uncond_ub'] = -ch4_summ.loc[country,'Unconditional_UB']*28-n2o_summ.loc[country,'Unconditional_UB']*265
-               data.loc[country,'CO2_nz_cond_lb'] = -ch4_summ.loc[country,'Conditional_LB']*28-n2o_summ.loc[country,'Conditional_LB']*265
-               data.loc[country,'CO2_nz_cond_ub'] = -ch4_summ.loc[country,'Conditional_UB']*28-n2o_summ.loc[country,'Conditional_UB']*265
+               data.loc[country,'CO2_nz_uncond_lb'] = -ch4_summ.loc[country,'Unconditional_LB']*28-n2o_summ.loc[country,'Unconditional_LB']*265-luc.loc[country,'Unconditional_LB']
+               data.loc[country,'CO2_nz_uncond_ub'] = -ch4_summ.loc[country,'Unconditional_UB']*28-n2o_summ.loc[country,'Unconditional_UB']*265-luc.loc[country,'Unconditional_UB']
+               data.loc[country,'CO2_nz_cond_lb'] = -ch4_summ.loc[country,'Conditional_LB']*28-n2o_summ.loc[country,'Conditional_LB']*265-luc.loc[country,'Conditional_LB']
+               data.loc[country,'CO2_nz_cond_ub'] = -ch4_summ.loc[country,'Conditional_UB']*28-n2o_summ.loc[country,'Conditional_UB']*265-luc.loc[country,'Conditional_UB']
                data.loc[country,'Processed'] = 'Yes'
           
           if country in nz_applies['CO2']:
 
                data.loc[country,'Neutrality'] = NDC.loc[country,'Neutrality']
                data.loc[country,'Year'] = NDC.loc[country,'Neutrality_year']
-               data.loc[country,'CO2_nz_uncond_lb'] = 0
-               data.loc[country,'CO2_nz_uncond_ub'] = 0
-               data.loc[country,'CO2_nz_cond_lb'] = 0
-               data.loc[country,'CO2_nz_cond_ub'] = 0
+               data.loc[country,'CO2_nz_uncond_lb'] = 0-luc.loc[country,'Unconditional_LB']
+               data.loc[country,'CO2_nz_uncond_ub'] = 0-luc.loc[country,'Unconditional_UB']
+               data.loc[country,'CO2_nz_cond_lb'] = 0-luc.loc[country,'Conditional_LB']
+               data.loc[country,'CO2_nz_cond_ub'] = 0-luc.loc[country,'Conditional_UB']
                data.loc[country,'Processed'] = 'Yes'
      
      for country in set(nz['Other']):
@@ -130,10 +135,10 @@ def co2_nz(ndc_table,ch4_summ,n2o_summ,co2_hist,co2eq_hist,country_list=None,dat
 
                data.loc[country,'Neutrality'] = NDC.loc[country,'Neutrality']
                data.loc[country,'Year'] = NDC.loc[country,'Neutrality_year']
-               data.loc[country,'CO2_nz_uncond_lb'] = emiss_nz-ch4_summ.loc[country,'Unconditional_LB']*28-n2o_summ.loc[country,'Unconditional_LB']*265
-               data.loc[country,'CO2_nz_uncond_ub'] = emiss_nz-ch4_summ.loc[country,'Unconditional_UB']*28-n2o_summ.loc[country,'Unconditional_UB']*265
-               data.loc[country,'CO2_nz_cond_lb'] = emiss_nz-ch4_summ.loc[country,'Conditional_LB']*28-n2o_summ.loc[country,'Conditional_LB']*265
-               data.loc[country,'CO2_nz_cond_ub'] = emiss_nz-ch4_summ.loc[country,'Conditional_UB']*28-n2o_summ.loc[country,'Conditional_UB']*265
+               data.loc[country,'CO2_nz_uncond_lb'] = emiss_nz-ch4_summ.loc[country,'Unconditional_LB']*28-n2o_summ.loc[country,'Unconditional_LB']*265-luc.loc[country,'Unconditional_LB']
+               data.loc[country,'CO2_nz_uncond_ub'] = emiss_nz-ch4_summ.loc[country,'Unconditional_UB']*28-n2o_summ.loc[country,'Unconditional_UB']*265-luc.loc[country,'Unconditional_UB']
+               data.loc[country,'CO2_nz_cond_lb'] = emiss_nz-ch4_summ.loc[country,'Conditional_LB']*28-n2o_summ.loc[country,'Conditional_LB']*265-luc.loc[country,'Conditional_LB']
+               data.loc[country,'CO2_nz_cond_ub'] = emiss_nz-ch4_summ.loc[country,'Conditional_UB']*28-n2o_summ.loc[country,'Conditional_UB']*265-luc.loc[country,'Conditional_UB']
                data.loc[country,'Processed'] = 'Yes'
           
           if country in nz_applies['CO2']:
@@ -142,10 +147,10 @@ def co2_nz(ndc_table,ch4_summ,n2o_summ,co2_hist,co2eq_hist,country_list=None,dat
 
                data.loc[country,'Neutrality'] = NDC.loc[country,'Neutrality']
                data.loc[country,'Year'] = NDC.loc[country,'Neutrality_year']
-               data.loc[country,'CO2_nz_uncond_lb'] = emiss_nz
-               data.loc[country,'CO2_nz_uncond_ub'] = emiss_nz
-               data.loc[country,'CO2_nz_cond_lb'] = emiss_nz
-               data.loc[country,'CO2_nz_cond_ub'] = emiss_nz
+               data.loc[country,'CO2_nz_uncond_lb'] = emiss_nz-luc.loc[country,'Unconditional_LB']
+               data.loc[country,'CO2_nz_uncond_ub'] = emiss_nz-luc.loc[country,'Unconditional_UB']
+               data.loc[country,'CO2_nz_cond_lb'] = emiss_nz-luc.loc[country,'Conditional_LB']
+               data.loc[country,'CO2_nz_cond_ub'] = emiss_nz-luc.loc[country,'Conditional_UB']
                data.loc[country,'Processed'] = 'Yes'
 
 
