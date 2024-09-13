@@ -8,7 +8,6 @@ import numpy as np
 import math
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-from pyrsistent import inc
 from sklearn.linear_model import LinearRegression
 from scipy.optimize import minimize, curve_fit, OptimizeWarning
 import pathlib
