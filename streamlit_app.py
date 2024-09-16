@@ -130,17 +130,19 @@ ndc_ch4 = ch4_summ.loc[selected_country]
 ndc_n2o = n2o_summ.loc[selected_country]
 
 #calculate CO2 trajectory:
-#--base trajectory
-if selected_fitmethod=='Old':
-    #----Olivier's method
-    emiss_co2_excl = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
+#for countries with target
+if endc['Processed']=='Yes':
+    #--base trajectory
+    if selected_fitmethod=='Old':
+        #----Olivier's method
+        emiss_co2_excl = mod_emissions_projection.create_timeseries(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,eneg=100/eneg,corr=corr,asm=asm)
 
-if selected_fitmethod=='Revised':
-    #----New method
-    emiss_co2_excl = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,xper)
+    if selected_fitmethod=='Revised':
+        #----New method
+        emiss_co2_excl = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,xper)
 
 #--for non target countries:
-if endc['Processed']!='Yes':
+else:
     emiss_co2_excl = mod_emissions_projection_method03.create_timeseries_notar(selected_country,ehist)
 
 #calculate CH4 and N2O:
