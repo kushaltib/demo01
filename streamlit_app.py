@@ -152,8 +152,8 @@ if endc['Processed']=='Yes':
 #--for non target countries:
 else:
     emiss_co2_excl = mod_emissions_projection_method03.create_timeseries_notar(selected_country,ehist)
-    emiss_ch4 = mod_emissions_projection_method03.create_timeseries_notar(selected_country,hist_ch4.loc[country])
-    emiss_n2o = mod_emissions_projection_method03.create_timeseries_notar(selected_country,hist_n2o.loc[country])
+    emiss_ch4 = mod_emissions_projection_method03.create_timeseries_notar(selected_country,hist_ch4.loc[selected_country])
+    emiss_n2o = mod_emissions_projection_method03.create_timeseries_notar(selected_country,hist_n2o.loc[selected_country])
 
 
 if selected_country in ["Int. Shipping","Int. Aviation"]:
