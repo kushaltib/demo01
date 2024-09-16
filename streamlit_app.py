@@ -139,6 +139,10 @@ if selected_fitmethod=='Revised':
     #----New method
     emiss_co2_excl = mod_emissions_projection_method03.create_timeseries_equ(selected_country,ehist,endc,enz,ndc_ch4,ndc_n2o,xper)
 
+#--for non target countries:
+if endc['Processed']!='Yes':
+    emiss_co2_excl = mod_emissions_projection_method03.create_timeseries_notar(selected_country,ehist)
+
 #calculate CH4 and N2O:
 emiss_ch4 = mod_emissions_projection_method03.create_timeseries_near(selected_country,ndc_ch4,hist_ch4.loc[selected_country])
 emiss_n2o = mod_emissions_projection_method03.create_timeseries_near(selected_country,ndc_n2o,hist_n2o.loc[selected_country])
