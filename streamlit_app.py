@@ -354,7 +354,7 @@ if glob_tot==0:
     c3=0
     
 if glob_tot==1:
-    col1,col2,col3,col4,col5=st.columns(5)
+    col1,col2,col3,col4=st.columns(5)
 
     with col1:
         if st.checkbox('0.2%'):
@@ -374,13 +374,13 @@ if glob_tot==1:
         else:
             c1=0
     
-    with col4:
-        if st.checkbox('2%'):
-            c2=1
-        else:
-            c2=0
+    #with col4:
+    #    if st.checkbox('2%'):
+    #        c2=1
+    #    else:
+    #        c2=0
 
-    with col5:
+    with col4:
         if st.checkbox('3%'):
             c3=1
         else:
@@ -601,22 +601,7 @@ if selected_gas=='CO2':
     
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
+ 
     
     axis_label = "CO2 emissions (Mt / yr) "
 
@@ -793,16 +778,16 @@ if selected_gas=='CO2':
                 '-', color='grey',alpha=1, lw=2, label='CO2_excl_uncond',mec='k',mew=0.5,ms=6
                 )
         
-    if c2==1:
-        ax.plot(c2_co2['Cond_LB'].index.values,
-                c2_co2['Cond_LB'].values,
-                '-', color='violet',alpha=1, lw=2, label='CO2_excl_cond',mec='k',mew=0.5,ms=6
-                )
+    #if c2==1:
+    #    ax.plot(c2_co2['Cond_LB'].index.values,
+    #            c2_co2['Cond_LB'].values,
+    #            '-', color='violet',alpha=1, lw=2, label='CO2_excl_cond',mec='k',mew=0.5,ms=6
+    #            )
     
-        ax.plot(c2_co2['Uncond_LB'].index.values,
-                c2_co2['Uncond_LB'].values,
-                '-', color='grey',alpha=1, lw=2, label='CO2_excl_uncond',mec='k',mew=0.5,ms=6
-                )
+    #    ax.plot(c2_co2['Uncond_LB'].index.values,
+    #            c2_co2['Uncond_LB'].values,
+    #            '-', color='grey',alpha=1, lw=2, label='CO2_excl_uncond',mec='k',mew=0.5,ms=6
+    #            )
     
     if c3==1:
         ax.plot(c3_co2['Cond_LB'].index.values,
