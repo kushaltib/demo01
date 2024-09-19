@@ -21,7 +21,21 @@ def format_text(value):
 
 st.title("GHG projections based on National Climate pledges")
 
-selected_gas = st.selectbox("Choose gas:",['CO2eq','CO2','CH4','N2O'])
+col1,col2=st.columns([0.3, 0.7])
+with col1:
+    #--choose gas
+    selected_gas = st.selectbox("Choose gas:",['CO2eq','CO2','CH4','N2O'])
+
+with col2:
+    #--years for the display plot
+    start, end = st.slider("Range of years", 
+                        min_value=1850,
+                        max_value=2100,
+                        value=(1985, 2100),        
+                        step=1
+                        )
+
+
 
 #@st.cache_data
 
@@ -372,13 +386,7 @@ if glob_tot==1:
         else:
             c3=0
 
-#--years for the display plot
-start, end = st.slider("Range of years", 
-                        min_value=1850,
-                        max_value=2100,
-                        value=(1985, 2100),        
-                        step=1
-                        )
+
 
 
     
