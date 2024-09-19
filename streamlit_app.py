@@ -869,6 +869,16 @@ ax.grid(which='major', axis='y', lw=0.4)
 
 
 if glob_tot==0:
+
+    sentence = (
+        "<b style='color: black;'>The plot shows non-luc and luc emissions seperately</b> <br>"        
+    )
+
+    # Display the sentence
+    st.markdown(sentence, unsafe_allow_html=True)
+
+
+
     st.pyplot(fig)
 
     sentence = (
