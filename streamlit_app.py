@@ -354,7 +354,7 @@ if glob_tot==0:
     c3=0
     
 if glob_tot==1:
-    col1,col2,col3,col4=st.columns(5)
+    col1,col2,col3,col4=st.columns(4)
 
     with col1:
         if st.checkbox('0.2%'):
