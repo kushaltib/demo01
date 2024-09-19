@@ -470,9 +470,9 @@ if selected_gas=='CO2eq':
                 '--', color='darkgreen',alpha=1, lw=2, label='UnCond LB luc',mec='purple',mew=0.5,ms=3
                 )
         
-        ax.plot(emiss_luc.iloc[2].index,
-                emiss_luc.iloc[2].values/1000,
-                '--', color='limegreen',alpha=1, lw=2, label='Cond LB luc',mec='purple',mew=0.5,ms=3
+        ax.plot(emiss_luc.iloc[1].index,
+                emiss_luc.iloc[1].values/1000,
+                '--', color='darkgreen',alpha=1, lw=2, label='Cond LB luc',mec='purple',mew=0.5,ms=3
                 )
         
 
