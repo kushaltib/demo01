@@ -421,15 +421,15 @@ if selected_gas=='CO2eq':
             'o-', color='grey',alpha=1, lw=2, label='UnCond UB',mec='purple',mew=0.5,ms=3
             )
     
-    #ax.plot(emiss_paper_co2eq_uncond.index,
-    #        emiss_paper_co2eq_uncond.values/1000,
-    #        ':', color='lightgrey',alpha=1, lw=2, label='Uncond',mec='k',mew=0.5,ms=3
-    #        )
+    ax.plot(emiss_paper_co2eq_uncond.index,
+            emiss_paper_co2eq_uncond.values/1000,
+            ':', color='lightgrey',alpha=1, lw=2, label='Uncond',mec='k',mew=0.5,ms=3
+            )
     
-    #ax.plot(emiss_paper_co2eq_cond.index,
-    #        emiss_paper_co2eq_cond.values/1000,
-    #        ':', color='pink',alpha=1, lw=2, label='Cond',mec='k',mew=0.5,ms=3
-    #        )
+    ax.plot(emiss_paper_co2eq_cond.index,
+            emiss_paper_co2eq_cond.values/1000,
+            ':', color='pink',alpha=1, lw=2, label='Cond',mec='k',mew=0.5,ms=3
+            )
     
     #plot net emissions:
     # if selected_country not in ['Int. Aviation','Int. Shipping']:
