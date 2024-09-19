@@ -821,7 +821,8 @@ if glob_tot==0:
         "<b style='color: grey;'>Unconditional emissions excl. land-use</b> | "
         "<b style='color: violet;'>Conditional emissions excl. land-use</b> | <br>"
 
-        "<b style='color: yellowgreen;'>Historical net land-use managed lands</b> | "        
+        "<b style='color: yellowgreen;'>Historical net land-use managed lands</b> | "
+        "<b style='color: darkgreen;'>net land-use managed lands for future</b> | <br> "        
         
         "<b style='color: pink;'>Emissions from our paper version, just for comparison here</b> | <br>"
 
