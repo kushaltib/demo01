@@ -464,6 +464,18 @@ if selected_gas=='CO2eq':
                 hist_luc_net.loc[selected_country].values/1000,
                 '-', color='yellowgreen',alpha=1, lw=2, label='CO2eq historical luc net',mec='k',mew=0.5,ms=6
                 )
+        
+        ax.plot(emiss_luc.iloc[0].index,
+                emiss_luc.iloc[0].values/1000,
+                '--', color='darkgreen',alpha=1, lw=2, label='UnCond LB luc',mec='purple',mew=0.5,ms=3
+                )
+        
+        ax.plot(emiss_luc.iloc[2].index,
+                emiss_luc.iloc[2].values/1000,
+                '--', color='limegreen',alpha=1, lw=2, label='Cond LB luc',mec='purple',mew=0.5,ms=3
+                )
+        
+
 
     if np.isnan(np.asarray(NDC.loc[selected_country,['Target_CO2eq_emissions_LB_conditional_LULUCF','Target_CO2eq_emissions_UB_conditional_LULUCF']].values,dtype=float)).any():
         plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
