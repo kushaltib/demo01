@@ -382,8 +382,8 @@ start, end = st.slider("Range of years",
 
 
     
-
-st.markdown("<hr>", unsafe_allow_html=True)
+#--horizontal line
+#st.markdown("<hr>", unsafe_allow_html=True)
 
 
 
