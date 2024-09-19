@@ -552,6 +552,64 @@ if selected_gas=='CO2':
             ':', color='pink',alpha=1, lw=2, label='Cond',mec='k',mew=0.5,ms=3
             )
     
+
+    #plot luc emissions:
+    if selected_country not in ['Int. Aviation','Int. Shipping']:
+        ax.plot(hist_luc_net.loc[selected_country].index,
+                hist_luc_net.loc[selected_country].values/1000,
+                '-', color='yellowgreen',alpha=1, lw=2, label='CO2eq historical luc net',mec='k',mew=0.5,ms=6
+                )
+        
+        ax.plot(emiss_luc.iloc[0].index,
+                emiss_luc.iloc[0].values/1000,
+                '--', color='darkgreen',alpha=1, lw=2, label='UnCond LB luc',mec='purple',mew=0.5,ms=3
+                )
+        
+        ax.plot(emiss_luc.iloc[1].index,
+                emiss_luc.iloc[1].values/1000,
+                '--', color='darkgreen',alpha=1, lw=2, label='Cond LB luc',mec='purple',mew=0.5,ms=3
+                )
+        
+
+
+    if np.isnan(np.asarray(NDC.loc[selected_country,['Target_CO2eq_emissions_LB_conditional_LULUCF','Target_CO2eq_emissions_UB_conditional_LULUCF']].values,dtype=float)).any():
+        plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
+                    NDC.loc[selected_country,['Supp_Target_CO2eq_emissions_LB_conditional_LULUCF','Supp_Target_CO2eq_emissions_UB_conditional_LULUCF']].values,
+                    label='NDC Condititonal',color='limegreen',marker='o',s=30,zorder=20)
+    else:
+        plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
+                    NDC.loc[selected_country,['Target_CO2eq_emissions_LB_conditional_LULUCF','Target_CO2eq_emissions_UB_conditional_LULUCF']].values,
+                    label='NDC Condititonal',color='limegreen',marker='o',s=30,zorder=20)
+
+
+    if np.isnan(np.asarray(NDC.loc[selected_country,['Target_CO2eq_emissions_LB_unconditional_LULUCF','Target_CO2eq_emissions_UB_unconditional_LULUCF']].values,dtype=float)).any():
+        plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
+                    NDC.loc[selected_country,['Supp_Target_CO2eq_emissions_LB_unconditional_LULUCF','Supp_Target_CO2eq_emissions_UB_unconditional_LULUCF']].values,
+                    label='NDC Condititonal',color='darkgreen',marker='o',s=30,zorder=20)
+    else:
+        plt.scatter([co2eq_excl.loc[selected_country,'Year']]*2,
+                    NDC.loc[selected_country,['Target_CO2eq_emissions_LB_unconditional_LULUCF','Target_CO2eq_emissions_UB_unconditional_LULUCF']].values,
+                    label='NDC Condititonal',color='darkgreen',marker='o',s=30,zorder=20)
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
     axis_label = "CO2 emissions (Mt / yr) "
 
 if selected_gas == "CH4":
