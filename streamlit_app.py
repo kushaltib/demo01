@@ -19,7 +19,7 @@ def format_text(value):
 
 
 
-st.title("GHG projections based on National Climate pledges")
+st.title("GHG emissions projections based on National Climate pledges")
 
 col1,col2=st.columns([0.3, 0.7])
 with col1:
